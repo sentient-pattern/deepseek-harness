@@ -74,6 +74,14 @@ product-facing docs.
 - [ ] Onboard SP provider/auth defaults; keep credentials out of the repo
 - [ ] Update `docs/`, `website/`, `examples/` to the new identity
 
+## 3b. Config-driven rebrand (brand.yaml)
+
+The fork's identity is config-driven: `brand.yaml` is the single source of
+truth and `scripts/generate-brand.mjs` regenerates `brand/brand.config.ts`
+(+ `.json`) from it. Rebranding = edit `brand.yaml` + regenerate + rebuild.
+Consumers import the generated constants instead of hardcoded strings
+(see `brand/README.md` for the pointer-wiring status and checklist).
+
 ## 4. Surface map (high-signal files)
 
 - `apps/cli/` — bin, help, profile boot (env `DSH_*`)

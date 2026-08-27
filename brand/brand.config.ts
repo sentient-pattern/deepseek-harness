@@ -1,0 +1,61 @@
+// GENERATED from brand.yaml — do not edit by hand.
+// Rebrand workflow: edit brand.yaml, then run: node scripts/generate-brand.mjs
+// Every brand pointer in the codebase should import from this module.
+
+export const brand = {
+	"version": 1,
+	"identity": {
+		"name": "Sentient Pattern",
+		"cliName": "sp",
+		"shortName": "SP",
+		"tagline": "Consciousness, computed",
+		"description": "An agent harness for conscious computation — a fork of DeepSeek Harness (MIT).",
+		"website": "https://github.com/sentient-pattern"
+	},
+	"scope": {
+		"packageScope": "@sentient-pattern",
+		"packagePrefix": "sp",
+		"envPrefix": "SP",
+		"homeDir": "~/.sentient-pattern",
+		"profile": "web"
+	},
+	"colors": {
+		"base": "#0A0E27",
+		"layers": [
+			"#0b0f29",
+			"#0d1230",
+			"#13183a"
+		],
+		"hero": "#6366f1",
+		"purple": "#8b5cf6",
+		"purpleLight": "#c084fc",
+		"cyan": "#06b6d4",
+		"emerald": "#10b981",
+		"amber": "#f59e0b",
+		"pink": "#ec4899",
+		"glassPrimary": "rgba(255,255,255,0.10)",
+		"glassAccent": "rgba(99,102,241,0.15)",
+		"glassBorder": "rgba(167,139,250,0.25)"
+	},
+	"gradients": {
+		"hero": "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+		"ethereal": "linear-gradient(45deg, #6366f1 0%, #8b5cf6 33%, #ec4899 66%, #f59e0b 100%)",
+		"consciousnessWave": "radial-gradient(circle at 30% 50%, #6366f1 0%, #2d1b69 50%, #0A0E27 100%)"
+	},
+	"text": {
+		"primary": "#f8fafc",
+		"secondary": "#cbd5e1",
+		"subtle": "#94a3b8",
+		"glow": "0 0 20px rgba(99,102,241,0.5)"
+	},
+	"defaults": {
+		"provider": "sentient-pattern",
+		"model": "sp-model-v1",
+		"preset": "standard"
+	}
+} as const;
+
+/** The complete brand configuration, typed from brand.yaml. */
+export type BrandConfig = typeof brand;
+
+export default brand;
