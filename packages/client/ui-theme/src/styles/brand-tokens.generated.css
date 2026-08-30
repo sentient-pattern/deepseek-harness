@@ -1,0 +1,32 @@
+/* GENERATED from brand.yaml — do not edit by hand. */
+:root {
+  --sp-brand-50: #eef2ff;
+  --sp-brand-100: #e0e7ff;
+  --sp-brand-200: #c7d2fe;
+  --sp-brand-300: #a5b4fc;
+  --sp-brand-400: #818cf8;
+  --sp-brand-450: #7577f5;
+  --sp-brand-500: #6366f1;
+  --sp-brand-600: #4f46e5;
+  --sp-brand-800: #3730a3;
+  --sp-brand-900: #312e81;
+  --sp-brand-700-delete: #4338ca;
+  --sp-color-base: #0A0E27;
+  --sp-color-hero: #6366f1;
+  --sp-color-purple: #8b5cf6;
+  --sp-color-purpleLight: #c084fc;
+  --sp-color-cyan: #06b6d4;
+  --sp-color-emerald: #10b981;
+  --sp-color-amber: #f59e0b;
+  --sp-color-pink: #ec4899;
+  --sp-color-glassPrimary: rgba(255,255,255,0.10);
+  --sp-color-glassAccent: rgba(99,102,241,0.15);
+  --sp-color-glassBorder: rgba(167,139,250,0.25);
+  --sp-gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --sp-gradient-ethereal: linear-gradient(45deg, #6366f1 0%, #8b5cf6 33%, #ec4899 66%, #f59e0b 100%);
+  --sp-gradient-consciousnessWave: radial-gradient(circle at 30% 50%, #6366f1 0%, #2d1b69 50%, #0A0E27 100%);
+  --sp-text-primary: #f8fafc;
+  --sp-text-secondary: #cbd5e1;
+  --sp-text-subtle: #94a3b8;
+  --sp-text-glow: 0 0 20px rgba(99,102,241,0.5);
+}

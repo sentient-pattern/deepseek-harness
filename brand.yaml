@@ -39,6 +39,20 @@ colors:
   glassAccent: "rgba(99,102,241,0.15)"
   glassBorder: "rgba(167,139,250,0.25)"
 
+# Brand ramp: the indigo scale that drives --dsw-static-deepseek-* (hero = 500).
+brandRamp:
+  50: "#eef2ff"
+  100: "#e0e7ff"
+  200: "#c7d2fe"
+  300: "#a5b4fc"
+  400: "#818cf8"
+  450: "#7577f5"
+  500: "#6366f1"
+  600: "#4f46e5"
+  700-delete: "#4338ca"
+  800: "#3730a3"
+  900: "#312e81"
+
 gradients:
   hero: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)"
   ethereal: "linear-gradient(45deg, #6366f1 0%, #8b5cf6 33%, #ec4899 66%, #f59e0b 100%)"

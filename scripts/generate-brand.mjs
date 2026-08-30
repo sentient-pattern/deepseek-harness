@@ -98,4 +98,19 @@ const ts = [
 ].join('\n');
 writeFileSync(join(outDir, "brand.config.ts"), ts);
 writeFileSync(join(outDir, "brand.config.json"), JSON.stringify(config, null, 2) + "\n");
-console.log("regenerated brand/brand.config.ts and brand/brand.config.json");
+
+// Theme tokens: emit CSS custom properties from brand.yaml for the client theme.
+// design-platform.css references these via var(--sp-*), so the palette is
+// config-driven (edit brand.yaml -> regenerate -> rebuild).
+const themeCssPath = join(root, "packages/client/ui-theme/src/styles/brand-tokens.generated.css");
+const cssLines = [
+  "/* GENERATED from brand.yaml \u2014 do not edit by hand. */",
+  ":root {"
+];
+for (const [step, value] of Object.entries(config.brandRamp || {})) cssLines.push("  --sp-brand-" + step + ": " + value + ";");
+for (const [key, value] of Object.entries(config.colors || {})) if (key !== "layers") cssLines.push("  --sp-color-" + key + ": " + value + ";");
+for (const [key, value] of Object.entries(config.gradients || {})) cssLines.push("  --sp-gradient-" + key + ": " + value + ";");
+for (const [key, value] of Object.entries(config.text || {})) cssLines.push("  --sp-text-" + key + ": " + value + ";");
+cssLines.push("}", "");
+writeFileSync(themeCssPath, cssLines.join("\n"));
+console.log("regenerated " + themeCssPath);
