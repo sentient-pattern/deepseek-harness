@@ -9,22 +9,22 @@ import { performance } from 'node:perf_hooks'
 import type { Browser, CDPSession, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import type { StreamChunk } from '@forgeweaver/fw-llm'
 import {
   CallId,
   createAssistantMessage,
   createToolResultMessage,
   createUserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { ReplayEntry, ReplayOverrideDoc } from '@deepseek-ai/dsh-llm-replay'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+} from '@forgeweaver/fw-llm'
+import type { ReplayEntry, ReplayOverrideDoc } from '@forgeweaver/fw-llm-replay'
+import type { SessionEvent } from '@forgeweaver/fw-session'
 import {
   SESSION_FORMAT_VERSION,
   Session,
   SessionId,
-} from '@deepseek-ai/dsh-session'
+} from '@forgeweaver/fw-session'
 // Carries the session/title event declaration into the fixture builder.
-import type {} from '@deepseek-ai/dsh-session-title'
+import type {} from '@forgeweaver/fw-session-title'
 import {
   launchWebScaffold,
   seedSession,
@@ -198,7 +198,7 @@ function appendTitle(session: Session, title: string, messageSeq: number): void 
 function appendRequestHeader(session: Session, turn: number, step: number): void {
   session.append('request/header', {
     header: {
-      config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      config: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
       system: `Synthetic performance system prompt for turn ${String(turn)}, step ${String(step)}.`,
     },
     reason: turn === 1 && step === 1 ? 'initial' : 'change',
@@ -216,7 +216,7 @@ function appendAssistant(
     step,
     message: createAssistantMessage({
       content: text(body),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
     }),
     usage: {
       inputTokens: 4_000 + turn * 10,
@@ -258,7 +258,7 @@ function appendToolStep(
           arguments: args,
         })),
       ],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
     }),
     usage: {
       inputTokens: 6_000 + turn * 10,
@@ -600,18 +600,18 @@ async function startMutationProbe(page: Page): Promise<void> {
       childList: true,
       subtree: true,
     })
-    Reflect.set(globalThis, '__dshPerfMutationProbe', probe)
+    Reflect.set(globalThis, '__fwPerfMutationProbe', probe)
   })
 }
 
 async function stopMutationProbe(page: Page): Promise<MutationProbeResult> {
   return page.evaluate(() => {
-    const probe = Reflect.get(globalThis, '__dshPerfMutationProbe') as
+    const probe = Reflect.get(globalThis, '__fwPerfMutationProbe') as
       | { batches: number; records: number; observer: MutationObserver }
       | undefined
     if (probe === undefined) throw new Error('stream mutation probe was not started')
     probe.observer.disconnect()
-    Reflect.deleteProperty(globalThis, '__dshPerfMutationProbe')
+    Reflect.deleteProperty(globalThis, '__fwPerfMutationProbe')
     return { batches: probe.batches, records: probe.records }
   })
 }
@@ -682,11 +682,11 @@ async function startUserRenderProbe(
       childList: true,
       subtree: true,
     })
-    Reflect.set(globalThis, '__dshPerfUserRenderProbe', probe)
+    Reflect.set(globalThis, '__fwPerfUserRenderProbe', probe)
   }, marker)
   await send.evaluate((button) => {
     button.addEventListener('click', (event) => {
-      const probe = Reflect.get(globalThis, '__dshPerfUserRenderProbe') as
+      const probe = Reflect.get(globalThis, '__fwPerfUserRenderProbe') as
         | { sendAt?: number; trustedClick?: boolean; pollForMarker?: () => void }
         | undefined
       if (probe?.pollForMarker === undefined) throw new Error('user render probe was not started')
@@ -708,14 +708,14 @@ async function stopUserRenderProbe(
 ): Promise<UserRenderProbeResult> {
   try {
     await page.waitForFunction(() => {
-      const probe = Reflect.get(globalThis, '__dshPerfUserRenderProbe') as
+      const probe = Reflect.get(globalThis, '__fwPerfUserRenderProbe') as
         | { paintAt?: number }
         | undefined
       return probe?.paintAt !== undefined
     }, undefined, { timeout: 15_000 })
   } catch (error) {
     const diagnostic = await page.evaluate((expectedMarker) => {
-      const probe = Reflect.get(globalThis, '__dshPerfUserRenderProbe') as
+      const probe = Reflect.get(globalThis, '__fwPerfUserRenderProbe') as
         | {
           sendAt?: number
           domAt?: number
@@ -748,7 +748,7 @@ async function stopUserRenderProbe(
     throw new Error(`user render probe timed out: ${JSON.stringify(diagnostic)}`, { cause: error })
   }
   return page.evaluate(() => {
-    const probe = Reflect.get(globalThis, '__dshPerfUserRenderProbe') as
+    const probe = Reflect.get(globalThis, '__fwPerfUserRenderProbe') as
       | {
         sendAt?: number
         domAt?: number
@@ -758,7 +758,7 @@ async function stopUserRenderProbe(
         records: number
       }
       | undefined
-    Reflect.deleteProperty(globalThis, '__dshPerfUserRenderProbe')
+    Reflect.deleteProperty(globalThis, '__fwPerfUserRenderProbe')
     if (
       probe?.trustedClick !== true
       || probe.sendAt === undefined
@@ -827,7 +827,7 @@ async function launchPerformanceWorld(
     if (options.replay === undefined) {
       scaffold = await launchWebScaffold()
     } else {
-      replayDir = await mkdtemp(join(tmpdir(), 'dsh-web-perf-replay-'))
+      replayDir = await mkdtemp(join(tmpdir(), 'fw-web-perf-replay-'))
       const replayOverride = join(replayDir, 'replay.override.json')
       await writeFile(replayOverride, JSON.stringify(options.replay))
       scaffold = await launchWebScaffold({

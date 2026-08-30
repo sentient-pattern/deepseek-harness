@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-spill`.
- * @module @deepseek-ai/dsh-spill/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-spill`.
+ * @module @forgeweaver/fw-spill/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-spill'
+const PACKAGE_NAME = '@forgeweaver/fw-spill'
 
 /** Cordis companion plugin name. */
 export const name = 'spill-invariant'

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-token-meter`.
- * @module @deepseek-ai/dsh-token-meter/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-token-meter`.
+ * @module @forgeweaver/fw-token-meter/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-token-meter'
+const PACKAGE_NAME = '@forgeweaver/fw-token-meter'
 
 /** Cordis companion plugin name. */
 export const name = 'token-meter-invariant'

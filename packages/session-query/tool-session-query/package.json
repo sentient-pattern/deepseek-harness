@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-tool-session-query",
+  "name": "@forgeweaver/fw-tool-session-query",
   "description": "Workspace-authorized model-facing session history search, trace, and event read tools",
   "version": "0.1.1-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/session-query/tool-session-query"
   },
   "type": "module",
@@ -32,32 +32,32 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-query": "workspace:^",
+    "@forgeweaver/fw-system-prompt": "workspace:^",
+    "@forgeweaver/fw-timeout": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@forgeweaver/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-session-query-sqlite": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tool-call-timeout-policy": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-persistence": "workspace:^",
+    "@forgeweaver/fw-session-persistence-jsonl": "workspace:^",
+    "@forgeweaver/fw-session-query": "workspace:^",
+    "@forgeweaver/fw-session-query-sqlite": "workspace:^",
+    "@forgeweaver/fw-session-title": "workspace:^",
+    "@forgeweaver/fw-system-prompt": "workspace:^",
+    "@forgeweaver/fw-timeout": "workspace:^",
+    "@forgeweaver/fw-tool-call-timeout-policy": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   }
 }

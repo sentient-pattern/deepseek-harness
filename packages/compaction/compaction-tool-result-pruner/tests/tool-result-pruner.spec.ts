@@ -1,22 +1,22 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { CallId , createMessage, createToolResultMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
+import { Context } from '@forgeweaver/cordis'
+import { CallId , createMessage, createToolResultMessage } from '@forgeweaver/fw-llm'
+import type { ContentBlock } from '@forgeweaver/fw-llm'
 import SessionStore, {
   Session,
   SessionId,
-} from '@deepseek-ai/dsh-session'
-import type { SurfaceEvent } from '@deepseek-ai/dsh-session'
-import * as SessionInvariant from '@deepseek-ai/dsh-session/invariant'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
+} from '@forgeweaver/fw-session'
+import type { SurfaceEvent } from '@forgeweaver/fw-session'
+import * as SessionInvariant from '@forgeweaver/fw-session/invariant'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
+import TokenMeter from '@forgeweaver/fw-token-meter'
 import ToolResultPruner, {
   codePointLength,
   DEFAULTS,
   PRUNE_MARKER,
   resolveConfig,
-} from '@deepseek-ai/dsh-compaction-tool-result-pruner'
-import type { ToolResultPruneConfig } from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+} from '@forgeweaver/fw-compaction-tool-result-pruner'
+import type { ToolResultPruneConfig } from '@forgeweaver/fw-compaction-tool-result-pruner'
 
 const MODEL = 'test-model'
 const SMALL: ToolResultPruneConfig = {

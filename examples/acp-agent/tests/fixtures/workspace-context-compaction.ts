@@ -1,8 +1,8 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-agent'
-import { CompactionId, compactCheckpointSource } from '@deepseek-ai/dsh-compaction'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-tools'
+import type { Context } from '@forgeweaver/cordis'
+import type {} from '@forgeweaver/fw-agent'
+import { CompactionId, compactCheckpointSource } from '@forgeweaver/fw-compaction'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import type {} from '@forgeweaver/fw-tools'
 
 export const name = 'workspace-context-compaction'
 

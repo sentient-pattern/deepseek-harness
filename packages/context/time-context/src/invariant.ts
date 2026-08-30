@@ -1,15 +1,15 @@
-/** Package-owned durable clock-context invariants. @module @deepseek-ai/dsh-time-context/invariant */
+/** Package-owned durable clock-context invariants. @module @forgeweaver/fw-time-context/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { Session, SessionEvent } from '@forgeweaver/fw-session'
+import type { InvariantFailure, InvariantInstaller } from '@forgeweaver/fw-invariants'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,
 } from './request-zone.ts'
 import { createTimestampFormatter, formatTimestamp } from './timestamp.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-time-context'
+const PACKAGE_NAME = '@forgeweaver/fw-time-context'
 const SOURCE_NAME = 'time-context'
 const READING = new RegExp(
   '^Time sampled while preparing turn (\\d+), step (\\d+): '

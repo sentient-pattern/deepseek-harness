@@ -3,13 +3,13 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import * as SessionLogDownload from '@deepseek-ai/dsh-session-log-export'
+import { Context } from '@forgeweaver/cordis'
+import Loader from '@forgeweaver/cordis-plugin-loader'
+import Include from '@forgeweaver/cordis-plugin-include'
+import type { Agent } from '@forgeweaver/fw-agent'
+import CommandRuntime from '@forgeweaver/fw-commands'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
+import * as SessionLogDownload from '@forgeweaver/fw-session-log-export'
 
 let root: string | undefined
 let context: Context | undefined
@@ -23,12 +23,12 @@ afterEach(async () => {
 
 describe('session-log-download real Loader composition', () => {
   it('discovers and executes /export through the assembled command plane', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-session-export-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'fw-session-export-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-session'",
-      "- name: '@deepseek-ai/dsh-commands'",
-      "- name: '@deepseek-ai/dsh-session-log-export'",
+      "- name: '@forgeweaver/fw-session'",
+      "- name: '@forgeweaver/fw-commands'",
+      "- name: '@forgeweaver/fw-session-log-export'",
       '',
     ].join('\n'))
 
@@ -37,9 +37,9 @@ describe('session-log-download real Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-session', SessionStore],
-      ['@deepseek-ai/dsh-commands', CommandRuntime],
-      ['@deepseek-ai/dsh-session-log-export', SessionLogDownload],
+      ['@forgeweaver/fw-session', SessionStore],
+      ['@forgeweaver/fw-commands', CommandRuntime],
+      ['@forgeweaver/fw-session-log-export', SessionLogDownload],
     ])
     context.loader.internal = {
       version: 'v2',

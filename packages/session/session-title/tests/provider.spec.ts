@@ -1,13 +1,13 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import LlmRuntime, { createUserMessage, deepFreeze, markAgentLoopRequest  } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
+import LlmRuntime, { createUserMessage, deepFreeze, markAgentLoopRequest  } from '@forgeweaver/fw-llm'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
 import SessionTitleService, {
   SessionTitleProviderId,
   type SessionTitleProvider,
   type SessionTitleProviderRequest,
   type SessionTitleProviderResult,
-} from '@deepseek-ai/dsh-session-title'
+} from '@forgeweaver/fw-session-title'
 
 const CONFIG = {
   fallbackMaxWords: 5,

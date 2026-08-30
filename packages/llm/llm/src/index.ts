@@ -3,10 +3,10 @@
  * API. Exports the `LlmRuntime` default, the abstract `LlmAdapter` for
  * provider backends, and `BlockAssembler` for chunk assembly.
  *
- * @module @deepseek-ai/dsh-llm
+ * @module @forgeweaver/fw-llm
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@forgeweaver/cordis'
 import type {
   GenerateOptions,
   LlmConfigurableProvider,
@@ -44,7 +44,7 @@ export { BlockAssembler } from './assembler.ts'
 export { callConfigEquals, deepFreeze, isAgentLoopRequest, markAgentLoopRequest } from './call-config.ts'
 export type { LlmCallConfig, LlmCallConfigAdapterDefaults } from './call-config.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     llm: LlmRuntime
   }
@@ -186,7 +186,7 @@ export interface PreparedAdapterCall {
  * Provider-wire adapter for the harness message and stream vocabulary. Register implementations
  * with `ctx.llm.registerAdapter(providers, adapter)`. Every provider HTTP request must include
  * `attributionHeaders()`; prove the headers are added in the wire request or library header hook. The direct-fetch
- * DeepSeek and library-backed pi-ai adapters meet this contract through different internals.
+ * ForgeWeaver and library-backed pi-ai adapters meet this contract through different internals.
  */
 export abstract class LlmAdapter {
   /**

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-lsp-stdio`.
- * @module @deepseek-ai/dsh-lsp-stdio/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-lsp-stdio`.
+ * @module @forgeweaver/fw-lsp-stdio/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-lsp-stdio'
+const PACKAGE_NAME = '@forgeweaver/fw-lsp-stdio'
 
 /** Cordis companion plugin name. */
 export const name = 'lsp-stdio-invariant'

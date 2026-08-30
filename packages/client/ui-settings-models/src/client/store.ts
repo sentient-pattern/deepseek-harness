@@ -8,10 +8,10 @@
 
 import type {
   ConfigurableProviderView, CredentialView, IApiClient, SettingsNamespaceView,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-runtime/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-runtime/client'
-import type { SettingsDescribeFace } from '@deepseek-ai/dsh-client-ui-settings/client'
+} from '@forgeweaver/fw-api-remotes/client'
+import type { SnapshotStore } from '@forgeweaver/fw-client-runtime/client'
+import { createSnapshotStore } from '@forgeweaver/fw-client-runtime/client'
+import type { SettingsDescribeFace } from '@forgeweaver/fw-client-ui-settings/client'
 import type { SettingsSchemaOperations } from './schema-operations.ts'
 
 /**
@@ -244,7 +244,7 @@ export type OnboardingReadiness =
  * Project first-run readiness from the provider/settings/credential join used
  * by the Models page. The step exists to leave the user with a model to talk
  * to, so ANY usable provider ends it; only when none exists does the official
- * DeepSeek route — the one route the prompt can offer a key field for — decide
+ * ForgeWeaver route — the one route the prompt can offer a key field for — decide
  * whether prompting can help. A missing official configurable-provider
  * declaration means the adapter is not repairable by navigating to Models.
  * @param state - current shared Models join snapshot.
@@ -262,8 +262,8 @@ export function onboardingReadiness(state: ModelsSettingsState): OnboardingReadi
   }
   if (state.rows.some(providerUsable)) return { kind: 'provider-ready' }
   const row = state.rows.find(candidate =>
-    candidate.entry.provider === 'deepseek-official'
-    && candidate.entry.settingsNs === 'llm-deepseek'
+    candidate.entry.provider === 'forgeweaver-official'
+    && candidate.entry.settingsNs === 'llm-forgeweaver'
     && candidate.entry.settingsPath.length === 0)
   if (row === undefined) return { kind: 'adapter-absent' }
   if (!row.entry.active) {

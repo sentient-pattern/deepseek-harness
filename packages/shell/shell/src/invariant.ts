@@ -1,9 +1,9 @@
-/** Package-owned invariant companion for the bash seam. @module @deepseek-ai/dsh-shell/invariant */
+/** Package-owned invariant companion for the bash seam. @module @forgeweaver/fw-shell/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-shell'
+const PACKAGE_NAME = '@forgeweaver/fw-shell'
 
 /** Cordis companion plugin name. */
 export const name = 'shell-invariant'

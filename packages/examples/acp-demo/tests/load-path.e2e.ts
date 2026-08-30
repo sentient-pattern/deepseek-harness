@@ -31,27 +31,27 @@ const repoTsconfig = fileURLToPath(new URL('../../../../tsconfig.json', import.m
 // A minimal opt-in leaf that loads this app + the two backends and the optional
 // session-query consumer/policies, inlined so the package test owns its fixture.
 const CORDIS_YML = `
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
+- id: llm-forgeweaver
+  name: '@forgeweaver/fw-llm-forgeweaver'
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@forgeweaver/fw-subprocess-local'
 - id: bash
-  name: '@deepseek-ai/dsh-bash-local'
+  name: '@forgeweaver/fw-bash-local'
 - id: acp-agent
-  name: '@deepseek-ai/dsh-acp-demo'
+  name: '@forgeweaver/fw-acp-demo'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-flash
+    provider: forgeweaver-official
+    model: forgeweaver-v4-flash
     persona: 'You are a test agent.'
     workspaceContext: false
 - id: tool-session-query
-  name: '@deepseek-ai/dsh-tool-session-query'
+  name: '@forgeweaver/fw-tool-session-query'
 - id: timeout-policy
-  name: '@deepseek-ai/dsh-tool-call-timeout-policy'
+  name: '@forgeweaver/fw-tool-call-timeout-policy'
 - id: spill-local
-  name: '@deepseek-ai/dsh-spill-local'
+  name: '@forgeweaver/fw-spill-local'
 - id: spill-policy
-  name: '@deepseek-ai/dsh-spill-policy'
+  name: '@forgeweaver/fw-spill-policy'
   config:
     maxInlineBytes: 50000
 `
@@ -88,9 +88,9 @@ async function boot(): Promise<Spawned & { cwd: string }> {
         ...process.env,
         TSX_TSCONFIG_PATH: repoTsconfig,
         // Key-present check only; no prompt is sent, so the model is never called.
-        DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY ?? 'keyless-acp-agent-smoke',
-        DSH_HOME: join(cwd, '.dsh'),
-        DSH_AGENTS_HOME: join(cwd, '.agents'),
+        FORGEWEAVER_API_KEY: process.env.FORGEWEAVER_API_KEY ?? 'keyless-acp-agent-smoke',
+        FW_HOME: join(cwd, '.fw'),
+        FW_AGENTS_HOME: join(cwd, '.agents'),
       },
       stdio: ['pipe', 'pipe', 'pipe'],
     },
@@ -115,7 +115,7 @@ async function boot(): Promise<Spawned & { cwd: string }> {
   return { ...spawned, cwd }
 }
 
-describe('dsh-acp-demo real-load-path smoke (bin + Loader, keyless)', () => {
+describe('fw-acp-demo real-load-path smoke (bin + Loader, keyless)', () => {
   it('boots via its bin and exposes only fresh text sessions', async () => {
     const { client, cwd, stderr } = await boot()
     // initialize: a broken export shape (collapsed bridge plugin, dropped inject)

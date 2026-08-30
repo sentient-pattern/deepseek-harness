@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-compaction-tool-result-pruner`.
- * @module @deepseek-ai/dsh-compaction-tool-result-pruner/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-compaction-tool-result-pruner`.
+ * @module @forgeweaver/fw-compaction-tool-result-pruner/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-compaction-tool-result-pruner'
+const PACKAGE_NAME = '@forgeweaver/fw-compaction-tool-result-pruner'
 
 /** Cordis companion plugin name. */
 export const name = 'compaction-tool-result-pruner-invariant'

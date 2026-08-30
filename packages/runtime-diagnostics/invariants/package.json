@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-invariants",
-  "description": "Registry service for package-owned DeepSeek Harness runtime invariants",
+  "name": "@forgeweaver/fw-invariants",
+  "description": "Registry service for package-owned ForgeWeaver runtime invariants",
   "version": "0.1.1-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/runtime-diagnostics/invariants"
   },
   "type": "module",
@@ -32,12 +32,12 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@forgeweaver/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/cordis": "workspace:^"
   }
 }

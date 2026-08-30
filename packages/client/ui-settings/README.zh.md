@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-client-ui-settings
+# @forgeweaver/fw-client-ui-settings
 
 [English](README.md) | 中文
 

@@ -2,20 +2,20 @@
 # the fs backend's overwrite diff-basis limit shrunk so a modest replacement
 # crosses the exclusive bound and the write result falls back to a whole-file
 # diff. A config patch replaces the row's whole config, so `cwd` is restated
-# verbatim, and the acp-agent restatement re-pins `deepseek-v4-flash` to match
+# verbatim, and the acp-agent restatement re-pins `forgeweaver-v4-flash` to match
 # the recorded corpus and its pinned request headers.
 - id: base
-  name: '@deepseek-ai/cordis-plugin-include'
+  name: '@forgeweaver/cordis-plugin-include'
   config:
     path: ../cordis.yml
     patches:
       - id: acp-agent
-        name: '@deepseek-ai/dsh-acp-demo'
+        name: '@forgeweaver/fw-acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
-          persistenceRoot: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
-          persistenceCompression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+          provider: forgeweaver-official
+          model: forgeweaver-v4-flash
+          persistenceRoot: !!js process.env.FW_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+          persistenceCompression: !!js "process.env.FW_SNAPSHOT === undefined ? 'zstd' : 'none'"
           workspaceContext:
             maxBytes: 65536
           persona: |
@@ -23,7 +23,7 @@
 
             Verify your work by running the code or tests. Keep answers brief and factual.
       - id: fs-sandbox
-        name: '@deepseek-ai/dsh-fs-sandbox'
+        name: '@forgeweaver/fw-fs-sandbox'
         config:
           cwd: !!js process.cwd()
           diffBasisMaxBytes: 64

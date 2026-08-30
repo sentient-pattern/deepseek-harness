@@ -3,19 +3,19 @@
 # text-only, so the strict read_image gate refuses and no image ever enters
 # the durable log.
 - id: base
-  name: '@deepseek-ai/cordis-plugin-include'
+  name: '@forgeweaver/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@deepseek-ai/dsh-llm-deepseek'
+      - id: llm-forgeweaver
+        name: '@forgeweaver/fw-llm-forgeweaver'
         disabled: true
       - id: acp-agent
-        name: '@deepseek-ai/dsh-acp-demo'
+        name: '@forgeweaver/fw-acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
-          persistenceRoot: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+          provider: forgeweaver-official
+          model: forgeweaver-v4-flash
+          persistenceRoot: !!js process.env.FW_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
             maxBytes: 65536
@@ -25,15 +25,15 @@
             Verify your work by running the code or tests. Keep answers brief and factual.
       - insert:
           - id: attachment-local
-            name: '@deepseek-ai/dsh-attachment-local'
+            name: '@forgeweaver/fw-attachment-local'
           - id: llm-replay
-            name: '@deepseek-ai/dsh-llm-replay'
+            name: '@forgeweaver/fw-llm-replay'
             config:
               providers:
-                - id: deepseek-official
-                  name: DeepSeek
+                - id: forgeweaver-official
+                  name: ForgeWeaver
                   models:
-                    - id: deepseek-v4-flash
+                    - id: forgeweaver-v4-flash
                       inputModalities: [text]
-                    - id: deepseek-v4-pro
+                    - id: forgeweaver-v4-pro
                       inputModalities: [text]

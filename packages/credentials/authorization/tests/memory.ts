@@ -1,4 +1,4 @@
-import { CredentialProvider } from '@deepseek-ai/dsh-credentials'
+import { CredentialProvider } from '@forgeweaver/fw-credentials'
 import type {
   CredentialInfo,
   CredentialKey,
@@ -7,7 +7,7 @@ import type {
   CredentialRecordInfo,
   CredentialRef,
   ResolvedCredential,
-} from '@deepseek-ai/dsh-credentials'
+} from '@forgeweaver/fw-credentials'
 
 /**
  * In-memory credentials provider for the authorization suite. Only the record

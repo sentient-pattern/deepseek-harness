@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import * as ToolsInvariant from '@deepseek-ai/dsh-tools/invariant'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@forgeweaver/cordis'
+import { scopeTarget } from '@forgeweaver/fw-scope'
+import { CallId } from '@forgeweaver/fw-llm'
+import SessionStore, { Session, SessionId } from '@forgeweaver/fw-session'
+import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@forgeweaver/fw-tools'
+import * as ToolsInvariant from '@forgeweaver/fw-tools/invariant'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
 
 const testToolSignal = new AbortController().signal
 

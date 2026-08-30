@@ -9,16 +9,16 @@ import {
 
 const experimental: WorkspaceManifest = {
   dir: 'packages/experimental/prototype',
-  manifest: { name: '@deepseek-ai/dsh-experimental-prototype', private: true },
+  manifest: { name: '@forgeweaver/fw-experimental-prototype', private: true },
 }
 
 describe('experimental workspace constraints', () => {
   it('requires the experimental package-name prefix', () => {
     expect(checkExperimentalManifest({
       ...experimental,
-      manifest: { ...experimental.manifest, name: '@deepseek-ai/dsh-prototype' },
+      manifest: { ...experimental.manifest, name: '@forgeweaver/fw-prototype' },
     })).toEqual([
-      '@deepseek-ai/dsh-prototype: experimental package name must start with "@deepseek-ai/dsh-experimental-"',
+      '@forgeweaver/fw-prototype: experimental package name must start with "@forgeweaver/fw-experimental-"',
     ])
   })
 
@@ -28,8 +28,8 @@ describe('experimental workspace constraints', () => {
       ...experimental,
       manifest: { ...experimental.manifest, private: false, publishConfig: { access: 'public' } },
     })).toEqual([
-      '@deepseek-ai/dsh-experimental-prototype: experimental package must set "private": true',
-      '@deepseek-ai/dsh-experimental-prototype: experimental package must omit publishConfig',
+      '@forgeweaver/fw-experimental-prototype: experimental package must set "private": true',
+      '@forgeweaver/fw-experimental-prototype: experimental package must omit publishConfig',
     ])
   })
 
@@ -39,11 +39,11 @@ describe('experimental workspace constraints', () => {
       expect(checkExperimentalDependencyIsolation([experimental, {
         dir: 'packages/core/consumer',
         manifest: {
-          name: '@deepseek-ai/dsh-consumer',
-          [section]: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+          name: '@forgeweaver/fw-consumer',
+          [section]: { '@forgeweaver/fw-experimental-prototype': 'workspace:^' },
         },
       }])).toEqual([
-        `@deepseek-ai/dsh-consumer: ${section}.@deepseek-ai/dsh-experimental-prototype must not reference an experimental package`,
+        `@forgeweaver/fw-consumer: ${section}.@forgeweaver/fw-experimental-prototype must not reference an experimental package`,
       ])
     },
   )
@@ -52,25 +52,25 @@ describe('experimental workspace constraints', () => {
     const manifests: WorkspaceManifest[] = [experimental, {
       dir: 'packages/core/test-only',
       manifest: {
-        name: '@deepseek-ai/dsh-test-only',
-        devDependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@forgeweaver/fw-test-only',
+        devDependencies: { '@forgeweaver/fw-experimental-prototype': 'workspace:^' },
       },
     }, {
       dir: 'packages/experimental/consumer',
       manifest: {
-        name: '@deepseek-ai/dsh-experimental-consumer',
-        dependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@forgeweaver/fw-experimental-consumer',
+        dependencies: { '@forgeweaver/fw-experimental-prototype': 'workspace:^' },
       },
     }, {
       dir: 'python/sdk-runtime',
       manifest: {
-        name: '@deepseek-ai/dsh-python-runtime',
-        dependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@forgeweaver/fw-python-runtime',
+        dependencies: { '@forgeweaver/fw-experimental-prototype': 'workspace:^' },
       },
     }]
 
     expect(checkExperimentalDependencyIsolation(manifests)).toEqual([
-      '@deepseek-ai/dsh-python-runtime: dependencies.@deepseek-ai/dsh-experimental-prototype must not reference an experimental package',
+      '@forgeweaver/fw-python-runtime: dependencies.@forgeweaver/fw-experimental-prototype must not reference an experimental package',
     ])
   })
 })

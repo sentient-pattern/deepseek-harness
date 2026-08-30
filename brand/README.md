@@ -31,5 +31,5 @@ The generator emits:
 | Theme palette | `packages/client/ui-theme/src/styles/design-platform.css` | ⏳ generate CSS from YAML |
 | UI copy (product name) | `packages/client/locale` | ⏳ interpolate from config |
 | CLI name/help | `apps/cli` | ⏳ read config |
-| Env prefix (`DSH_*`) | launch/shell env plumbing | ⏳ Phase 2 rename, YAML-driven |
-| Package scope (`@deepseek-ai`) | npm manifests | ⏳ Phase 2 rename, YAML-driven |
+| Env prefix (`FW_*`) | launch/shell env plumbing | ⏳ Phase 2 rename, YAML-driven |
+| Package scope (`@forgeweaver`) | npm manifests | ⏳ Phase 2 rename, YAML-driven |

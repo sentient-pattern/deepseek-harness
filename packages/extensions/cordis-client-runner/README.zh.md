@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-cordis-client-runner
+# @forgeweaver/fw-cordis-client-runner
 
 [English](README.md) | 中文
 

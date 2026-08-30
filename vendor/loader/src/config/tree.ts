@@ -1,5 +1,5 @@
-import { composeError, Context } from '@deepseek-ai/cordis'
-import { isNonNullable, type Dict } from '@deepseek-ai/cosmokit'
+import { composeError, Context } from '@forgeweaver/cordis'
+import { isNonNullable, type Dict } from '@forgeweaver/cosmokit'
 import { Entry, type EntryOptions } from './entry.ts'
 import { EntryGroup } from './group.ts'
 

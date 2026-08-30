@@ -1,21 +1,21 @@
 /**
  * Basic replay-aware compaction backend.
  *
- * @module @deepseek-ai/dsh-compaction-basic
+ * @module @forgeweaver/fw-compaction-basic
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { CompactionEngine, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@deepseek-ai/dsh-compaction'
-import type { TokenMeter } from '@deepseek-ai/dsh-token-meter'
-import type { Session } from '@deepseek-ai/dsh-session'
-import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever } from '@deepseek-ai/dsh-llm'
-import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import { CompactionEngine, ManualCompactionError } from '@forgeweaver/fw-compaction'
+import type { CompactionResult, CompactionTrigger } from '@forgeweaver/fw-compaction'
+import type { TokenMeter } from '@forgeweaver/fw-token-meter'
+import type { Session } from '@forgeweaver/fw-session'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever } from '@forgeweaver/fw-llm'
+import type { LlmCallConfig } from '@forgeweaver/fw-llm'
+import type { Agent, PreStepDecision } from '@forgeweaver/fw-agent'
+import type { CommandId } from '@forgeweaver/fw-commands/brand'
 // Type-only: makes the optional sibling service available to `ctx.get()`.
-import type {} from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+import type {} from '@forgeweaver/fw-compaction-tool-result-pruner'
 import {
   resolveCompactSpec,
   resolveConfig,

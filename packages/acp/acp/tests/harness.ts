@@ -1,6 +1,6 @@
 /** In-memory ACP transport fixture over the real agent factory and loop. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { createHash } from 'node:crypto'
 import {
   ClientSideConnection,
@@ -12,11 +12,11 @@ import {
   type SessionNotification,
   type Stream,
 } from '@agentclientprotocol/sdk'
-import AttachmentStore, { AttachmentError, AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { type GenerateOptions, LlmAdapter, type LlmResolvedModelInfo, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
+import AttachmentStore, { AttachmentError, AttachmentId } from '@forgeweaver/fw-attachment'
+import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@forgeweaver/fw-attachment'
+import { type GenerateOptions, LlmAdapter, type LlmResolvedModelInfo, type StreamChunk } from '@forgeweaver/fw-llm'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import { mountAgentLoopTestDependencies } from '@forgeweaver/fw-agent-loop-testkit'
 import * as AcpPlugin from '../src/index.ts'
 import type { AcpConfig } from '../src/index.ts'
 

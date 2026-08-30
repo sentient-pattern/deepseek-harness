@@ -1,7 +1,7 @@
 /**
  * Lossless storage packing for `assistant/chunk` delta runs. Providers stream
  * token-sized deltas, so a log stores hundreds of near-identical event lines
- * whose JSON envelopes dwarf their payloads (~56× measured on a real DeepSeek
+ * whose JSON envelopes dwarf their payloads (~56× measured on a real ForgeWeaver
  * session). This module packs each run of consecutive same-block delta chunks
  * into ONE storage row — `text-chunks`, `reasoning-chunks`, or
  * `tool-call-chunks` — and expands rows back to the exact original events.
@@ -15,11 +15,11 @@
  * data. The decoder validates before expanding and fails loud on a malformed
  * row-tagged value instead of silently dropping a whole run.
  *
- * @module @deepseek-ai/dsh-session/chunk-rows
+ * @module @forgeweaver/fw-session/chunk-rows
  */
 
-import { CallId, assertNever } from '@deepseek-ai/dsh-llm'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import { CallId, assertNever } from '@forgeweaver/fw-llm'
+import type { StreamChunk } from '@forgeweaver/fw-llm'
 import type { SessionEvent } from './types.ts'
 
 /** The chunk kinds that may pack; block boundaries, usage, and finish chunks always stay one event per line. */

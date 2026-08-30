@@ -1,4 +1,4 @@
-/* Thumbnail geometry mirrors DeepSeek Chat's composer rail: 64px cards with a
+/* Thumbnail geometry mirrors ForgeWeaver Chat's composer rail: 64px cards with a
    16px radius, remove control fully inside the card, arrows overlaid at the
    edges instead of a scrollbar. */
 
@@ -17,8 +17,8 @@
   /* The rail scrolls on the composer's elevated input surface: bind the l2
      pair (ui-theme styles/scrollbar.css rebinding contract) so anything that
      does draw a thumb here matches the surface. */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --fw-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
+  --fw-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
 }
 
 .rail::-webkit-scrollbar {

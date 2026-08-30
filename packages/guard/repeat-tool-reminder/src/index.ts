@@ -3,16 +3,16 @@
  * with logged model context without vetoing or rewriting calls. Configuration
  * and chain semantics live in the package README; rationale lives in the
  * repeat-tool-reminder Agent Note.
- * @module @deepseek-ai/dsh-repeat-tool-reminder
+ * @module @forgeweaver/fw-repeat-tool-reminder
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { MessageSource } from '@deepseek-ai/dsh-llm'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import type { PostToolDecision, ToolExecution } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import type { Agent, PreStepDecision } from '@forgeweaver/fw-agent'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import type { MessageSource } from '@forgeweaver/fw-llm'
+import type { UserMessage } from '@forgeweaver/fw-session'
+import type { PostToolDecision, ToolExecution } from '@forgeweaver/fw-tools'
 
 export const name = 'repeat-tool-reminder'
 

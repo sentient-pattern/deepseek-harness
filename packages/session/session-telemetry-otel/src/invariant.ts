@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-telemetry-otel`.
- * @module @deepseek-ai/dsh-session-telemetry-otel/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-session-telemetry-otel`.
+ * @module @forgeweaver/fw-session-telemetry-otel/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-telemetry-otel'
+const PACKAGE_NAME = '@forgeweaver/fw-session-telemetry-otel'
 
 /** Cordis companion plugin name. */
 export const name = 'session-telemetry-otel-invariant'

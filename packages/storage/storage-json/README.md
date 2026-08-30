@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-storage-json
+# @forgeweaver/fw-storage-json
 
 English | [中文](README.zh.md)
 

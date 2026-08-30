@@ -1,6 +1,6 @@
-// Real-host smoke: spawn `dsh web` with a real key, walk the full flow
+// Real-host smoke: spawn `fw web` with a real key, walk the full flow
 // list in a real chromium, screenshot every screen into .artifacts/ for the
-// figma comparison pass. Self-skips without DEEPSEEK_API_KEY (repo e2e
+// figma comparison pass. Self-skips without FORGEWEAVER_API_KEY (repo e2e
 // convention); vitest.web.config.ts loads the repo-root .env before this file
 // runs (the CLI only auto-loads .env from its cwd — a temp dir here, so
 // sessions never land in the repo's .sessions).
@@ -32,10 +32,10 @@ const WEB_SURFACE_PROMPT = fileURLToPath(new URL('./snapshots/web-runtime-contex
 function waitForReadyLine(child: ChildProcess): Promise<string> {
   return new Promise((resolveReady, reject) => {
     let out = ''
-    const timer = setTimeout(() => { reject(new Error(`dsh web not ready in 90s; output:\n${out}`)) }, 90_000)
+    const timer = setTimeout(() => { reject(new Error(`fw web not ready in 90s; output:\n${out}`)) }, 90_000)
     const onData = (chunk: Buffer): void => {
       out += chunk.toString()
-      const match = /dsh web: (http:\/\/[^\s]+)/.exec(out)
+      const match = /fw web: (http:\/\/[^\s]+)/.exec(out)
       if (match?.[1] !== undefined) {
         clearTimeout(timer)
         resolveReady(match[1])
@@ -45,7 +45,7 @@ function waitForReadyLine(child: ChildProcess): Promise<string> {
     child.stderr?.on('data', onData)
     child.once('exit', (code) => {
       clearTimeout(timer)
-      reject(new Error(`dsh web exited early (code ${code}); output:\n${out}`))
+      reject(new Error(`fw web exited early (code ${code}); output:\n${out}`))
     })
   })
 }
@@ -138,7 +138,7 @@ async function detailsTrack(page: Page): Promise<number> {
   return Number(cols.split(' ').pop()!.replace('px', ''))
 }
 
-// Readiness gate: `dsh web` serves every production manifest plugin; until every UI
+// Readiness gate: `fw web` serves every production manifest plugin; until every UI
 // plugin's client bundle exists and exports apply, the loader fail-louds and
 // the frame never appears.
 const UI_PLUGIN_DIRS = [
@@ -153,10 +153,10 @@ const notReady = UI_PLUGIN_DIRS.filter((dir) => {
 })
 if (notReady.length > 0) console.warn(`[smoke-real] skipped — client bundles not ready: ${notReady.join(', ')}`)
 
-describe('dsh web keyless CLI smoke', () => {
+describe('fw web keyless CLI smoke', () => {
   it('listens on 127.0.0.1 by default', async () => {
     requireDist()
-    const sessionsDir = mkdtempSync(join(tmpdir(), 'dsh-web-keyless-'))
+    const sessionsDir = mkdtempSync(join(tmpdir(), 'fw-web-keyless-'))
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
@@ -165,9 +165,9 @@ describe('dsh web keyless CLI smoke', () => {
         cwd: sessionsDir,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-no-call',
-          DSH_HOME: join(sessionsDir, '.dsh'),
-          DSH_AGENTS_HOME: join(sessionsDir, '.agents'),
+          FORGEWEAVER_API_KEY: 'keyless-web-no-call',
+          FW_HOME: join(sessionsDir, '.fw'),
+          FW_AGENTS_HOME: join(sessionsDir, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -189,7 +189,7 @@ describe('dsh web keyless CLI smoke', () => {
 
   it('routes web runtime context and workspace instructions through the real CLI request', async () => {
     requireDist()
-    const workspace = mkdtempSync(join(tmpdir(), 'dsh-web-workspace-'))
+    const workspace = mkdtempSync(join(tmpdir(), 'fw-web-workspace-'))
     mkdirSync(join(workspace, '.git'))
     writeFileSync(join(workspace, 'AGENTS.md'), 'web-workspace-context-probe\n')
 
@@ -231,10 +231,10 @@ describe('dsh web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-workspace',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
-          DSH_HOME: join(workspace, '.dsh'),
-          DSH_AGENTS_HOME: join(workspace, '.agents'),
+          FORGEWEAVER_API_KEY: 'keyless-web-workspace',
+          FORGEWEAVER_BASE_URL: `http://127.0.0.1:${address.port}`,
+          FW_HOME: join(workspace, '.fw'),
+          FW_AGENTS_HOME: join(workspace, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -297,7 +297,7 @@ describe('dsh web keyless CLI smoke', () => {
 
   it('retries a partial transport failure through the shipped Web composition', async () => {
     requireDist()
-    const workspace = mkdtempSync(join(tmpdir(), 'dsh-web-retry-'))
+    const workspace = mkdtempSync(join(tmpdir(), 'fw-web-retry-'))
     const promptMarker = 'WEB_RETRY_REQUEST'
     const recoveredMarker = 'WEB_RETRY_RECOVERED'
     let mainAttempts = 0
@@ -344,9 +344,9 @@ describe('dsh web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-retry',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
-          DSH_HOME: join(workspace, '.dsh'),
+          FORGEWEAVER_API_KEY: 'keyless-web-retry',
+          FORGEWEAVER_BASE_URL: `http://127.0.0.1:${address.port}`,
+          FW_HOME: join(workspace, '.fw'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -387,9 +387,9 @@ describe('dsh web keyless CLI smoke', () => {
     }
   }, 30_000)
 
-  it('DSH_TOOLS_MODE=code collapses the provider wire tools to run_code with the SDK prompt section', async () => {
+  it('FW_TOOLS_MODE=code collapses the provider wire tools to run_code with the SDK prompt section', async () => {
     requireDist()
-    const workspace = mkdtempSync(join(tmpdir(), 'dsh-web-code-mode-'))
+    const workspace = mkdtempSync(join(tmpdir(), 'fw-web-code-mode-'))
 
     interface CodeModeProviderRequest {
       messages?: { role?: string; content?: string }[]
@@ -426,11 +426,11 @@ describe('dsh web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-code-mode',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
-          DSH_TOOLS_MODE: 'code',
-          DSH_HOME: join(workspace, '.dsh'),
-          DSH_AGENTS_HOME: join(workspace, '.agents'),
+          FORGEWEAVER_API_KEY: 'keyless-web-code-mode',
+          FORGEWEAVER_BASE_URL: `http://127.0.0.1:${address.port}`,
+          FW_TOOLS_MODE: 'code',
+          FW_HOME: join(workspace, '.fw'),
+          FW_AGENTS_HOME: join(workspace, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -466,7 +466,7 @@ describe('dsh web keyless CLI smoke', () => {
   })
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
+describe.skipIf(!process.env.FORGEWEAVER_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
   let child: ChildProcess
   let sessionsDir: string
   let baseUrl: string
@@ -476,9 +476,9 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
 
   beforeAll(async () => {
     requireDist()
-    sessionsDir = mkdtempSync(join(tmpdir(), 'dsh-web-w5-'))
+    sessionsDir = mkdtempSync(join(tmpdir(), 'fw-web-w5-'))
     const port = await probeFreePort()
-    // tsx boot mirrors the runtime half of the root dsh script. Isolate
+    // tsx boot mirrors the runtime half of the root fw script. Isolate
     // the host-level Harness and shared-agent homes inside the temp world; tsx
     // also needs the repo's loader and tsconfig paths pointed at explicitly.
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
@@ -498,8 +498,8 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
         cwd: sessionsDir,
         env: {
           ...process.env,
-          DSH_HOME: join(sessionsDir, '.dsh'),
-          DSH_AGENTS_HOME: join(sessionsDir, '.agents'),
+          FW_HOME: join(sessionsDir, '.fw'),
+          FW_AGENTS_HOME: join(sessionsDir, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -534,8 +534,8 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
 
   it('empty-state first send completes a real model round', async () => {
     onTestFailed(() => saveFailureShot(page, 'w5-first-round'))
-    // This scenario spawns its own server against a fresh $DSH_HOME with the
-    // DeepSeek credential inherited from the environment, so no onboarding
+    // This scenario spawns its own server against a fresh $FW_HOME with the
+    // ForgeWeaver credential inherited from the environment, so no onboarding
     // step mounts and the page is immediately interactive.
     // Fresh world: connect a Workspace so the composer starts live.
     await connectFreshWorkspace(page, sessionsDir)

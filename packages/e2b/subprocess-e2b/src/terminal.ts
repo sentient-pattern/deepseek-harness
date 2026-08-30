@@ -10,16 +10,16 @@ import {
   FileNotFoundError,
   SandboxNotFoundError,
   quoteE2BShellArg,
-} from '@deepseek-ai/dsh-e2b'
-import type { CommandHandle, CommandResult, Sandbox } from '@deepseek-ai/dsh-e2b'
+} from '@forgeweaver/fw-e2b'
+import type { CommandHandle, CommandResult, Sandbox } from '@forgeweaver/fw-e2b'
 import type {
   SubprocessOutcome,
   SubprocessTerminalForeground,
   SubprocessTerminalHandle,
   SubprocessTerminalSignal,
   SubprocessTerminalSpawnSpec,
-} from '@deepseek-ai/dsh-subprocess'
-import type E2BRuntime from '@deepseek-ai/dsh-e2b'
+} from '@forgeweaver/fw-subprocess'
+import type E2BRuntime from '@forgeweaver/fw-e2b'
 import {
   bootstrapEnvironment,
   readRemoteEnvironment,
@@ -30,17 +30,17 @@ import { asError, commandOpts, delay, signalOpts, signalRemoteGroups } from './r
 const TERMINAL_RUNNER_SOURCE = [
   '#!/bin/bash',
   'set -euo pipefail',
-  'dsh_state=$1',
-  'mapfile -d \'\' -t dsh_env < "$dsh_state/environment"',
-  'mapfile -d \'\' -t dsh_argv < "$dsh_state/argv"',
-  'dsh_output_marker=$(<"$dsh_state/output-marker")',
-  'rm -f -- "$dsh_state/environment" "$dsh_state/argv" "$dsh_state/output-marker" "$dsh_state/runner.bash"',
-  'if (( ${#dsh_argv[@]} == 0 )); then',
+  'fw_state=$1',
+  'mapfile -d \'\' -t fw_env < "$fw_state/environment"',
+  'mapfile -d \'\' -t fw_argv < "$fw_state/argv"',
+  'fw_output_marker=$(<"$fw_state/output-marker")',
+  'rm -f -- "$fw_state/environment" "$fw_state/argv" "$fw_state/output-marker" "$fw_state/runner.bash"',
+  'if (( ${#fw_argv[@]} == 0 )); then',
   "  printf 'terminal runner received empty argv\\n' >&2",
   '  exit 125',
   'fi',
-  'printf \'%s\' "$dsh_output_marker"',
-  'exec env -i -- "${dsh_env[@]}" "${dsh_argv[@]}"',
+  'printf \'%s\' "$fw_output_marker"',
+  'exec env -i -- "${fw_env[@]}" "${fw_argv[@]}"',
   '',
 ].join('\n')
 
@@ -469,7 +469,7 @@ export async function spawnE2BTerminal(
     argv: posix.join(stateDir, 'argv'),
     outputMarker: posix.join(stateDir, 'output-marker'),
   }
-  const outputMarker = Buffer.from(`dsh-e2b-bootstrap:${randomUUID()}`)
+  const outputMarker = Buffer.from(`fw-e2b-bootstrap:${randomUUID()}`)
   const output = new PassThrough()
   const outputFilter = new BootstrapOutputFilter(outputMarker, output)
   let handle: CommandHandle | undefined

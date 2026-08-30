@@ -4,19 +4,19 @@
  * producers. It also delivers unreported completions to the owning agent:
  * injected into a busy owner's next step, or opening a turn on an idle one
  * under the default `wakeup` delivery, bounded per owner.
- * @module @deepseek-ai/dsh-tool-jobs
+ * @module @forgeweaver/fw-tool-jobs
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { boundContextSummary, createUserMessage, type ContentBlock } from '@deepseek-ai/dsh-llm'
-import { TextRetainer } from '@deepseek-ai/dsh-output-retention'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, ToolDefinition, ToolExecution } from '@deepseek-ai/dsh-tools'
-import { JobId } from '@deepseek-ai/dsh-jobs'
-import type { JobSnapshot } from '@deepseek-ai/dsh-jobs'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import { boundContextSummary, createUserMessage, type ContentBlock } from '@forgeweaver/fw-llm'
+import { TextRetainer } from '@forgeweaver/fw-output-retention'
+import { defineTool } from '@forgeweaver/fw-tools'
+import type { GenericCallView, ToolDefinition, ToolExecution } from '@forgeweaver/fw-tools'
+import { JobId } from '@forgeweaver/fw-jobs'
+import type { JobSnapshot } from '@forgeweaver/fw-jobs'
+import type {} from '@forgeweaver/fw-system-prompt'
+import type { Agent } from '@forgeweaver/fw-agent'
 
 export const name = 'tool-jobs'
 export const inject = ['tools', 'jobs', 'systemPrompt']

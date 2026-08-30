@@ -10,8 +10,8 @@ import {
   createToolResultMessage,
   createUserMessage,
   isTokenDelta,
-} from '@deepseek-ai/dsh-llm/message'
-import { CallId } from '@deepseek-ai/dsh-llm/brand'
+} from '@forgeweaver/fw-llm/message'
+import { CallId } from '@forgeweaver/fw-llm/brand'
 import type {
   AssistantMessage,
   ContentBlock,
@@ -19,24 +19,24 @@ import type {
   TokenUsage,
   ToolResultMessage,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { AttachmentIdType, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+} from '@forgeweaver/fw-llm'
+import type { AttachmentIdType, ImageAttachmentRef } from '@forgeweaver/fw-attachment'
 import type {
   SessionEvent,
   SessionId,
   TodoItem,
-} from '@deepseek-ai/dsh-session/types'
+} from '@forgeweaver/fw-session/types'
 // Type-only: the brand constructor is host-side; the fixture casts at its
 // wire-fabrication boundary (the schema layer's one-cast-point posture).
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
-import type { CommandDescriptor, CommandExecution, CommandResult } from '@deepseek-ai/dsh-commands/types'
-import { deriveEventMessage, foldSurface } from '@deepseek-ai/dsh-session/surface'
+import type { CommandId } from '@forgeweaver/fw-commands/brand'
+import type { CommandDescriptor, CommandExecution, CommandResult } from '@forgeweaver/fw-commands/types'
+import { deriveEventMessage, foldSurface } from '@forgeweaver/fw-session/surface'
 import type {
   ApiProxy, ClientRequest, ClientResponse, HistoryEntry, HostFrame, MuxFrame, RpcReceipt,
   ModelProviderGroup, ModelSelection, RpcRequest, RpcResponse, RpcResult, ServerRequest, ServerResponse, SessionSummary,
   ToolCallView, ToolEventView, ToolResultView, WorkspaceId, WorkspaceView,
 } from './api.ts'
-import type { RequestPayload, ResponseValue, RpcMethodMap } from '@deepseek-ai/dsh-host-apiproxy/api'
+import type { RequestPayload, ResponseValue, RpcMethodMap } from '@forgeweaver/fw-host-apiproxy/api'
 import { AbstractApiClient, RpcId, SESSION_SEARCH_RESULT_LIMIT } from './api.ts'
 import { randomUuid } from './random-uuid.ts'
 import type { ClientConnectionRpc } from '../rpc.ts'
@@ -78,7 +78,7 @@ const MARKDOWN_FIXTURE = [
   '| history | rendered |',
   '| streaming | stable |',
   '',
-  '[DeepSeek](https://www.deepseek.com)',
+  '[ForgeWeaver](https://www.forgeweaver.com)',
   '',
   '```ts',
   'const markdown = true',
@@ -180,7 +180,7 @@ const SEARCH_MATCHES_FIXTURE: { path: string; matches: { lineNumber: number; lin
 /**
  * The model-facing grep render text for the sample — what a UI without a search
  * card shows, attached as the view's `content`. Mirrors the real grep
- * presenter's shape (see formatGrepOutput in dsh-tool-fs-search): a
+ * presenter's shape (see formatGrepOutput in fw-tool-fs-search): a
  * `Found X of Y matches` header, the matches grouped under file headers with
  * `Line N:` rows, then a spill-recovery footer.
  */
@@ -208,7 +208,7 @@ const SEARCH_PATHS_FIXTURE = [
 /**
  * The model-facing glob render text — the newline-joined path list plus a
  * spill-recovery footer, mirroring the real glob presenter's shape (see
- * formatGlobOutput in dsh-tool-fs-search).
+ * formatGlobOutput in fw-tool-fs-search).
  */
 const SEARCH_PATHS_TEXT = [
   ...SEARCH_PATHS_FIXTURE,
@@ -253,20 +253,20 @@ const READ_SAMPLE_TEXT = READ_SAMPLE_SOURCE.map((text, index) => `${READ_SAMPLE_
  * search view minus its wire discriminants.
  */
 const WEB_SEARCH_RESULT: Omit<Extract<ToolResultView, { card: 'web'; kind: 'search' }>, 'card' | 'kind'> = {
-  answer: 'DeepSeek Harness is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
+  answer: 'ForgeWeaver is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
   sources: [
     {
-      url: 'https://github.com/deepseek-ai/deepseek-harness',
-      title: 'DeepSeek Harness — plugin-based agent harness',
+      url: 'https://github.com/sentient-pattern/deepseek-harness',
+      title: 'ForgeWeaver — plugin-based agent harness',
       snippet: 'Everything is a plugin: session, tools, agent-loop, and LLM adapters all mount on the same Cordis context.',
       publishedAt: '2026-07-01',
     },
     {
-      url: 'https://www.deepseek.com/blog/harness-architecture',
+      url: 'https://www.forgeweaver.com/blog/harness-architecture',
       snippet: 'The capability-seam pattern splits each capability into interface, implementation, and consumer packages.',
     },
     {
-      url: 'https://docs.deepseek.com/harness/plugins',
+      url: 'https://docs.forgeweaver.com/harness/plugins',
       title: 'Writing a harness plugin',
       publishedAt: '2026-06-15',
     },
@@ -276,12 +276,12 @@ const WEB_SEARCH_RESULT: Omit<Extract<ToolResultView, { card: 'web'; kind: 'sear
 
 /** The `web_fetch` result view for the web-fetch turn, authored inline for the same reason. */
 const WEB_FETCH_RESULT: Omit<Extract<ToolResultView, { card: 'web'; kind: 'fetch' }>, 'card' | 'kind'> = {
-  url: 'https://www.deepseek.com/blog/harness-architecture',
+  url: 'https://www.forgeweaver.com/blog/harness-architecture',
   statusCode: 200,
   truncated: false,
 }
 
-const DEEPSEEK_REASONING = {
+const FORGEWEAVER_REASONING = {
   efforts: [
     { id: 'off', name: 'Off' },
     { id: 'high', name: 'High' },
@@ -304,20 +304,20 @@ const OPENAI_REASONING = {
 function fixtureModelGroups(): ModelProviderGroup[] {
   return [
     {
-      id: 'deepseek-official',
-      name: 'DeepSeek',
+      id: 'forgeweaver-official',
+      name: 'ForgeWeaver',
       models: [
         {
-          id: 'deepseek-v4-flash',
-          name: 'DeepSeek-V4-Flash',
+          id: 'forgeweaver-v4-flash',
+          name: 'ForgeWeaver-V4-Flash',
           description: '快速响应',
-          reasoning: DEEPSEEK_REASONING,
+          reasoning: FORGEWEAVER_REASONING,
         },
         {
-          id: 'deepseek-v4-pro',
-          name: 'DeepSeek-V4-Pro',
+          id: 'forgeweaver-v4-pro',
+          name: 'ForgeWeaver-V4-Pro',
           description: '复杂任务',
-          reasoning: DEEPSEEK_REASONING,
+          reasoning: FORGEWEAVER_REASONING,
         },
       ],
     },
@@ -377,7 +377,7 @@ function buildAlphaLog(): SessionEvent[] {
   // route capacity that accompanied them just as the live prompt path does.
   push({
     type: 'request/context',
-    data: { provider: 'deepseek-official', model: 'deepseek-v4-flash', contextWindow: 128_000 },
+    data: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash', contextWindow: 128_000 },
   })
   for (let turn = 0; turn < 60; turn++) {
     push({ type: 'turn/start', data: { turn } })
@@ -545,8 +545,8 @@ function buildAlphaLog(): SessionEvent[] {
   // the real tools so they hit the keyed WebRow registration. Ordered BEFORE
   // the todo turn for the same reason turn 66 is: the standing plan retires at
   // the next turn/start, so a turn after it would empty the dock's plan strip.
-  toolTurn(70, 'web_search', '{"queries":["deepseek harness architecture"]}', 'Search results for deepseek harness architecture.')
-  toolTurn(71, 'web_fetch', '{"url":"https://www.deepseek.com/blog/harness-architecture"}', '# Harness architecture\n\nEverything is a plugin.')
+  toolTurn(70, 'web_search', '{"queries":["forgeweaver harness architecture"]}', 'Search results for forgeweaver harness architecture.')
+  toolTurn(71, 'web_fetch', '{"url":"https://www.forgeweaver.com/blog/harness-architecture"}', '# Harness architecture\n\nEverything is a plugin.')
 
   // Turn 72: max-tokens sample — the provider ends the turn at its output cap
   // mid-sentence, so the chat flow must render the turn-max-tokens notice
@@ -1379,7 +1379,7 @@ function backscanTodos(log: readonly SessionEvent[]): TodoItem[] | undefined {
   return undefined
 }
 
-/** Fixture-local mirror of the goal projection value (dsh-goal's GoalProjection shape). */
+/** Fixture-local mirror of the goal projection value (fw-goal's GoalProjection shape). */
 interface FxGoalProjection {
   goal: {
     id: string
@@ -1532,7 +1532,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   const logs = new Map<SessionId, SessionEvent[]>([[sid('fx-alpha'), buildAlphaLog()]])
   const modelSelections = new Map<SessionId, ModelSelection>(sessions.map(session => [
     session.sessionId,
-    { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
   ]))
   const attachments = new Map<string, { attachment: ImageAttachmentRef; data: string }>([[
     String(FIXTURE_IMAGE_REF.attachmentId),
@@ -1541,8 +1541,8 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   /** Credential store double: set/unset flip the describe badge, values never read back. */
   const fixtureCredentials = new Map<string, true>([
     // The assembled fixture represents an already-configured shipped
-    // DeepSeek route so unrelated GUI journeys do not enter first-run setup.
-    ['DEEPSEEK_API_KEY', true],
+    // ForgeWeaver route so unrelated GUI journeys do not enter first-run setup.
+    ['FORGEWEAVER_API_KEY', true],
   ])
   /**
    * Preset compositions the fixture serves. Held as state rather than
@@ -1550,9 +1550,9 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
    * roster a GUI journey sees after writing is the text it wrote.
    */
   const fixturePresets = new Map<string, { trust: 'system' | 'user'; content: string }>([
-    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@deepseek-ai/dsh-tool-bash'\n" }],
-    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@deepseek-ai/dsh-tool-web-search'\n" }],
-    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@deepseek-ai/dsh-tool-read'\n" }],
+    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@forgeweaver/fw-tool-bash'\n" }],
+    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@forgeweaver/fw-tool-web-search'\n" }],
+    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@forgeweaver/fw-tool-read'\n" }],
   ])
   let fixtureDefaultPreset = 'standard'
   const nextTurn = new Map<SessionId, number>([[sid('fx-alpha'), 75]])
@@ -1593,8 +1593,8 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     ['/home', ['fixture']],
     [FIXTURE_HOME, ['Documents', 'Downloads', '.config']],
     [`${FIXTURE_HOME}/Documents`, [
-      'project', 'deepseek-iOS', 'deepseek-android', 'deepseek-platform',
-      'deepseek-web', 'deepseek-harness', 'deepseek-app', 'deepseek-landing-blog',
+      'project', 'forgeweaver-iOS', 'forgeweaver-android', 'forgeweaver-platform',
+      'forgeweaver-web', 'forgeweaver-harness', 'forgeweaver-app', 'forgeweaver-landing-blog',
     ]],
   ])
   const childrenOf = (path: string): string[] | undefined => {
@@ -1904,7 +1904,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
             label,
             ...item.cwd === undefined ? {} : { cwd: item.cwd },
             createdAt: item.updatedAt,
-            mention: `@[${label}](dsh-session:${encoded})`,
+            mention: `@[${label}](fw-session:${encoded})`,
           }
         })
       return { ok: true, value }
@@ -2354,7 +2354,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
           sessionId: requestedId ?? sid(`fx-${nextSession++}`), updatedAt: Date.now(), running: false, blank: true, cwd,
         }
         sessions.push(created)
-        modelSelections.set(created.sessionId, { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+        modelSelections.set(created.sessionId, { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' })
         attachedSessions += 1
         const emitSession = (): void => {
           // Mirrors the host: the frame fires at creation, so blank is constantly true.
@@ -2464,7 +2464,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       },
       models: request => ok(request, {
         current: modelSelections.get(request.payload.sessionId)
-          ?? { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+          ?? { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
         // The fixture's routes all serve; a surface exercising the blocked
         // posture drives it through its own stub.
         routable: true,
@@ -2542,7 +2542,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         // Capacity parallel of the host token-meter's request/context record:
         // log-only, appended inside the open turn, and deduplicated against the
         // route already recorded (the fixture never varies contextWindow).
-        const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'deepseek-v4-flash' }
+        const selection = modelSelections.get(id) ?? { provider: 'forgeweaver', model: 'forgeweaver-v4-flash' }
         if (lastRequestContext(logOf(id))?.model !== selection.model) {
           append(id, {
             type: 'request/context',
@@ -2987,16 +2987,16 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       },
     },
     settings: {
-      // Only the resolved DeepSeek address needed by first-run readiness is
+      // Only the resolved ForgeWeaver address needed by first-run readiness is
       // represented here. Fixture-backed journeys do not open its Models
       // editor; real schema-driven forms ride the HTTP transport.
       describe: request => ok(request, {
         writable: true,
         hasDocument: true,
         namespaces: [{
-          ns: 'llm-deepseek',
+          ns: 'llm-forgeweaver',
           schema: {},
-          value: { apiKeyEnv: 'DEEPSEEK_API_KEY' },
+          value: { apiKeyEnv: 'FORGEWEAVER_API_KEY' },
           applies: 'live',
           secrets: [{ path: ['apiKey'], set: false }],
           revision: 0,
@@ -3040,7 +3040,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     llm: {
       providers: request => ok(request, {
         providers: [
-          { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+          { provider: 'forgeweaver-official', displayName: 'ForgeWeaver', settingsNs: 'llm-forgeweaver', settingsPath: [], active: true },
           { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true, declared: false },
           { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false, declared: false },
           // One hand-declared route, so a surface reading this fixture meets

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-agent-instructions`.
- * @module @deepseek-ai/dsh-agent-instructions/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-agent-instructions`.
+ * @module @forgeweaver/fw-agent-instructions/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-agent-instructions'
+const PACKAGE_NAME = '@forgeweaver/fw-agent-instructions'
 
 /** Cordis companion plugin name. */
 export const name = 'workspace-context-invariant'

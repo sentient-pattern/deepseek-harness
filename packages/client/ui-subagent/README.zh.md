@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-client-ui-subagent
+# @forgeweaver/fw-client-ui-subagent
 
 [English](README.md) | 中文
 

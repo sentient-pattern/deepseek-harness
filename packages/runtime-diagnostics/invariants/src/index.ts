@@ -3,13 +3,13 @@
  * Every workspace package registers checks from a `./invariant` companion;
  * ordinary package entrypoints stay independent of diagnostics.
  *
- * @module @deepseek-ai/dsh-invariants
+ * @module @forgeweaver/fw-invariants
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { Inject } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type Schema from '@deepseek-ai/schemastery'
+import { Context, Service } from '@forgeweaver/cordis'
+import type { Inject } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import type Schema from '@forgeweaver/schemastery'
 
 /** Runtime invariant selection configured on the service plugin. */
 export interface Config {
@@ -65,7 +65,7 @@ export class InvariantError extends Error {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     invariants: InvariantRegistry
   }

@@ -4,8 +4,8 @@
  * @module subagent-diagnostic-agent
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { Context } from '@forgeweaver/cordis'
+import type { SessionId } from '@forgeweaver/fw-session'
 
 /** Fixture plugin name. */
 export const name = 'subagent-diagnostic-agent'
@@ -20,7 +20,7 @@ export const inject = ['agents', 'agentLoop', 'sessionPersistence']
 export async function apply(ctx: Context): Promise<void> {
   const handle = await ctx.agents.resume({
     resumeSessionId: 'subagent-diagnostic-parent' as SessionId,
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
   })
   ctx.effect(() => () => handle.dispose(), 'subagent-diagnostic-agent.handle')
 }

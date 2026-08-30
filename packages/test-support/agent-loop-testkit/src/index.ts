@@ -2,17 +2,17 @@
  * Shared mounting for the services required before tests load the concrete
  * agent loop. The caller retains ownership of the context, loop, adapters,
  * optional plugins, and teardown.
- * @module @deepseek-ai/dsh-agent-loop-testkit
+ * @module @forgeweaver/fw-agent-loop-testkit
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import type { Config as SystemPromptConfig } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { Config as ToolRuntimeConfig } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@forgeweaver/cordis'
+import AgentRegistry from '@forgeweaver/fw-agent'
+import LlmRuntime from '@forgeweaver/fw-llm'
+import SessionStore from '@forgeweaver/fw-session'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import type { Config as SystemPromptConfig } from '@forgeweaver/fw-system-prompt'
+import ToolRuntime from '@forgeweaver/fw-tools'
+import type { Config as ToolRuntimeConfig } from '@forgeweaver/fw-tools'
 
 /** Configuration forwarded to the prerequisite service plugins. */
 export interface AgentLoopTestDependenciesOptions {

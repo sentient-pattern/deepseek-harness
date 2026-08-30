@@ -3,19 +3,19 @@ import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promis
 import { homedir } from 'node:os'
 import { basename, join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { SandboxBashExecutor } from '@deepseek-ai/dsh-bash-sandbox'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import SandboxedFileSystem from '@deepseek-ai/dsh-fs-sandbox'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { LocalSandboxProvider } from '@deepseek-ai/dsh-sandbox-local'
-import { bwrapProfileArgs, seatbeltProfileArgs } from '@deepseek-ai/dsh-sandbox-local/src/profiles.ts'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import type { ToolResult } from '@deepseek-ai/dsh-tools'
-import { launcherPath } from '@deepseek-ai/node-addon-landlock-run'
+import { Context } from '@forgeweaver/cordis'
+import { SandboxBashExecutor } from '@forgeweaver/fw-bash-sandbox'
+import LocalSubprocessRuntime from '@forgeweaver/fw-subprocess-local'
+import * as FsPolicy from '@forgeweaver/fw-fs-observation-policy'
+import SandboxedFileSystem from '@forgeweaver/fw-fs-sandbox'
+import { CallId } from '@forgeweaver/fw-llm'
+import { LocalSandboxProvider } from '@forgeweaver/fw-sandbox-local'
+import { bwrapProfileArgs, seatbeltProfileArgs } from '@forgeweaver/fw-sandbox-local/src/profiles.ts'
+import SandboxPolicyService from '@forgeweaver/fw-sandbox-policy'
+import { SessionId } from '@forgeweaver/fw-session'
+import * as ToolFs from '@forgeweaver/fw-tool-fs'
+import type { ToolResult } from '@forgeweaver/fw-tools'
+import { launcherPath } from '@forgeweaver/node-addon-landlock-run'
 import * as agentSpine from '../src/index.ts'
 
 const bwrapUsable = spawnSync('bwrap', [...bwrapProfileArgs({ mode: 'read-only', workspaceRoot: '/' }), '--', 'true'], { timeout: 5_000, stdio: 'ignore' }).status === 0
@@ -30,7 +30,7 @@ let projectB: string
 const tempDirs: string[] = []
 
 async function projectDir(label: string): Promise<string> {
-  const dir = await mkdtemp(join(homedir(), `dsh-${label}-`))
+  const dir = await mkdtemp(join(homedir(), `fw-${label}-`))
   tempDirs.push(dir)
   return dir
 }

@@ -1,5 +1,5 @@
 /**
- * Unit + real-load-path coverage for @deepseek-ai/dsh-tool-call-timeout-policy. The
+ * Unit + real-load-path coverage for @forgeweaver/fw-tool-call-timeout-policy. The
  * timeout-wins cases drive the deadline under fake timers (deterministic — no
  * wall-clock race) and use a COOPERATIVE tool that settles only when its
  * `exec.signal` aborts, mirroring how a real capability forwards the signal and
@@ -7,13 +7,13 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { CallId, HarnessError } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED, type ToolExecutionInput, type PostToolDecision } from '@deepseek-ai/dsh-tools'
-import * as timeoutPolicy from '@deepseek-ai/dsh-tool-call-timeout-policy'
-import { TOOL_TIMEOUT } from '@deepseek-ai/dsh-tool-call-timeout-policy'
+import { Context } from '@forgeweaver/cordis'
+import Loader from '@forgeweaver/cordis-plugin-loader'
+import { CallId, HarnessError } from '@forgeweaver/fw-llm'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED, type ToolExecutionInput, type PostToolDecision } from '@forgeweaver/fw-tools'
+import * as timeoutPolicy from '@forgeweaver/fw-tool-call-timeout-policy'
+import { TOOL_TIMEOUT } from '@forgeweaver/fw-tool-call-timeout-policy'
 
 const testToolSignal = new AbortController().signal
 
@@ -217,7 +217,7 @@ describe('timeout-policy disposal (HMR safety)', () => {
   })
 })
 
-describe('dsh-tool-call-timeout-policy real-load-path guard', () => {
+describe('fw-tool-call-timeout-policy real-load-path guard', () => {
   it('has no default export and keeps name/inject through unwrapExports', () => {
     expect('default' in timeoutPolicy).toBe(false)
     const loader = Object.create(Loader.prototype) as Loader

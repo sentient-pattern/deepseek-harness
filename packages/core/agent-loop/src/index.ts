@@ -2,13 +2,13 @@
  * Concrete agent-loop plugin: creates scoped ReactLoopAgents, publishes them
  * through the agent/session registries, and owns their ordered teardown.
  *
- * @module @deepseek-ai/dsh-agent-loop
+ * @module @forgeweaver/fw-agent-loop
  */
 
-import { Context, FiberState, Service } from '@deepseek-ai/cordis'
+import { Context, FiberState, Service } from '@forgeweaver/cordis'
 import { randomUUID } from 'node:crypto'
-import z from '@deepseek-ai/schemastery'
-import { emitAgentEvent } from '@deepseek-ai/dsh-agent'
+import z from '@forgeweaver/schemastery'
+import { emitAgentEvent } from '@forgeweaver/fw-agent'
 import type {
   Agent,
   AgentFactory,
@@ -18,14 +18,14 @@ import type {
   CreateAgentOptions,
   ResumeAgentOptions,
   SessionStartSource,
-} from '@deepseek-ai/dsh-agent'
-import { errorChain } from '@deepseek-ai/dsh-llm'
-import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
-import { SessionId, SessionPreparation } from '@deepseek-ai/dsh-session'
-import type { Session, SessionHeader } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-tools'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
+} from '@forgeweaver/fw-agent'
+import { errorChain } from '@forgeweaver/fw-llm'
+import { installSettingsSection, settingsNamespace } from '@forgeweaver/fw-settings'
+import { SessionId, SessionPreparation } from '@forgeweaver/fw-session'
+import type { Session, SessionHeader } from '@forgeweaver/fw-session'
+import type {} from '@forgeweaver/fw-system-prompt'
+import type {} from '@forgeweaver/fw-tools'
+import type { SessionPersistence } from '@forgeweaver/fw-session-persistence'
 import { ReactLoopAgent } from './agent.ts'
 import { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from './constants.ts'
 
@@ -157,7 +157,7 @@ interface PreparedAgent {
   dispose(): Promise<void>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     agentLoop: AgentLoop
     /**
@@ -653,7 +653,7 @@ export class AgentLoop extends Service implements AgentFactory {
   async resume(ownerCtx: Context, options: ResumeAgentOptions): Promise<AgentHandle> {
     const persistence = this.runtime.ctx.get('sessionPersistence')
     if (persistence === undefined) {
-      throw new Error('cannot resume: session persistence is not configured (load a dsh-session-persistence backend)')
+      throw new Error('cannot resume: session persistence is not configured (load a fw-session-persistence backend)')
     }
     return this.resumeWith(ownerCtx, persistence, options)
   }

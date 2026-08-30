@@ -3,249 +3,249 @@
 
 # DSH Base Composition
 
-The dsh-base bundle patch every profile applies first; mode bundles (dsh-web-app, dsh-headless) and the user's profile layer patch over it.
+The fw-base bundle patch every profile applies first; mode bundles (fw-web-app, fw-headless) and the user's profile layer patch over it.
 
 ```mermaid
 flowchart LR
   cfg["packages/bundle/base/cordis.patch.yml<br/>cordis.yml"]
-  plugin_dsh_base_timer["timer<br/>@deepseek-ai/cordis-plugin-timer"]
-  cfg --> plugin_dsh_base_timer
-  plugin_dsh_base_hmr["hmr<br/>@deepseek-ai/cordis-plugin-hmr"]
-  cfg --> plugin_dsh_base_hmr
-  plugin_dsh_base_llm["llm<br/>@deepseek-ai/dsh-llm"]
-  cfg --> plugin_dsh_base_llm
-  plugin_dsh_base_session["session<br/>@deepseek-ai/dsh-session"]
-  cfg --> plugin_dsh_base_session
-  plugin_dsh_base_typert["typert<br/>@deepseek-ai/dsh-typert-registry"]
-  cfg --> plugin_dsh_base_typert
-  plugin_dsh_base_typert_loader["typert-loader<br/>@deepseek-ai/dsh-typert-loader"]
-  cfg --> plugin_dsh_base_typert_loader
-  plugin_dsh_base_typert_gateway["typert-gateway<br/>@deepseek-ai/dsh-api-gateway"]
-  cfg --> plugin_dsh_base_typert_gateway
-  plugin_dsh_base_session_title["session-title<br/>@deepseek-ai/dsh-session-title"]
-  cfg --> plugin_dsh_base_session_title
-  plugin_dsh_base_session_title_llm["session-title-llm<br/>@deepseek-ai/dsh-session-title-first-prompt-llm"]
-  cfg --> plugin_dsh_base_session_title_llm
-  plugin_dsh_base_user_questions["user-questions<br/>@deepseek-ai/dsh-user-questions"]
-  cfg --> plugin_dsh_base_user_questions
-  plugin_dsh_base_agent["agent<br/>@deepseek-ai/dsh-agent"]
-  cfg --> plugin_dsh_base_agent
-  plugin_dsh_base_agent_default_model["agent-default-model<br/>@deepseek-ai/dsh-agent-default-model"]
-  cfg --> plugin_dsh_base_agent_default_model
-  plugin_dsh_base_jobs["jobs<br/>@deepseek-ai/dsh-jobs-local"]
-  cfg --> plugin_dsh_base_jobs
-  plugin_dsh_base_llm_retry["llm-retry<br/>@deepseek-ai/dsh-llm-retry"]
-  cfg --> plugin_dsh_base_llm_retry
-  plugin_dsh_base_settings["settings<br/>@deepseek-ai/dsh-settings-file"]
-  cfg --> plugin_dsh_base_settings
-  plugin_dsh_base_credentials["credentials<br/>@deepseek-ai/dsh-credentials-local"]
-  cfg --> plugin_dsh_base_credentials
-  plugin_dsh_base_llm_pi_ai["llm-pi-ai<br/>@deepseek-ai/dsh-llm-pi-ai"]
-  cfg --> plugin_dsh_base_llm_pi_ai
-  plugin_dsh_base_session_persistence_jsonl["session-persistence-jsonl<br/>@deepseek-ai/dsh-session-persistence-jsonl"]
-  cfg --> plugin_dsh_base_session_persistence_jsonl
-  plugin_dsh_base_attachment_local["attachment-local<br/>@deepseek-ai/dsh-attachment-local"]
-  cfg --> plugin_dsh_base_attachment_local
-  plugin_dsh_base_session_query_sqlite["session-query-sqlite<br/>@deepseek-ai/dsh-session-query-sqlite"]
-  cfg --> plugin_dsh_base_session_query_sqlite
-  plugin_dsh_base_session_projection["session-projection<br/>@deepseek-ai/dsh-session-projection"]
-  cfg --> plugin_dsh_base_session_projection
-  plugin_dsh_base_session_telemetry_otel["session-telemetry-otel<br/>@deepseek-ai/dsh-session-telemetry-otel"]
-  cfg --> plugin_dsh_base_session_telemetry_otel
-  plugin_dsh_base_subprocess["subprocess<br/>@deepseek-ai/dsh-subprocess-local"]
-  cfg --> plugin_dsh_base_subprocess
-  plugin_dsh_base_sandbox["sandbox<br/>@deepseek-ai/dsh-sandbox-local"]
-  cfg --> plugin_dsh_base_sandbox
-  plugin_dsh_base_sandbox_policy["sandbox-policy<br/>@deepseek-ai/dsh-sandbox-policy"]
-  cfg --> plugin_dsh_base_sandbox_policy
-  plugin_dsh_base_bash_sandbox["bash-sandbox<br/>@deepseek-ai/dsh-bash-sandbox"]
-  cfg --> plugin_dsh_base_bash_sandbox
-  plugin_dsh_base_pwsh_sandbox["pwsh-sandbox<br/>@deepseek-ai/dsh-pwsh-sandbox"]
-  cfg --> plugin_dsh_base_pwsh_sandbox
-  plugin_dsh_base_approval["approval<br/>@deepseek-ai/dsh-user-approval"]
-  cfg --> plugin_dsh_base_approval
-  plugin_dsh_base_permission["permission<br/>@deepseek-ai/dsh-permission-presets"]
-  cfg --> plugin_dsh_base_permission
-  plugin_dsh_base_shell_env["shell-env<br/>@deepseek-ai/dsh-shell-env"]
-  cfg --> plugin_dsh_base_shell_env
-  plugin_dsh_base_tool_bash["tool-bash<br/>@deepseek-ai/dsh-tool-bash"]
-  cfg --> plugin_dsh_base_tool_bash
-  plugin_dsh_base_tool_pwsh["tool-pwsh<br/>@deepseek-ai/dsh-tool-pwsh"]
-  cfg --> plugin_dsh_base_tool_pwsh
-  plugin_dsh_base_tool_jobs["tool-jobs<br/>@deepseek-ai/dsh-tool-jobs"]
-  cfg --> plugin_dsh_base_tool_jobs
-  plugin_dsh_base_fs_observation_policy["fs-observation-policy<br/>@deepseek-ai/dsh-fs-observation-policy"]
-  cfg --> plugin_dsh_base_fs_observation_policy
-  plugin_dsh_base_tool_fs["tool-fs<br/>@deepseek-ai/dsh-tool-fs"]
-  cfg --> plugin_dsh_base_tool_fs
-  plugin_dsh_base_tool_fs_search["tool-fs-search<br/>@deepseek-ai/dsh-tool-fs-search"]
-  cfg --> plugin_dsh_base_tool_fs_search
-  plugin_dsh_base_agent_instructions["agent-instructions<br/>@deepseek-ai/dsh-agent-instructions"]
-  cfg --> plugin_dsh_base_agent_instructions
-  plugin_dsh_base_skill["skill<br/>@deepseek-ai/dsh-skill"]
-  cfg --> plugin_dsh_base_skill
-  plugin_dsh_base_skill_filesystem["skill-filesystem<br/>@deepseek-ai/dsh-skill-filesystem"]
-  cfg --> plugin_dsh_base_skill_filesystem
-  plugin_dsh_base_skill_badge["skill-badge<br/>@deepseek-ai/dsh-skill-badge"]
-  cfg --> plugin_dsh_base_skill_badge
-  plugin_dsh_base_tool_skill["tool-skill<br/>@deepseek-ai/dsh-tool-skill"]
-  cfg --> plugin_dsh_base_tool_skill
-  plugin_dsh_base_commands["commands<br/>@deepseek-ai/dsh-commands"]
-  cfg --> plugin_dsh_base_commands
-  plugin_dsh_base_command_feedback["command-feedback<br/>@deepseek-ai/dsh-command-feedback"]
-  cfg --> plugin_dsh_base_command_feedback
-  plugin_dsh_base_goal["goal<br/>@deepseek-ai/dsh-goal"]
-  cfg --> plugin_dsh_base_goal
-  plugin_dsh_base_goal_round_driver["goal-round-driver<br/>@deepseek-ai/dsh-goal-round-driver"]
-  cfg --> plugin_dsh_base_goal_round_driver
-  plugin_dsh_base_command_goal["command-goal<br/>@deepseek-ai/dsh-command-goal"]
-  cfg --> plugin_dsh_base_command_goal
-  plugin_dsh_base_plan_mode["plan-mode<br/>@deepseek-ai/dsh-plan-mode"]
-  cfg --> plugin_dsh_base_plan_mode
-  plugin_dsh_base_token_meter["token-meter<br/>@deepseek-ai/dsh-token-meter"]
-  cfg --> plugin_dsh_base_token_meter
-  plugin_dsh_base_compaction_basic["compaction-basic<br/>@deepseek-ai/dsh-compaction-basic"]
-  cfg --> plugin_dsh_base_compaction_basic
-  plugin_dsh_base_command_compact["command-compact<br/>@deepseek-ai/dsh-command-compact"]
-  cfg --> plugin_dsh_base_command_compact
-  plugin_dsh_base_subagent["subagent<br/>@deepseek-ai/dsh-subagent"]
-  cfg --> plugin_dsh_base_subagent
-  plugin_dsh_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@deepseek-ai/dsh-subagent-spawn-in-process"]
-  cfg --> plugin_dsh_base_subagent_spawn_in_process
-  plugin_dsh_base_subagent_fork_in_process["subagent-fork-in-process<br/>@deepseek-ai/dsh-subagent-fork-in-process"]
-  cfg --> plugin_dsh_base_subagent_fork_in_process
-  plugin_dsh_base_tool_subagent_control["tool-subagent-control<br/>@deepseek-ai/dsh-tool-subagent-control"]
-  cfg --> plugin_dsh_base_tool_subagent_control
-  plugin_dsh_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@deepseek-ai/dsh-tool-subagent-control/list-agents"]
-  cfg --> plugin_dsh_base_tool_subagent_list_agents
-  plugin_dsh_base_tool_subagent["tool-subagent<br/>@deepseek-ai/dsh-tool-subagent"]
-  cfg --> plugin_dsh_base_tool_subagent
-  plugin_dsh_base_tool_subagent_fork["tool-subagent-fork<br/>@deepseek-ai/dsh-tool-subagent"]
-  cfg --> plugin_dsh_base_tool_subagent_fork
-  plugin_dsh_base_tool_subagent_report["tool-subagent-report<br/>@deepseek-ai/dsh-tool-subagent-report"]
-  cfg --> plugin_dsh_base_tool_subagent_report
-  plugin_dsh_base_workflow_worker_thread["workflow-worker-thread<br/>@deepseek-ai/dsh-workflow-worker-thread"]
-  cfg --> plugin_dsh_base_workflow_worker_thread
-  plugin_dsh_base_tool_workflow["tool-workflow<br/>@deepseek-ai/dsh-tool-workflow"]
-  cfg --> plugin_dsh_base_tool_workflow
-  plugin_dsh_base_timeout_policy["timeout-policy<br/>@deepseek-ai/dsh-tool-call-timeout-policy"]
-  cfg --> plugin_dsh_base_timeout_policy
-  plugin_dsh_base_spill_local["spill-local<br/>@deepseek-ai/dsh-spill-local"]
-  cfg --> plugin_dsh_base_spill_local
-  plugin_dsh_base_spill_policy["spill-policy<br/>@deepseek-ai/dsh-spill-policy"]
-  cfg --> plugin_dsh_base_spill_policy
-  plugin_dsh_base_session_checkpoint_policy["session-checkpoint-policy<br/>@deepseek-ai/dsh-session-checkpoint-policy"]
-  cfg --> plugin_dsh_base_session_checkpoint_policy
-  plugin_dsh_base_tool_result_pruner["tool-result-pruner<br/>@deepseek-ai/dsh-compaction-tool-result-pruner"]
-  cfg --> plugin_dsh_base_tool_result_pruner
-  plugin_dsh_base_tool_todo["tool-todo<br/>@deepseek-ai/dsh-tool-todo"]
-  cfg --> plugin_dsh_base_tool_todo
-  plugin_dsh_base_tool_goal["tool-goal<br/>@deepseek-ai/dsh-tool-goal"]
-  cfg --> plugin_dsh_base_tool_goal
-  plugin_dsh_base_tool_ralph["tool-ralph<br/>@deepseek-ai/dsh-tool-ralph"]
-  cfg --> plugin_dsh_base_tool_ralph
-  plugin_dsh_base_tool_str_replace_editor["tool-str-replace-editor<br/>@deepseek-ai/dsh-tool-str-replace-editor"]
-  cfg --> plugin_dsh_base_tool_str_replace_editor
-  plugin_dsh_base_repeat_tool_reminder["repeat-tool-reminder<br/>@deepseek-ai/dsh-repeat-tool-reminder"]
-  cfg --> plugin_dsh_base_repeat_tool_reminder
-  plugin_dsh_base_web["web<br/>@deepseek-ai/dsh-web"]
-  cfg --> plugin_dsh_base_web
-  plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@deepseek-ai/dsh-web-search-deepseek"]
-  cfg --> plugin_dsh_base_web_search_deepseek
-  plugin_dsh_base_tool_web["tool-web<br/>@deepseek-ai/dsh-tool-web"]
-  cfg --> plugin_dsh_base_tool_web
-  plugin_dsh_base_tools["tools<br/>@deepseek-ai/dsh-tools"]
-  cfg --> plugin_dsh_base_tools
-  plugin_dsh_base_system_prompt["system-prompt<br/>@deepseek-ai/dsh-system-prompt"]
-  cfg --> plugin_dsh_base_system_prompt
-  plugin_dsh_base_agent_loop["agent-loop<br/>@deepseek-ai/dsh-agent-loop"]
-  cfg --> plugin_dsh_base_agent_loop
-  plugin_dsh_base_fs_sandbox["fs-sandbox<br/>@deepseek-ai/dsh-fs-sandbox"]
-  cfg --> plugin_dsh_base_fs_sandbox
-  plugin_dsh_base_llm_deepseek["llm-deepseek<br/>@deepseek-ai/dsh-llm-deepseek"]
-  cfg --> plugin_dsh_base_llm_deepseek
+  plugin_fw_base_timer["timer<br/>@forgeweaver/cordis-plugin-timer"]
+  cfg --> plugin_fw_base_timer
+  plugin_fw_base_hmr["hmr<br/>@forgeweaver/cordis-plugin-hmr"]
+  cfg --> plugin_fw_base_hmr
+  plugin_fw_base_llm["llm<br/>@forgeweaver/fw-llm"]
+  cfg --> plugin_fw_base_llm
+  plugin_fw_base_session["session<br/>@forgeweaver/fw-session"]
+  cfg --> plugin_fw_base_session
+  plugin_fw_base_typert["typert<br/>@forgeweaver/fw-typert-registry"]
+  cfg --> plugin_fw_base_typert
+  plugin_fw_base_typert_loader["typert-loader<br/>@forgeweaver/fw-typert-loader"]
+  cfg --> plugin_fw_base_typert_loader
+  plugin_fw_base_typert_gateway["typert-gateway<br/>@forgeweaver/fw-api-gateway"]
+  cfg --> plugin_fw_base_typert_gateway
+  plugin_fw_base_session_title["session-title<br/>@forgeweaver/fw-session-title"]
+  cfg --> plugin_fw_base_session_title
+  plugin_fw_base_session_title_llm["session-title-llm<br/>@forgeweaver/fw-session-title-first-prompt-llm"]
+  cfg --> plugin_fw_base_session_title_llm
+  plugin_fw_base_user_questions["user-questions<br/>@forgeweaver/fw-user-questions"]
+  cfg --> plugin_fw_base_user_questions
+  plugin_fw_base_agent["agent<br/>@forgeweaver/fw-agent"]
+  cfg --> plugin_fw_base_agent
+  plugin_fw_base_agent_default_model["agent-default-model<br/>@forgeweaver/fw-agent-default-model"]
+  cfg --> plugin_fw_base_agent_default_model
+  plugin_fw_base_jobs["jobs<br/>@forgeweaver/fw-jobs-local"]
+  cfg --> plugin_fw_base_jobs
+  plugin_fw_base_llm_retry["llm-retry<br/>@forgeweaver/fw-llm-retry"]
+  cfg --> plugin_fw_base_llm_retry
+  plugin_fw_base_settings["settings<br/>@forgeweaver/fw-settings-file"]
+  cfg --> plugin_fw_base_settings
+  plugin_fw_base_credentials["credentials<br/>@forgeweaver/fw-credentials-local"]
+  cfg --> plugin_fw_base_credentials
+  plugin_fw_base_llm_pi_ai["llm-pi-ai<br/>@forgeweaver/fw-llm-pi-ai"]
+  cfg --> plugin_fw_base_llm_pi_ai
+  plugin_fw_base_session_persistence_jsonl["session-persistence-jsonl<br/>@forgeweaver/fw-session-persistence-jsonl"]
+  cfg --> plugin_fw_base_session_persistence_jsonl
+  plugin_fw_base_attachment_local["attachment-local<br/>@forgeweaver/fw-attachment-local"]
+  cfg --> plugin_fw_base_attachment_local
+  plugin_fw_base_session_query_sqlite["session-query-sqlite<br/>@forgeweaver/fw-session-query-sqlite"]
+  cfg --> plugin_fw_base_session_query_sqlite
+  plugin_fw_base_session_projection["session-projection<br/>@forgeweaver/fw-session-projection"]
+  cfg --> plugin_fw_base_session_projection
+  plugin_fw_base_session_telemetry_otel["session-telemetry-otel<br/>@forgeweaver/fw-session-telemetry-otel"]
+  cfg --> plugin_fw_base_session_telemetry_otel
+  plugin_fw_base_subprocess["subprocess<br/>@forgeweaver/fw-subprocess-local"]
+  cfg --> plugin_fw_base_subprocess
+  plugin_fw_base_sandbox["sandbox<br/>@forgeweaver/fw-sandbox-local"]
+  cfg --> plugin_fw_base_sandbox
+  plugin_fw_base_sandbox_policy["sandbox-policy<br/>@forgeweaver/fw-sandbox-policy"]
+  cfg --> plugin_fw_base_sandbox_policy
+  plugin_fw_base_bash_sandbox["bash-sandbox<br/>@forgeweaver/fw-bash-sandbox"]
+  cfg --> plugin_fw_base_bash_sandbox
+  plugin_fw_base_pwsh_sandbox["pwsh-sandbox<br/>@forgeweaver/fw-pwsh-sandbox"]
+  cfg --> plugin_fw_base_pwsh_sandbox
+  plugin_fw_base_approval["approval<br/>@forgeweaver/fw-user-approval"]
+  cfg --> plugin_fw_base_approval
+  plugin_fw_base_permission["permission<br/>@forgeweaver/fw-permission-presets"]
+  cfg --> plugin_fw_base_permission
+  plugin_fw_base_shell_env["shell-env<br/>@forgeweaver/fw-shell-env"]
+  cfg --> plugin_fw_base_shell_env
+  plugin_fw_base_tool_bash["tool-bash<br/>@forgeweaver/fw-tool-bash"]
+  cfg --> plugin_fw_base_tool_bash
+  plugin_fw_base_tool_pwsh["tool-pwsh<br/>@forgeweaver/fw-tool-pwsh"]
+  cfg --> plugin_fw_base_tool_pwsh
+  plugin_fw_base_tool_jobs["tool-jobs<br/>@forgeweaver/fw-tool-jobs"]
+  cfg --> plugin_fw_base_tool_jobs
+  plugin_fw_base_fs_observation_policy["fs-observation-policy<br/>@forgeweaver/fw-fs-observation-policy"]
+  cfg --> plugin_fw_base_fs_observation_policy
+  plugin_fw_base_tool_fs["tool-fs<br/>@forgeweaver/fw-tool-fs"]
+  cfg --> plugin_fw_base_tool_fs
+  plugin_fw_base_tool_fs_search["tool-fs-search<br/>@forgeweaver/fw-tool-fs-search"]
+  cfg --> plugin_fw_base_tool_fs_search
+  plugin_fw_base_agent_instructions["agent-instructions<br/>@forgeweaver/fw-agent-instructions"]
+  cfg --> plugin_fw_base_agent_instructions
+  plugin_fw_base_skill["skill<br/>@forgeweaver/fw-skill"]
+  cfg --> plugin_fw_base_skill
+  plugin_fw_base_skill_filesystem["skill-filesystem<br/>@forgeweaver/fw-skill-filesystem"]
+  cfg --> plugin_fw_base_skill_filesystem
+  plugin_fw_base_skill_badge["skill-badge<br/>@forgeweaver/fw-skill-badge"]
+  cfg --> plugin_fw_base_skill_badge
+  plugin_fw_base_tool_skill["tool-skill<br/>@forgeweaver/fw-tool-skill"]
+  cfg --> plugin_fw_base_tool_skill
+  plugin_fw_base_commands["commands<br/>@forgeweaver/fw-commands"]
+  cfg --> plugin_fw_base_commands
+  plugin_fw_base_command_feedback["command-feedback<br/>@forgeweaver/fw-command-feedback"]
+  cfg --> plugin_fw_base_command_feedback
+  plugin_fw_base_goal["goal<br/>@forgeweaver/fw-goal"]
+  cfg --> plugin_fw_base_goal
+  plugin_fw_base_goal_round_driver["goal-round-driver<br/>@forgeweaver/fw-goal-round-driver"]
+  cfg --> plugin_fw_base_goal_round_driver
+  plugin_fw_base_command_goal["command-goal<br/>@forgeweaver/fw-command-goal"]
+  cfg --> plugin_fw_base_command_goal
+  plugin_fw_base_plan_mode["plan-mode<br/>@forgeweaver/fw-plan-mode"]
+  cfg --> plugin_fw_base_plan_mode
+  plugin_fw_base_token_meter["token-meter<br/>@forgeweaver/fw-token-meter"]
+  cfg --> plugin_fw_base_token_meter
+  plugin_fw_base_compaction_basic["compaction-basic<br/>@forgeweaver/fw-compaction-basic"]
+  cfg --> plugin_fw_base_compaction_basic
+  plugin_fw_base_command_compact["command-compact<br/>@forgeweaver/fw-command-compact"]
+  cfg --> plugin_fw_base_command_compact
+  plugin_fw_base_subagent["subagent<br/>@forgeweaver/fw-subagent"]
+  cfg --> plugin_fw_base_subagent
+  plugin_fw_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@forgeweaver/fw-subagent-spawn-in-process"]
+  cfg --> plugin_fw_base_subagent_spawn_in_process
+  plugin_fw_base_subagent_fork_in_process["subagent-fork-in-process<br/>@forgeweaver/fw-subagent-fork-in-process"]
+  cfg --> plugin_fw_base_subagent_fork_in_process
+  plugin_fw_base_tool_subagent_control["tool-subagent-control<br/>@forgeweaver/fw-tool-subagent-control"]
+  cfg --> plugin_fw_base_tool_subagent_control
+  plugin_fw_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@forgeweaver/fw-tool-subagent-control/list-agents"]
+  cfg --> plugin_fw_base_tool_subagent_list_agents
+  plugin_fw_base_tool_subagent["tool-subagent<br/>@forgeweaver/fw-tool-subagent"]
+  cfg --> plugin_fw_base_tool_subagent
+  plugin_fw_base_tool_subagent_fork["tool-subagent-fork<br/>@forgeweaver/fw-tool-subagent"]
+  cfg --> plugin_fw_base_tool_subagent_fork
+  plugin_fw_base_tool_subagent_report["tool-subagent-report<br/>@forgeweaver/fw-tool-subagent-report"]
+  cfg --> plugin_fw_base_tool_subagent_report
+  plugin_fw_base_workflow_worker_thread["workflow-worker-thread<br/>@forgeweaver/fw-workflow-worker-thread"]
+  cfg --> plugin_fw_base_workflow_worker_thread
+  plugin_fw_base_tool_workflow["tool-workflow<br/>@forgeweaver/fw-tool-workflow"]
+  cfg --> plugin_fw_base_tool_workflow
+  plugin_fw_base_timeout_policy["timeout-policy<br/>@forgeweaver/fw-tool-call-timeout-policy"]
+  cfg --> plugin_fw_base_timeout_policy
+  plugin_fw_base_spill_local["spill-local<br/>@forgeweaver/fw-spill-local"]
+  cfg --> plugin_fw_base_spill_local
+  plugin_fw_base_spill_policy["spill-policy<br/>@forgeweaver/fw-spill-policy"]
+  cfg --> plugin_fw_base_spill_policy
+  plugin_fw_base_session_checkpoint_policy["session-checkpoint-policy<br/>@forgeweaver/fw-session-checkpoint-policy"]
+  cfg --> plugin_fw_base_session_checkpoint_policy
+  plugin_fw_base_tool_result_pruner["tool-result-pruner<br/>@forgeweaver/fw-compaction-tool-result-pruner"]
+  cfg --> plugin_fw_base_tool_result_pruner
+  plugin_fw_base_tool_todo["tool-todo<br/>@forgeweaver/fw-tool-todo"]
+  cfg --> plugin_fw_base_tool_todo
+  plugin_fw_base_tool_goal["tool-goal<br/>@forgeweaver/fw-tool-goal"]
+  cfg --> plugin_fw_base_tool_goal
+  plugin_fw_base_tool_ralph["tool-ralph<br/>@forgeweaver/fw-tool-ralph"]
+  cfg --> plugin_fw_base_tool_ralph
+  plugin_fw_base_tool_str_replace_editor["tool-str-replace-editor<br/>@forgeweaver/fw-tool-str-replace-editor"]
+  cfg --> plugin_fw_base_tool_str_replace_editor
+  plugin_fw_base_repeat_tool_reminder["repeat-tool-reminder<br/>@forgeweaver/fw-repeat-tool-reminder"]
+  cfg --> plugin_fw_base_repeat_tool_reminder
+  plugin_fw_base_web["web<br/>@forgeweaver/fw-web"]
+  cfg --> plugin_fw_base_web
+  plugin_fw_base_web_search_forgeweaver["web-search-forgeweaver<br/>@forgeweaver/fw-web-search-forgeweaver"]
+  cfg --> plugin_fw_base_web_search_forgeweaver
+  plugin_fw_base_tool_web["tool-web<br/>@forgeweaver/fw-tool-web"]
+  cfg --> plugin_fw_base_tool_web
+  plugin_fw_base_tools["tools<br/>@forgeweaver/fw-tools"]
+  cfg --> plugin_fw_base_tools
+  plugin_fw_base_system_prompt["system-prompt<br/>@forgeweaver/fw-system-prompt"]
+  cfg --> plugin_fw_base_system_prompt
+  plugin_fw_base_agent_loop["agent-loop<br/>@forgeweaver/fw-agent-loop"]
+  cfg --> plugin_fw_base_agent_loop
+  plugin_fw_base_fs_sandbox["fs-sandbox<br/>@forgeweaver/fw-fs-sandbox"]
+  cfg --> plugin_fw_base_fs_sandbox
+  plugin_fw_base_llm_forgeweaver["llm-forgeweaver<br/>@forgeweaver/fw-llm-forgeweaver"]
+  cfg --> plugin_fw_base_llm_forgeweaver
 ```
 
 | Plugin id | Package / module |
 | --- | --- |
-| `timer` | `@deepseek-ai/cordis-plugin-timer` |
-| `hmr` | `@deepseek-ai/cordis-plugin-hmr` |
-| `llm` | `@deepseek-ai/dsh-llm` |
-| `session` | `@deepseek-ai/dsh-session` |
-| `typert` | `@deepseek-ai/dsh-typert-registry` |
-| `typert-loader` | `@deepseek-ai/dsh-typert-loader` |
-| `typert-gateway` | `@deepseek-ai/dsh-api-gateway` |
-| `session-title` | `@deepseek-ai/dsh-session-title` |
-| `session-title-llm` | `@deepseek-ai/dsh-session-title-first-prompt-llm` |
-| `user-questions` | `@deepseek-ai/dsh-user-questions` |
-| `agent` | `@deepseek-ai/dsh-agent` |
-| `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
-| `jobs` | `@deepseek-ai/dsh-jobs-local` |
-| `llm-retry` | `@deepseek-ai/dsh-llm-retry` |
-| `settings` | `@deepseek-ai/dsh-settings-file` |
-| `credentials` | `@deepseek-ai/dsh-credentials-local` |
-| `llm-pi-ai` | `@deepseek-ai/dsh-llm-pi-ai` |
-| `session-persistence-jsonl` | `@deepseek-ai/dsh-session-persistence-jsonl` |
-| `attachment-local` | `@deepseek-ai/dsh-attachment-local` |
-| `session-query-sqlite` | `@deepseek-ai/dsh-session-query-sqlite` |
-| `session-projection` | `@deepseek-ai/dsh-session-projection` |
-| `session-telemetry-otel` | `@deepseek-ai/dsh-session-telemetry-otel` |
-| `subprocess` | `@deepseek-ai/dsh-subprocess-local` |
-| `sandbox` | `@deepseek-ai/dsh-sandbox-local` |
-| `sandbox-policy` | `@deepseek-ai/dsh-sandbox-policy` |
-| `bash-sandbox` | `@deepseek-ai/dsh-bash-sandbox` |
-| `pwsh-sandbox` | `@deepseek-ai/dsh-pwsh-sandbox` |
-| `approval` | `@deepseek-ai/dsh-user-approval` |
-| `permission` | `@deepseek-ai/dsh-permission-presets` |
-| `shell-env` | `@deepseek-ai/dsh-shell-env` |
-| `tool-bash` | `@deepseek-ai/dsh-tool-bash` |
-| `tool-pwsh` | `@deepseek-ai/dsh-tool-pwsh` |
-| `tool-jobs` | `@deepseek-ai/dsh-tool-jobs` |
-| `fs-observation-policy` | `@deepseek-ai/dsh-fs-observation-policy` |
-| `tool-fs` | `@deepseek-ai/dsh-tool-fs` |
-| `tool-fs-search` | `@deepseek-ai/dsh-tool-fs-search` |
-| `agent-instructions` | `@deepseek-ai/dsh-agent-instructions` |
-| `skill` | `@deepseek-ai/dsh-skill` |
-| `skill-filesystem` | `@deepseek-ai/dsh-skill-filesystem` |
-| `skill-badge` | `@deepseek-ai/dsh-skill-badge` |
-| `tool-skill` | `@deepseek-ai/dsh-tool-skill` |
-| `commands` | `@deepseek-ai/dsh-commands` |
-| `command-feedback` | `@deepseek-ai/dsh-command-feedback` |
-| `goal` | `@deepseek-ai/dsh-goal` |
-| `goal-round-driver` | `@deepseek-ai/dsh-goal-round-driver` |
-| `command-goal` | `@deepseek-ai/dsh-command-goal` |
-| `plan-mode` | `@deepseek-ai/dsh-plan-mode` |
-| `token-meter` | `@deepseek-ai/dsh-token-meter` |
-| `compaction-basic` | `@deepseek-ai/dsh-compaction-basic` |
-| `command-compact` | `@deepseek-ai/dsh-command-compact` |
-| `subagent` | `@deepseek-ai/dsh-subagent` |
-| `subagent-spawn-in-process` | `@deepseek-ai/dsh-subagent-spawn-in-process` |
-| `subagent-fork-in-process` | `@deepseek-ai/dsh-subagent-fork-in-process` |
-| `tool-subagent-control` | `@deepseek-ai/dsh-tool-subagent-control` |
-| `tool-subagent-list-agents` | `@deepseek-ai/dsh-tool-subagent-control/list-agents` |
-| `tool-subagent` | `@deepseek-ai/dsh-tool-subagent` |
-| `tool-subagent-fork` | `@deepseek-ai/dsh-tool-subagent` |
-| `tool-subagent-report` | `@deepseek-ai/dsh-tool-subagent-report` |
-| `workflow-worker-thread` | `@deepseek-ai/dsh-workflow-worker-thread` |
-| `tool-workflow` | `@deepseek-ai/dsh-tool-workflow` |
-| `timeout-policy` | `@deepseek-ai/dsh-tool-call-timeout-policy` |
-| `spill-local` | `@deepseek-ai/dsh-spill-local` |
-| `spill-policy` | `@deepseek-ai/dsh-spill-policy` |
-| `session-checkpoint-policy` | `@deepseek-ai/dsh-session-checkpoint-policy` |
-| `tool-result-pruner` | `@deepseek-ai/dsh-compaction-tool-result-pruner` |
-| `tool-todo` | `@deepseek-ai/dsh-tool-todo` |
-| `tool-goal` | `@deepseek-ai/dsh-tool-goal` |
-| `tool-ralph` | `@deepseek-ai/dsh-tool-ralph` |
-| `tool-str-replace-editor` | `@deepseek-ai/dsh-tool-str-replace-editor` |
-| `repeat-tool-reminder` | `@deepseek-ai/dsh-repeat-tool-reminder` |
-| `web` | `@deepseek-ai/dsh-web` |
-| `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
-| `tool-web` | `@deepseek-ai/dsh-tool-web` |
-| `tools` | `@deepseek-ai/dsh-tools` |
-| `system-prompt` | `@deepseek-ai/dsh-system-prompt` |
-| `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
-| `fs-sandbox` | `@deepseek-ai/dsh-fs-sandbox` |
-| `llm-deepseek` | `@deepseek-ai/dsh-llm-deepseek` |
+| `timer` | `@forgeweaver/cordis-plugin-timer` |
+| `hmr` | `@forgeweaver/cordis-plugin-hmr` |
+| `llm` | `@forgeweaver/fw-llm` |
+| `session` | `@forgeweaver/fw-session` |
+| `typert` | `@forgeweaver/fw-typert-registry` |
+| `typert-loader` | `@forgeweaver/fw-typert-loader` |
+| `typert-gateway` | `@forgeweaver/fw-api-gateway` |
+| `session-title` | `@forgeweaver/fw-session-title` |
+| `session-title-llm` | `@forgeweaver/fw-session-title-first-prompt-llm` |
+| `user-questions` | `@forgeweaver/fw-user-questions` |
+| `agent` | `@forgeweaver/fw-agent` |
+| `agent-default-model` | `@forgeweaver/fw-agent-default-model` |
+| `jobs` | `@forgeweaver/fw-jobs-local` |
+| `llm-retry` | `@forgeweaver/fw-llm-retry` |
+| `settings` | `@forgeweaver/fw-settings-file` |
+| `credentials` | `@forgeweaver/fw-credentials-local` |
+| `llm-pi-ai` | `@forgeweaver/fw-llm-pi-ai` |
+| `session-persistence-jsonl` | `@forgeweaver/fw-session-persistence-jsonl` |
+| `attachment-local` | `@forgeweaver/fw-attachment-local` |
+| `session-query-sqlite` | `@forgeweaver/fw-session-query-sqlite` |
+| `session-projection` | `@forgeweaver/fw-session-projection` |
+| `session-telemetry-otel` | `@forgeweaver/fw-session-telemetry-otel` |
+| `subprocess` | `@forgeweaver/fw-subprocess-local` |
+| `sandbox` | `@forgeweaver/fw-sandbox-local` |
+| `sandbox-policy` | `@forgeweaver/fw-sandbox-policy` |
+| `bash-sandbox` | `@forgeweaver/fw-bash-sandbox` |
+| `pwsh-sandbox` | `@forgeweaver/fw-pwsh-sandbox` |
+| `approval` | `@forgeweaver/fw-user-approval` |
+| `permission` | `@forgeweaver/fw-permission-presets` |
+| `shell-env` | `@forgeweaver/fw-shell-env` |
+| `tool-bash` | `@forgeweaver/fw-tool-bash` |
+| `tool-pwsh` | `@forgeweaver/fw-tool-pwsh` |
+| `tool-jobs` | `@forgeweaver/fw-tool-jobs` |
+| `fs-observation-policy` | `@forgeweaver/fw-fs-observation-policy` |
+| `tool-fs` | `@forgeweaver/fw-tool-fs` |
+| `tool-fs-search` | `@forgeweaver/fw-tool-fs-search` |
+| `agent-instructions` | `@forgeweaver/fw-agent-instructions` |
+| `skill` | `@forgeweaver/fw-skill` |
+| `skill-filesystem` | `@forgeweaver/fw-skill-filesystem` |
+| `skill-badge` | `@forgeweaver/fw-skill-badge` |
+| `tool-skill` | `@forgeweaver/fw-tool-skill` |
+| `commands` | `@forgeweaver/fw-commands` |
+| `command-feedback` | `@forgeweaver/fw-command-feedback` |
+| `goal` | `@forgeweaver/fw-goal` |
+| `goal-round-driver` | `@forgeweaver/fw-goal-round-driver` |
+| `command-goal` | `@forgeweaver/fw-command-goal` |
+| `plan-mode` | `@forgeweaver/fw-plan-mode` |
+| `token-meter` | `@forgeweaver/fw-token-meter` |
+| `compaction-basic` | `@forgeweaver/fw-compaction-basic` |
+| `command-compact` | `@forgeweaver/fw-command-compact` |
+| `subagent` | `@forgeweaver/fw-subagent` |
+| `subagent-spawn-in-process` | `@forgeweaver/fw-subagent-spawn-in-process` |
+| `subagent-fork-in-process` | `@forgeweaver/fw-subagent-fork-in-process` |
+| `tool-subagent-control` | `@forgeweaver/fw-tool-subagent-control` |
+| `tool-subagent-list-agents` | `@forgeweaver/fw-tool-subagent-control/list-agents` |
+| `tool-subagent` | `@forgeweaver/fw-tool-subagent` |
+| `tool-subagent-fork` | `@forgeweaver/fw-tool-subagent` |
+| `tool-subagent-report` | `@forgeweaver/fw-tool-subagent-report` |
+| `workflow-worker-thread` | `@forgeweaver/fw-workflow-worker-thread` |
+| `tool-workflow` | `@forgeweaver/fw-tool-workflow` |
+| `timeout-policy` | `@forgeweaver/fw-tool-call-timeout-policy` |
+| `spill-local` | `@forgeweaver/fw-spill-local` |
+| `spill-policy` | `@forgeweaver/fw-spill-policy` |
+| `session-checkpoint-policy` | `@forgeweaver/fw-session-checkpoint-policy` |
+| `tool-result-pruner` | `@forgeweaver/fw-compaction-tool-result-pruner` |
+| `tool-todo` | `@forgeweaver/fw-tool-todo` |
+| `tool-goal` | `@forgeweaver/fw-tool-goal` |
+| `tool-ralph` | `@forgeweaver/fw-tool-ralph` |
+| `tool-str-replace-editor` | `@forgeweaver/fw-tool-str-replace-editor` |
+| `repeat-tool-reminder` | `@forgeweaver/fw-repeat-tool-reminder` |
+| `web` | `@forgeweaver/fw-web` |
+| `web-search-forgeweaver` | `@forgeweaver/fw-web-search-forgeweaver` |
+| `tool-web` | `@forgeweaver/fw-tool-web` |
+| `tools` | `@forgeweaver/fw-tools` |
+| `system-prompt` | `@forgeweaver/fw-system-prompt` |
+| `agent-loop` | `@forgeweaver/fw-agent-loop` |
+| `fs-sandbox` | `@forgeweaver/fw-fs-sandbox` |
+| `llm-forgeweaver` | `@forgeweaver/fw-llm-forgeweaver` |
 
 Source config: [`packages/bundle/base/cordis.patch.yml`](../../packages/bundle/base/cordis.patch.yml).
 

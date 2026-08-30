@@ -1,7 +1,7 @@
 /** Page-store join: directory × namespaces × credentials, with last-good rows on failure. */
 import { describe, expect, it } from 'vitest'
-import type { RpcResponse } from '@deepseek-ai/dsh-api-remotes/client'
-import { SettingsDescribeMirror } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
+import type { RpcResponse } from '@forgeweaver/fw-api-remotes/client'
+import { SettingsDescribeMirror } from '@forgeweaver/fw-client-ui-settings/src/client/settings-mirror.ts'
 import { settingsSchema } from './settings-schema.client.ts'
 import { messageOf, ModelsSettingsStore } from '../src/client/store.ts'
 
@@ -14,7 +14,7 @@ function fail<T>(message: string): RpcResponse<T> {
 }
 
 const DIRECTORY = [
-  { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+  { provider: 'forgeweaver-official', displayName: 'ForgeWeaver', settingsNs: 'llm-forgeweaver', settingsPath: [], active: true },
   { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true },
   { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false },
   { provider: 'ghost', displayName: 'Ghost', settingsNs: '', settingsPath: [], active: true },
@@ -22,9 +22,9 @@ const DIRECTORY = [
 
 const NAMESPACES = [
   {
-    ns: 'llm-deepseek',
+    ns: 'llm-forgeweaver',
     schema: {},
-    value: { apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://base' },
+    value: { apiKeyEnv: 'FORGEWEAVER_API_KEY', baseURL: 'https://base' },
     base: { baseURL: 'https://base' },
     applies: 'live' as const,
     secrets: [],
@@ -81,12 +81,12 @@ describe('ModelsSettingsStore', () => {
     expect(state.status).toBe('ready')
     expect(state.writable).toBe(true)
     expect(state.credentialError).toBeNull()
-    expect(seenRefs).toEqual([['DEEPSEEK_API_KEY', 'OPENAI_API_KEY']])
+    expect(seenRefs).toEqual([['FORGEWEAVER_API_KEY', 'OPENAI_API_KEY']])
     const byProvider = new Map(state.rows.map(row => [row.entry.provider, row]))
-    expect(byProvider.get('deepseek-official')).toMatchObject({
+    expect(byProvider.get('forgeweaver-official')).toMatchObject({
       configured: true,
       removable: false,
-      apiKeyEnv: 'DEEPSEEK_API_KEY',
+      apiKeyEnv: 'FORGEWEAVER_API_KEY',
       credential: { configured: false, writable: true },
     })
     expect(byProvider.get('openai')).toMatchObject({

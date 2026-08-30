@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
+import type { PropsRenderSlots } from '@forgeweaver/fw-client-ui-slots'
 import type {
   ChatNodeViewProps, CommandRowOwnerProps,
 } from '../contract/slots.ts'

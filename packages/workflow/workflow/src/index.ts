@@ -1,11 +1,11 @@
 /**
  * Service Definition for the workflow capability seam. Service Providers execute orchestration scripts;
  * observe-only lifecycle events never expose run control.
- * @module @deepseek-ai/dsh-workflow
+ * @module @forgeweaver/fw-workflow
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
+import { Context, Service } from '@forgeweaver/cordis'
+import { HarnessError } from '@forgeweaver/fw-llm'
 import type {
   WorkflowAgentEndInfo,
   WorkflowAgentInfo,
@@ -28,7 +28,7 @@ export type {
 } from './types.ts'
 export type { WorkflowRun, WorkflowStartRequest } from './runtime-types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     workflowEngine: WorkflowEngine
   }

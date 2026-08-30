@@ -5,14 +5,14 @@
  * that are already showing, so a default set from one converges the other.
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-runtime/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-agent-preset/client'
+import { resolveSlotLabel } from '@forgeweaver/fw-client-ui-slots'
+import { SlotRegistry } from '@forgeweaver/fw-client-runtime/client'
+import { LocaleRuntime } from '@forgeweaver/fw-client-locale/client'
+import { TestRemote } from '@forgeweaver/fw-client-test-runtime'
+import { apply as settingsApply, inject as settingsInject } from '@forgeweaver/fw-client-ui-settings/client'
+import { apply, inject } from '@forgeweaver/fw-client-ui-agent-preset/client'
 import { AgentPresetLabel } from '../src/client/AgentPresetLabel.tsx'
 import type { AgentPresetLabelInjected } from '../src/client/AgentPresetLabel.tsx'
 import { AgentPresetRow } from '../src/client/AgentPresetRow.tsx'
@@ -266,7 +266,7 @@ describe('ui-agent-preset apply', () => {
     await vi.waitFor(() => { expect(calls.length).toBe(before + 2) })
     const afterRelevant = calls.length
 
-    ctx.remote.$dispatch('settings/document-updated', ['llm-deepseek', 1])
+    ctx.remote.$dispatch('settings/document-updated', ['llm-forgeweaver', 1])
     await Promise.resolve()
 
     // Both surfaces re-read on their own namespace; an unrelated one moves
@@ -345,7 +345,7 @@ describe('ui-agent-preset apply', () => {
     // An unrelated namespace moves nothing: the chip re-reads on its own
     // setting, not on every settings write in the process.
     moveDefault()
-    ctx.remote.$dispatch('settings/document-updated', ['llm-deepseek', 1])
+    ctx.remote.$dispatch('settings/document-updated', ['llm-forgeweaver', 1])
     await Promise.resolve()
     expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('standard')
 

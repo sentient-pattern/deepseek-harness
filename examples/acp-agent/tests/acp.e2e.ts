@@ -8,7 +8,7 @@ import {
   launchAcpTestAgent,
   type AgentUnderTest,
   type LaunchedAcpTestAgent,
-} from '@deepseek-ai/dsh-acp-snapshot'
+} from '@forgeweaver/fw-acp-snapshot'
 import { cleanupAcpExampleTest } from './cleanup.ts'
 
 /**
@@ -26,7 +26,7 @@ const AGENT: AgentUnderTest = {
   configPath: fileURLToPath(new URL('../cordis.yml', import.meta.url)),
   tsconfigPath: fileURLToPath(new URL('../../../tsconfig.json', import.meta.url)),
 }
-const DANGER_FULL_ACCESS_ENV = { DSH_PERMISSION_MODE: 'danger-full-access' }
+const DANGER_FULL_ACCESS_ENV = { FW_PERMISSION_MODE: 'danger-full-access' }
 
 let spawned: LaunchedAcpTestAgent | undefined
 let workdir: string | undefined
@@ -43,14 +43,14 @@ describe('acp-agent over real stdio (no key required)', () => {
   it('emits only framed JSON-RPC on stdout', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'acp-e2e-'))
     // Inspect the launcher's raw-byte tee in addition to driving its SDK client.
-    // A dummy key lets the deepseek adapter APPLY (it only checks the key is
+    // A dummy key lets the forgeweaver adapter APPLY (it only checks the key is
     // present at boot, not valid — the key is used only on a real model call,
     // which this purity test never triggers). So this runs WITHOUT real creds.
     spawned = launchAcpTestAgent({
       agent: AGENT,
       cwd: workdir,
       env: {
-        DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY ?? 'sk-dummy-for-boot',
+        FORGEWEAVER_API_KEY: process.env.FORGEWEAVER_API_KEY ?? 'sk-dummy-for-boot',
         ...DANGER_FULL_ACCESS_ENV,
       },
     })
@@ -78,13 +78,13 @@ describe('acp-agent over real stdio (no key required)', () => {
     // the factory). This closes that gap: boot the real subprocess and create a
     // session, asserting the RPC RESOLVES (not rejects with an inject error).
     workdir = await mkdtemp(join(tmpdir(), 'acp-e2e-'))
-    // A dummy key lets the deepseek adapter boot (it only checks presence, not
+    // A dummy key lets the forgeweaver adapter boot (it only checks presence, not
     // validity, at apply time); no model call is made, so the key is never used.
     spawned = launchAcpTestAgent({
       agent: AGENT,
       cwd: workdir,
       env: {
-        DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY ?? 'sk-dummy-for-boot',
+        FORGEWEAVER_API_KEY: process.env.FORGEWEAVER_API_KEY ?? 'sk-dummy-for-boot',
         ...DANGER_FULL_ACCESS_ENV,
       },
     })
@@ -97,7 +97,7 @@ describe('acp-agent over real stdio (no key required)', () => {
   }, 60_000)
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('acp-agent e2e: real prompt over ACP', () => {
+describe.skipIf(!process.env.FORGEWEAVER_API_KEY)('acp-agent e2e: real prompt over ACP', () => {
   it('runs a real turn and the agent writes the requested file (verified on disk)', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'acp-e2e-'))
     spawned = launchAcpTestAgent({ agent: AGENT, cwd: workdir, env: DANGER_FULL_ACCESS_ENV })

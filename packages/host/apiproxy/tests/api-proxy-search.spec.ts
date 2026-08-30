@@ -5,21 +5,21 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { stat } from 'node:fs/promises'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
+import AgentRegistry from '@forgeweaver/fw-agent'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import SessionStore from '@forgeweaver/fw-session'
+import type { SessionHeader, SessionId } from '@forgeweaver/fw-session'
+import UserQuestionService from '@forgeweaver/fw-user-questions'
 import {
   SessionQueryError,
   type SessionSearchHit,
   type SessionSearchRequest,
-} from '@deepseek-ai/dsh-session-query'
-import type { RpcRequest } from '@deepseek-ai/dsh-host-apiproxy/api'
-import { RpcId } from '@deepseek-ai/dsh-host-apiproxy/api'
-import { createApiProxy } from '@deepseek-ai/dsh-host-apiproxy'
+} from '@forgeweaver/fw-session-query'
+import type { RpcRequest } from '@forgeweaver/fw-host-apiproxy/api'
+import { RpcId } from '@forgeweaver/fw-host-apiproxy/api'
+import { createApiProxy } from '@forgeweaver/fw-host-apiproxy'
 
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs/promises')>()

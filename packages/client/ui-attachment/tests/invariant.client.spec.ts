@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import * as AttachmentInvariant from '@deepseek-ai/dsh-client-ui-attachment/invariant'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@forgeweaver/cordis'
+import * as AttachmentInvariant from '@forgeweaver/fw-client-ui-attachment/invariant'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
 
 describe('invariant companion', () => {
   it('registers under the package name with an empty installer', async () => {

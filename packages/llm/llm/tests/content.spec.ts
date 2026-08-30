@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
+import { AttachmentId } from '@forgeweaver/fw-attachment'
 import {
   CallId,
   createUserMessage,

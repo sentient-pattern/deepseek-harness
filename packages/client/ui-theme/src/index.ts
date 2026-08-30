@@ -1,8 +1,8 @@
 /** Host registration for the browser theme preference and pre-plugin palette. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import type { Context } from '@forgeweaver/cordis'
+import type {} from '@forgeweaver/fw-host-webserver'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
 import { bootThemeInjection } from './boot-theme.ts'
 import {
   DEFAULT_PREFERENCE, THEME_SETTINGS_NAMESPACE, ThemeSettingsSchema,

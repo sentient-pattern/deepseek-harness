@@ -2,15 +2,15 @@
  * Provider-routed model-request retry policy on the agent loop's request
  * recovery extension point. Each scheduled retry is durable before its cancellable wait.
  *
- * @module @deepseek-ai/dsh-llm-retry
+ * @module @forgeweaver/fw-llm-retry
  */
 
 import { randomUUID } from 'node:crypto'
-import type { Context, Events } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, RequestErrorAction } from '@deepseek-ai/dsh-agent'
-import type { LlmFailure, ResolvedRetryPolicy } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { Context, Events } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import type { Agent, RequestErrorAction } from '@forgeweaver/fw-agent'
+import type { LlmFailure, ResolvedRetryPolicy } from '@forgeweaver/fw-llm'
+import type { SessionEvent } from '@forgeweaver/fw-session'
 import { RetryId } from './brand.ts'
 import type { LlmRetryEventData } from './types.ts'
 

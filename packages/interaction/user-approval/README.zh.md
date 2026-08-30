@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-user-approval
+# @forgeweaver/fw-user-approval
 
 [English](README.md) | 中文
 

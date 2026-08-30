@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-primitives",
-  "description": "Pure React atoms for the dsh web UI: controls, icons, markdown, and JSON inspectors (zero cordis)",
+  "name": "@forgeweaver/fw-client-ui-primitives",
+  "description": "Pure React atoms for the fw web UI: controls, icons, markdown, and JSON inspectors (zero cordis)",
   "version": "0.1.1-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/client/ui-primitives"
   },
   "type": "module",
@@ -49,10 +49,10 @@
     "shiki": "^4.3.1"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/cordis": "workspace:^"
   },
   "files": [
     "lib/index.js",
@@ -61,7 +61,7 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   }
 }

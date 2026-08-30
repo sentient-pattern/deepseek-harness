@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-mcp-client
+# @forgeweaver/fw-mcp-client
 
 English | [中文](README.zh.md)
 
@@ -10,7 +10,7 @@ One plugin instance per MCP server in `cordis.yml`:
 
 ```yaml
 - id: mcp-github
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@forgeweaver/fw-mcp-client'
   config:
     serverName: github
     transport: stdio
@@ -20,7 +20,7 @@ One plugin instance per MCP server in `cordis.yml`:
       GITHUB_TOKEN: !!js process.env.GITHUB_TOKEN
 
 - id: mcp-web
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@forgeweaver/fw-mcp-client'
   config:
     serverName: web
     transport: streamable-http
@@ -52,7 +52,7 @@ The model sees `mcp__github__create_issue`, `mcp__web__search`, … — the same
 
 ## Tool naming
 
-Every MCP tool has two names: the raw MCP name (sent on the wire in `tools/call`) and the public name `mcp__<serverName>__<rawName>` registered on `ctx.tools`. Public names are normalized to the DeepSeek function-name contract (64 chars, `[A-Za-z0-9_-]`); when replacement or truncation changes the name, a deterministic 12-hex-char hash of `(serverName, rawName)` is appended so distinct tools never collapse into one name. Names are pure functions of `(serverName, rawName)` — connection order, re-syncs, and other servers never rename a tool.
+Every MCP tool has two names: the raw MCP name (sent on the wire in `tools/call`) and the public name `mcp__<serverName>__<rawName>` registered on `ctx.tools`. Public names are normalized to the ForgeWeaver function-name contract (64 chars, `[A-Za-z0-9_-]`); when replacement or truncation changes the name, a deterministic 12-hex-char hash of `(serverName, rawName)` is appended so distinct tools never collapse into one name. Names are pure functions of `(serverName, rawName)` — connection order, re-syncs, and other servers never rename a tool.
 
 - Two servers publishing the same raw name (e.g. `search`) coexist under their namespaces.
 - A duplicate `serverName` across live instances fails the later plugin instance at load.

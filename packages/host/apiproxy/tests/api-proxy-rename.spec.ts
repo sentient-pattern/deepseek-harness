@@ -8,17 +8,17 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore from '@deepseek-ai/dsh-session'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionTitleService from '@deepseek-ai/dsh-session-title'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { RpcRequest } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { RpcId } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@deepseek-ai/dsh-host-apiproxy'
+import { Context } from '@forgeweaver/cordis'
+import SessionStore from '@forgeweaver/fw-session'
+import AgentRegistry from '@forgeweaver/fw-agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@forgeweaver/fw-agent'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import SessionTitleService from '@forgeweaver/fw-session-title'
+import UserQuestionService from '@forgeweaver/fw-user-questions'
+import type { Session, SessionId } from '@forgeweaver/fw-session'
+import type { RpcRequest } from '@forgeweaver/fw-host-apiproxy/api/rpc'
+import { RpcId } from '@forgeweaver/fw-host-apiproxy/api/rpc'
+import { createApiProxy } from '@forgeweaver/fw-host-apiproxy'
 
 const sid = (id: string): SessionId => id as SessionId
 

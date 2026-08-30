@@ -2,18 +2,18 @@
  * JSON-RPC methods and notifications for out-of-process harness SDKs.
  * The surrounding context owns plugins, persistence, and configured adapters.
  *
- * @module @deepseek-ai/dsh-sdk-jsonrpc-server/server
+ * @module @forgeweaver/fw-sdk-jsonrpc-server/server
  */
 
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@forgeweaver/cordis'
 import { resolve } from 'node:path'
-import type { Agent, AgentHandle } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { carrierKeyOf, type Scoped } from '@deepseek-ai/dsh-scope'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentRunEndInfo } from '@deepseek-ai/dsh-subagent'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
+import type { Agent, AgentHandle } from '@forgeweaver/fw-agent'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import { carrierKeyOf, type Scoped } from '@forgeweaver/fw-scope'
+import { SessionId } from '@forgeweaver/fw-session'
+import type SubagentRuntime from '@forgeweaver/fw-subagent'
+import type { SubagentRunEndInfo } from '@forgeweaver/fw-subagent'
+import * as LlmForgeWeaver from '@forgeweaver/fw-llm-forgeweaver'
 import type {
   InitializeParams,
   InitializeResult,
@@ -23,7 +23,7 @@ import type {
   SessionPromptResult,
   SubagentFinishedNotification,
   SubagentStartedNotification,
-} from '@deepseek-ai/dsh-sdk-protocol'
+} from '@forgeweaver/fw-sdk-protocol'
 
 interface SessionRecord {
   handle: AgentHandle
@@ -52,8 +52,8 @@ function successStatus(reason: string, options: HarnessSdkJsonRpcServerOptions):
  */
 export class HarnessSdkJsonRpcServer {
   private cwd = process.cwd()
-  private provider = 'deepseek-official'
-  private model = 'deepseek-official'
+  private provider = 'forgeweaver-official'
+  private model = 'forgeweaver-official'
   private maxTokens: number | undefined
   private llmFiber: { dispose(): Promise<void> } | undefined
   private readonly sessions = new Map<string, SessionRecord>()
@@ -104,7 +104,7 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Configure the SDK route, mounting the DeepSeek fallback only when unowned.
+   * Configure the SDK route, mounting the ForgeWeaver fallback only when unowned.
    * @param params - SDK handshake parameters.
    * @returns server identity for the handshake.
    */
@@ -118,10 +118,10 @@ export class HarnessSdkJsonRpcServer {
     this.model = params.model
     this.maxTokens = params.maxTokens
     if (!this.hasAdapterFor(this.provider)) {
-      if (this.provider !== 'deepseek-official') throw new Error(`no adapter registered for provider "${this.provider}"`)
-      this.llmFiber = await this.ctx.plugin(LlmDeepSeek, {})
+      if (this.provider !== 'forgeweaver-official') throw new Error(`no adapter registered for provider "${this.provider}"`)
+      this.llmFiber = await this.ctx.plugin(LlmForgeWeaver, {})
     }
-    return { serverInfo: { name: 'deepseek-harness-sdk-runtime', version: '0.0.1' } }
+    return { serverInfo: { name: 'forgeweaver-harness-sdk-runtime', version: '0.0.1' } }
   }
 
   /**
@@ -196,7 +196,7 @@ export class HarnessSdkJsonRpcServer {
       case 'shutdown':
         return this.shutdown()
       default:
-        throw new Error(`unknown DeepSeek Harness SDK runtime method: ${method}`)
+        throw new Error(`unknown ForgeWeaver SDK runtime method: ${method}`)
     }
   }
 
@@ -219,7 +219,7 @@ export class HarnessSdkJsonRpcServer {
     // No preset composition: this server's compositions keep the model-facing
     // rows in the host plane, so this agent reads them from the global layer. A
     // deployment that configures a roster has to join one here first
-    // (@deepseek-ai/dsh-agent-presets README, "Composing a child agent").
+    // (@forgeweaver/fw-agent-presets README, "Composing a child agent").
     const handle = await this.ctx.agents.create({
       sessionId: SessionId(sessionId),
       meta: { cwd: this.cwd },

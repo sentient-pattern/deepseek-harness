@@ -1,18 +1,18 @@
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
+import { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import { mountAgentLoopTestDependencies } from '@forgeweaver/fw-agent-loop-testkit'
+import { LocalBashExecutor } from '@forgeweaver/fw-bash-local'
+import * as BashEnvPlugin from '@forgeweaver/fw-shell-env'
+import LocalSubprocessRuntime from '@forgeweaver/fw-subprocess-local'
+import * as ToolBash from '@forgeweaver/fw-tool-bash'
+import * as LlmForgeWeaver from '@forgeweaver/fw-llm-forgeweaver'
+import SubagentRuntime from '@forgeweaver/fw-subagent'
 import * as Spawn from '../src/index.ts'
-import * as ToolSubagent from '@deepseek-ai/dsh-tool-subagent'
+import * as ToolSubagent from '@forgeweaver/fw-tool-subagent'
 
 /**
- * Shared harness for the spawn-backend e2e: the full real stack (DeepSeek
+ * Shared harness for the spawn-backend e2e: the full real stack (ForgeWeaver
  * adapter + real bash tool + the subagent tool bound to the spawn backend), so
  * a real parent agent can delegate to a real in-process child that does real
  * work (writes a file). Lives outside the *.e2e.ts pattern so importing it never
@@ -28,7 +28,7 @@ export async function spawnHarness(workdir: string): Promise<Context> {
     systemPrompt: { persona: 'You are a coding agent. Report only when the requested work is done.' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek)
+  await ctx.plugin(LlmForgeWeaver)
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)
   await ctx.plugin(LocalBashExecutor, { cwd: workdir, timeoutMs: 30_000 })

@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-hooks-claude-code",
-  "description": "Bridge plugin: run a Claude Code hooks.json / settings hook config on the DeepSeek Harness interception seams",
+  "name": "@forgeweaver/fw-hooks-claude-code",
+  "description": "Bridge plugin: run a Claude Code hooks.json / settings hook config on the ForgeWeaver interception seams",
   "version": "0.1.1-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/hooks/hooks-claude-code"
   },
   "type": "module",
@@ -32,34 +32,34 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@forgeweaver/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-hook-protocol": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-hook-protocol": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-persistence": "workspace:^",
+    "@forgeweaver/fw-subagent": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-hook-protocol": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-agent-loop": "workspace:^",
+    "@forgeweaver/fw-agent-loop-testkit": "workspace:^",
+    "@forgeweaver/fw-shell": "workspace:^",
+    "@forgeweaver/fw-bash-local": "workspace:^",
+    "@forgeweaver/fw-subprocess-local": "workspace:^",
+    "@forgeweaver/fw-hook-protocol": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-persistence": "workspace:^",
+    "@forgeweaver/fw-session-persistence-jsonl": "workspace:^",
+    "@forgeweaver/fw-subagent": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   }
 }

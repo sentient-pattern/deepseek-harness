@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-client-ui-deliverables`.
- * @module @deepseek-ai/dsh-client-ui-deliverables/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-client-ui-deliverables`.
+ * @module @forgeweaver/fw-client-ui-deliverables/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-client-ui-deliverables'
+const PACKAGE_NAME = '@forgeweaver/fw-client-ui-deliverables'
 
 /** Cordis companion plugin name. */
 export const name = 'client-ui-deliverables-invariant'

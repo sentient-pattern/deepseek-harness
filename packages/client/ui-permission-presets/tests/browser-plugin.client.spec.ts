@@ -8,14 +8,14 @@
  * disposal removes the contribution (HMR safety). The same plugin registers
  * its Settings row and invalidates that row on host settings changes.
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it } from 'vitest'
-import { SlotRegistry, type SessionId } from '@deepseek-ai/dsh-client-runtime/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import type { CommandDecoration } from '@deepseek-ai/dsh-client-ui-commands/client'
-import type { PermissionSelect } from '@deepseek-ai/dsh-permission-presets/client'
+import { SlotRegistry, type SessionId } from '@forgeweaver/fw-client-runtime/client'
+import { LocaleRuntime } from '@forgeweaver/fw-client-locale/client'
+import { TestRemote } from '@forgeweaver/fw-client-test-runtime'
+import { apply as settingsApply, inject as settingsInject } from '@forgeweaver/fw-client-ui-settings/client'
+import type { CommandDecoration } from '@forgeweaver/fw-client-ui-commands/client'
+import type { PermissionSelect } from '@forgeweaver/fw-permission-presets/client'
 import {
   PermissionRow, type PermissionRowInjected,
 } from '../src/client/PermissionRow.tsx'

@@ -1,0 +1,23 @@
+- id: base
+  name: '@forgeweaver/cordis-plugin-include'
+  config:
+    path: ../../cordis.yml
+    patches:
+      - id: llm-forgeweaver
+        config:
+          baseURL: !!js process.env.FW_SNAPSHOT_BASE_URL
+          thinking: enabled
+          reasoningEffort: low
+          streamIdleTimeoutMs: 150
+      - id: agent-spine
+        config:
+          agents:
+            - id: main
+              provider: forgeweaver-official
+              model: forgeweaver-v4-flash
+              cwd: !!js process.cwd()
+          workspaceContext: false
+          persona: 'Keyless ForgeWeaver adapter defaults snapshot.'
+      - id: persistence
+        config:
+          root: './.sessions'

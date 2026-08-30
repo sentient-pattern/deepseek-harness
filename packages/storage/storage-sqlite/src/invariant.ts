@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-storage-sqlite`.
- * @module @deepseek-ai/dsh-storage-sqlite/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-storage-sqlite`.
+ * @module @forgeweaver/fw-storage-sqlite/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-storage-sqlite'
+const PACKAGE_NAME = '@forgeweaver/fw-storage-sqlite'
 
 /** Cordis companion plugin name. */
 export const name = 'storage-sqlite-invariant'

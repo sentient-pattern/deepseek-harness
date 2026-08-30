@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-runtime",
+  "name": "@forgeweaver/fw-client-runtime",
   "description": "Client core services: SlotRegistry, SessionRuntime (scope tree + object layer)",
   "version": "0.1.1-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/client/runtime"
   },
   "type": "module",
@@ -29,12 +29,12 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "fw": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-typert-registry",
-        "@deepseek-ai/dsh-api-remotes"
+        "@forgeweaver/fw-client-connection",
+        "@forgeweaver/fw-typert-registry",
+        "@forgeweaver/fw-api-remotes"
       ],
       "platform": "web",
       "immediately": true
@@ -46,44 +46,44 @@
     "zustand": "~4.4.7"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-host-apiproxy": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@forgeweaver/cordis": "workspace:^",
+    "@forgeweaver/fw-api-remotes": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-typert-protocol": "workspace:^",
+    "@forgeweaver/fw-typert-registry": "workspace:^",
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-attachment": "workspace:^",
+    "@forgeweaver/fw-client-connection": "workspace:^",
+    "@forgeweaver/fw-commands": "workspace:^",
+    "@forgeweaver/fw-host-apiproxy": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-llm-retry": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-projection": "workspace:^",
+    "@forgeweaver/fw-session-title": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^",
+    "@forgeweaver/fw-api-remotes": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-timeout": "workspace:^",
+    "@forgeweaver/fw-typert-protocol": "workspace:^",
+    "@forgeweaver/fw-typert-registry": "workspace:^",
     "@types/react": "~18.3.1",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
+    "@forgeweaver/fw-client-ui-slots": "workspace:^",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-host-apiproxy": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-attachment": "workspace:^",
+    "@forgeweaver/fw-client-connection": "workspace:^",
+    "@forgeweaver/fw-commands": "workspace:^",
+    "@forgeweaver/fw-host-apiproxy": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-llm-retry": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-session-projection": "workspace:^",
+    "@forgeweaver/fw-session-title": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^"
   },
   "files": [
     "lib/index.js",

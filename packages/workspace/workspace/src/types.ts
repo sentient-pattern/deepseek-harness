@@ -2,11 +2,11 @@
  * Public type vocabulary of the workspace entity: the `WorkspaceId` brand and
  * the `Workspace` consumer interface. Types only — the `WorkspaceId` factory
  * lives in `index.ts` (this file carries no runtime code).
- * @module @deepseek-ai/dsh-workspace/src/types
+ * @module @forgeweaver/fw-workspace/src/types
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { Branded } from '@forgeweaver/fw-brand'
+import type { SessionId } from '@forgeweaver/fw-session'
 
 /**
  * Identifies one workspace record. A generated uuid, never the path: path

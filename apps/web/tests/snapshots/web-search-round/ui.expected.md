@@ -9,17 +9,17 @@
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
-- text: Use web_search once with queries ["DeepSeek Harness snapshot search","DeepSeek Harness multi-query search"]. Then reply exactly SEARCH_DONE and stop. {{clock}}
+- text: Use web_search once with queries ["ForgeWeaver snapshot search","ForgeWeaver multi-query search"]. Then reply exactly SEARCH_DONE and stop. {{clock}}
 - button "Copy":
   - img
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @forgeweaver/fw-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
-- button "Search DeepSeek Harness snapshot search, DeepSeek Harness multi-query search":
+  - text: Context injection @forgeweaver/fw-system-prompt
+- button "Search ForgeWeaver snapshot search, ForgeWeaver multi-query search":
   - img
   - img
-  - text: Search DeepSeek Harness snapshot search, DeepSeek Harness multi-query search
+  - text: Search ForgeWeaver snapshot search, ForgeWeaver multi-query search
 - paragraph: SEARCH_DONE
 - button "Copy":
   - img
@@ -34,8 +34,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current ForgeWeaver-V4-Flash":
+  - text: ForgeWeaver-V4-Flash
   - img
 - button "0% of context used"
 - button "Send message" [disabled]

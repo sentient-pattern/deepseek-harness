@@ -1,11 +1,11 @@
 /**
  * Agent-scoped durable one-shot and fixed-rate reminders over the session event log.
- * @module @deepseek-ai/dsh-schedule
+ * @module @forgeweaver/fw-schedule
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-session-persistence'
+import type { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import type {} from '@forgeweaver/fw-session-persistence'
 import { ScheduleRuntime } from './runtime.ts'
 import { registerScheduleTools } from './tools.ts'
 

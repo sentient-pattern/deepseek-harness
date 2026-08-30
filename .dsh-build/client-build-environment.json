@@ -1,0 +1,10 @@
+{
+  "formatVersion": 1,
+  "environment": {
+    "FW_CLIENT_COMMIT_HASH": "ae705fe"
+  },
+  "artifacts": {
+    "fileCount": 200,
+    "sha256": "db319da243de4616bcf531744d5ed2583143592e5e5342b30a8cc5a2b054b37c"
+  }
+}

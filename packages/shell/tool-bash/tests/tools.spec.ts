@@ -2,31 +2,31 @@ import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { ShellExecutor } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@deepseek-ai/dsh-shell'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolTasks from '@deepseek-ai/dsh-tool-jobs'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
-import type { ApprovalOutcome } from '@deepseek-ai/dsh-user-approval'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@forgeweaver/cordis'
+import { CallId } from '@forgeweaver/fw-llm'
+import { ShellExecutor } from '@forgeweaver/fw-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@forgeweaver/fw-shell'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@forgeweaver/fw-tools'
+import AgentRegistry from '@forgeweaver/fw-agent'
+import type { Agent } from '@forgeweaver/fw-agent'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
+import JsonlSessionPersistence from '@forgeweaver/fw-session-persistence-jsonl'
+import LocalJobRegistry from '@forgeweaver/fw-jobs-local'
+import * as ToolTasks from '@forgeweaver/fw-tool-jobs'
+import ApprovalService from '@forgeweaver/fw-user-approval'
+import type { ApprovalOutcome } from '@forgeweaver/fw-user-approval'
+import { LocalBashExecutor } from '@forgeweaver/fw-bash-local'
+import LocalSubprocessRuntime from '@forgeweaver/fw-subprocess-local'
+import SandboxPolicyService from '@forgeweaver/fw-sandbox-policy'
+import * as ToolBash from '@forgeweaver/fw-tool-bash'
+import * as BashEnvPlugin from '@forgeweaver/fw-shell-env'
 import { processOutcome } from '../src/background.ts'
 import { renderProcessRead, renderResult } from '../src/render.ts'
 
 const testToolSignal = new AbortController().signal
 
-const spillDir = mkdtempSync(join(tmpdir(), 'dsh-tool-bash-spec-'))
+const spillDir = mkdtempSync(join(tmpdir(), 'fw-tool-bash-spec-'))
 
 /** Foreground-only harness: no job runtime (backgrounding fails loud here). */
 async function setup() {
@@ -300,7 +300,7 @@ describe('bash tool', () => {
 
   it('surfaces spawn failures as isError', async () => {
     const ctx = await setup()
-    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-dsh' })
+    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-fw' })
     expect(result.isError).toBe(true)
     expect(text(result)).toMatch(/ENOENT/)
   })
@@ -492,7 +492,7 @@ describe('background execution through the job runtime', () => {
     const ctx = await setup() // no LocalJobRegistry / ToolTasks
     const result = await call(ctx, 'bash', { command: 'sleep 60', description: 'test command', run_in_background: true })
     expect(result.isError).toBe(true)
-    expect(text(result)).toContain('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+    expect(text(result)).toContain('background jobs unavailable: load @forgeweaver/fw-jobs and @forgeweaver/fw-tool-jobs')
   })
 
   it('a pre-aborted call is skipped before the process starts', async () => {
@@ -1051,7 +1051,7 @@ describe('tool-owned UI presentation (presentCall / presentResult)', () => {
 })
 
 describe('the model-facing bash tool builds its request from named args only (no {...args} forward)', () => {
-  const recordingDshHome = join(spillDir, 'dsh-home')
+  const recordingDshHome = join(spillDir, 'fw-home')
 
   /**
    * Records every {@link ShellExecRequest} the consumer hands to `resolve()`, so a
@@ -1062,7 +1062,7 @@ describe('the model-facing bash tool builds its request from named args only (no
    * future refactor that blindly forwards `...args` — which would silently thread
    * model input into the post-scrub `env` merge or per-run capture budget — NOT
    * to defend a trust boundary
-   * (the credential scrub in dsh-bash-local is the security control; see the
+   * (the credential scrub in fw-bash-local is the security control; see the
    * bash-stdin-env Agent Note). Foreground `run()` returns a canned result; `start()`
    * hands back an already-settled fake handle so the task registration completes.
    */
@@ -1078,7 +1078,7 @@ describe('the model-facing bash tool builds its request from named args only (no
         ...request.signal ? { signal: request.signal } : {},
         ...request.stdin !== undefined ? { stdin: request.stdin } : {},
         ...request.env !== undefined ? { env: request.env } : {},
-        ...request.dshEnv !== undefined ? { dshEnv: request.dshEnv } : {},
+        ...request.fwEnv !== undefined ? { fwEnv: request.fwEnv } : {},
         sandboxPolicy: request.sandboxPolicy,
       }
     }
@@ -1111,7 +1111,7 @@ describe('the model-facing bash tool builds its request from named args only (no
     }
     await ctx.plugin(LocalJobRegistry)
     await ctx.plugin(ToolTasks)
-    await ctx.plugin(BashEnvPlugin, { dshHome: recordingDshHome })
+    await ctx.plugin(BashEnvPlugin, { fwHome: recordingDshHome })
     await ctx.plugin(RecordingBashExecutor)
     await ctx.plugin(ToolBash)
     return { ctx, bash: ctx.shell as RecordingBashExecutor }
@@ -1120,8 +1120,8 @@ describe('the model-facing bash tool builds its request from named args only (no
   it('describes the managed harness environment namespace to the model', async () => {
     const { ctx } = await setupRecording()
     const description = ctx.tools.get('bash')?.description ?? ''
-    expect(description).toContain('$DSH_*')
-    expect(description).not.toContain('DSH_SESSION_JSONL')
+    expect(description).toContain('$FW_*')
+    expect(description).not.toContain('FW_SESSION_JSONL')
   })
 
   it('injects the session id and JSONL target path into a foreground request', async () => {
@@ -1137,11 +1137,11 @@ describe('the model-facing bash tool builds its request from named args only (no
       agent,
     })
 
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-fg',
-      DSH_SESSION_JSONL: path,
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.fwEnv).toEqual({
+      FW_HOME: recordingDshHome,
+      FW_SESSION_ID: 'request-fg',
+      FW_SESSION_JSONL: path,
+      FW_SHELL: '1',
     })
   })
 
@@ -1158,24 +1158,24 @@ describe('the model-facing bash tool builds its request from named args only (no
         command: 'sleep 1',
         description: 'run command',
         run_in_background: true,
-        env: { DSH_SESSION_ID: 'spoofed', DSH_SESSION_JSONL: '/tmp/spoofed' },
+        env: { FW_SESSION_ID: 'spoofed', FW_SESSION_JSONL: '/tmp/spoofed' },
       },
       agent,
     })
 
     expect(bash.requests[0]?.env).toBeUndefined()
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-bg',
-      DSH_SESSION_JSONL: path,
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.fwEnv).toEqual({
+      FW_HOME: recordingDshHome,
+      FW_SESSION_ID: 'request-bg',
+      FW_SESSION_JSONL: path,
+      FW_SHELL: '1',
     })
   })
 
   it('injects built-ins and the stable session id when no JSONL locator is available', async () => {
     const { ctx, bash } = await setupRecording()
     const agent = registerFakeAgent(ctx, 'request-id-only', () => undefined)
-    const ambient = process.env.DSH_SESSION_ID
+    const ambient = process.env.FW_SESSION_ID
 
     await ctx.tools.execute({
       signal: testToolSignal,
@@ -1185,12 +1185,12 @@ describe('the model-facing bash tool builds its request from named args only (no
       agent,
     })
 
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-id-only',
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.fwEnv).toEqual({
+      FW_HOME: recordingDshHome,
+      FW_SESSION_ID: 'request-id-only',
+      FW_SHELL: '1',
     })
-    expect(process.env.DSH_SESSION_ID).toBe(ambient)
+    expect(process.env.FW_SESSION_ID).toBe(ambient)
   })
 
   it('keeps parent and child agent session environments isolated', async () => {
@@ -1208,21 +1208,21 @@ describe('the model-facing bash tool builds its request from named args only (no
       })
     }
 
-    expect(bash.requests.map(request => request.dshEnv)).toEqual([
+    expect(bash.requests.map(request => request.fwEnv)).toEqual([
       {
-        DSH_HOME: recordingDshHome,
-        DSH_SESSION_ID: 'request-parent',
-        DSH_SESSION_JSONL: ctx.sessionPersistence.locate(parent.session.header)?.path,
-        DSH_SHELL: '1',
+        FW_HOME: recordingDshHome,
+        FW_SESSION_ID: 'request-parent',
+        FW_SESSION_JSONL: ctx.sessionPersistence.locate(parent.session.header)?.path,
+        FW_SHELL: '1',
       },
       {
-        DSH_HOME: recordingDshHome,
-        DSH_SESSION_ID: 'request-child',
-        DSH_SESSION_JSONL: ctx.sessionPersistence.locate(child.session.header)?.path,
-        DSH_SHELL: '1',
+        FW_HOME: recordingDshHome,
+        FW_SESSION_ID: 'request-child',
+        FW_SESSION_JSONL: ctx.sessionPersistence.locate(child.session.header)?.path,
+        FW_SHELL: '1',
       },
     ])
-    expect(bash.requests[0]?.dshEnv?.DSH_SESSION_JSONL).not.toBe(bash.requests[1]?.dshEnv?.DSH_SESSION_JSONL)
+    expect(bash.requests[0]?.fwEnv?.FW_SESSION_JSONL).not.toBe(bash.requests[1]?.fwEnv?.FW_SESSION_JSONL)
   })
 
   it('does not forward trusted-only fields even when the model includes them as extra arguments', async () => {

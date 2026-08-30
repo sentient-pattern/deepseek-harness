@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-launch-environment`.
- * @module @deepseek-ai/dsh-launch-environment/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-launch-environment`.
+ * @module @forgeweaver/fw-launch-environment/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-launch-environment'
+const PACKAGE_NAME = '@forgeweaver/fw-launch-environment'
 
 /** Cordis companion plugin name. */
 export const name = 'launch-environment-invariant'

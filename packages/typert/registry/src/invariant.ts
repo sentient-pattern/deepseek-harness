@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-typert-registry`.
- * @module @deepseek-ai/dsh-typert-registry/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-typert-registry`.
+ * @module @forgeweaver/fw-typert-registry/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-typert-registry'
+const PACKAGE_NAME = '@forgeweaver/fw-typert-registry'
 
 /** Cordis companion plugin name. */
 export const name = 'typert-registry-invariant'

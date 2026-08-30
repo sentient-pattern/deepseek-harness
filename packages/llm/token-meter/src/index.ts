@@ -1,17 +1,17 @@
 /**
  * Single replay-aware token-meter service for request and surface pressure.
  *
- * @module @deepseek-ai/dsh-token-meter
+ * @module @forgeweaver/fw-token-meter
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { BlockAssembler, deepFreeze } from '@deepseek-ai/dsh-llm'
-import type { Message, TokenUsage } from '@deepseek-ai/dsh-llm'
-import type { EpochHeader, Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import { canonicalHeader, headerEquals, isSurfaceEvent } from '@deepseek-ai/dsh-session'
+import { Context, Service } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import { BlockAssembler, deepFreeze } from '@forgeweaver/fw-llm'
+import type { Message, TokenUsage } from '@forgeweaver/fw-llm'
+import type { EpochHeader, Session, SessionEvent } from '@forgeweaver/fw-session'
+import { canonicalHeader, headerEquals, isSurfaceEvent } from '@forgeweaver/fw-session'
 // Type-only: resolves the optional projection registry Context declaration.
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@forgeweaver/fw-session-projection'
 import type {
   TokenMeasurement,
   TokenMeasurementBaseline,
@@ -64,7 +64,7 @@ function validateConfigKeys(config: TokenMeterConfig): void {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     tokenMeter: TokenMeter
   }

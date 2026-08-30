@@ -5,18 +5,18 @@
 export const brand = {
 	"version": 1,
 	"identity": {
-		"name": "Sentient Pattern",
-		"cliName": "sp",
-		"shortName": "SP",
+		"name": "ForgeWeaver",
+		"cliName": "fw",
+		"shortName": "FW",
 		"tagline": "Consciousness, computed",
-		"description": "An agent harness for conscious computation — a fork of DeepSeek Harness (MIT).",
+		"description": "ForgeWeaver — an agent harness for conscious computation. A fork of ForgeWeaver (MIT).",
 		"website": "https://github.com/sentient-pattern"
 	},
 	"scope": {
-		"packageScope": "@sentient-pattern",
-		"packagePrefix": "sp",
-		"envPrefix": "SP",
-		"homeDir": "~/.sentient-pattern",
+		"packageScope": "@forgeweaver",
+		"packagePrefix": "fw",
+		"envPrefix": "FW",
+		"homeDir": "~/.forgeweaver",
 		"profile": "web"
 	},
 	"colors": {
@@ -62,8 +62,8 @@ export const brand = {
 		"glow": "0 0 20px rgba(99,102,241,0.5)"
 	},
 	"defaults": {
-		"provider": "sentient-pattern",
-		"model": "sp-model-v1",
+		"provider": "forgeweaver",
+		"model": "forgeweaver-v1",
 		"preset": "standard"
 	}
 } as const;

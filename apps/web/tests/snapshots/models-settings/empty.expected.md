@@ -29,7 +29,7 @@
     - option "cerebras"
     - option "cloudflare-ai-gateway"
     - option "cloudflare-workers-ai"
-    - option "deepseek"
+    - option "forgeweaver"
     - option "fireworks"
     - option "github-copilot"
     - option "google"

@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-agent-presets",
-  "description": "Per-session agent composition from preset cordis.yml files for the DeepSeek Harness",
+  "name": "@forgeweaver/fw-agent-presets",
+  "description": "Per-session agent composition from preset cordis.yml files for the ForgeWeaver",
   "version": "0.1.1-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
     "directory": "packages/preset/agent-presets"
   },
   "type": "module",
@@ -37,37 +37,37 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/cordis-plugin-include": "workspace:^",
+    "@forgeweaver/cordis-plugin-loader": "workspace:^",
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-atomic-write": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-home-paths": "workspace:^",
+    "@forgeweaver/fw-scope": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^",
+    "@forgeweaver/fw-system-prompt": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@forgeweaver/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-settings-file": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@forgeweaver/cordis-plugin-include": "workspace:^",
+    "@forgeweaver/cordis-plugin-loader": "workspace:^",
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-agent-loop": "workspace:^",
+    "@forgeweaver/fw-atomic-write": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-home-paths": "workspace:^",
+    "@forgeweaver/fw-scope": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^",
+    "@forgeweaver/fw-settings-file": "workspace:^",
+    "@forgeweaver/fw-system-prompt": "workspace:^",
+    "@forgeweaver/fw-tools": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
   }
 }

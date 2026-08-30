@@ -8,18 +8,18 @@
 version: 1
 
 identity:
-  name: "Sentient Pattern"              # product / company name (UI, docs, shell)
-  cliName: "sp"                         # CLI binary (dsh -> sp)
-  shortName: "SP"
+  name: "ForgeWeaver"                   # product name (UI, docs, shell)
+  cliName: "fw"                         # CLI binary (fw -> fw)
+  shortName: "FW"
   tagline: "Consciousness, computed"
-  description: "An agent harness for conscious computation — a fork of DeepSeek Harness (MIT)."
+  description: "ForgeWeaver — an agent harness for conscious computation. A fork of ForgeWeaver (MIT)."
   website: "https://github.com/sentient-pattern"
 
 scope:
-  packageScope: "@sentient-pattern"     # Phase 2 rename target (@deepseek-ai -> this)
-  packagePrefix: "sp"                   # Phase 2 package prefix (dsh-* -> sp-*)
-  envPrefix: "SP"                       # env var prefix (DSH_* -> SP_*)
-  homeDir: "~/.sentient-pattern"        # config home (DSH_HOME -> SP_HOME)
+  packageScope: "@forgeweaver"          # package scope (@forgeweaver -> this)
+  packagePrefix: "fw"                   # package prefix (fw-* -> fw-*)
+  envPrefix: "FW"                       # env var prefix (FW_* -> FW_*)
+  homeDir: "~/.forgeweaver"             # config home (FW_HOME -> FW_HOME)
   profile: "web"                        # keep
 
 colors:
@@ -39,7 +39,7 @@ colors:
   glassAccent: "rgba(99,102,241,0.15)"
   glassBorder: "rgba(167,139,250,0.25)"
 
-# Brand ramp: the indigo scale that drives --dsw-static-deepseek-* (hero = 500).
+# Brand ramp: the indigo scale that drives --dsw-static-forgeweaver-* (hero = 500).
 brandRamp:
   50: "#eef2ff"
   100: "#e0e7ff"
@@ -65,6 +65,6 @@ text:
   glow: "0 0 20px rgba(99,102,241,0.5)"
 
 defaults:
-  provider: "sentient-pattern"          # Phase 3: our LLM provider key
-  model: "sp-model-v1"
+  provider: "forgeweaver"              # our LLM provider key
+  model: "forgeweaver-v1"
   preset: "standard"

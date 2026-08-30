@@ -15,16 +15,16 @@
  * reads session state once at each operation boundary; executors and providers
  * remain session-free.
  *
- * @module @deepseek-ai/dsh-sandbox-policy
+ * @module @forgeweaver/fw-sandbox-policy
  */
 
 import { resolve as resolvePath } from 'node:path'
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-agent'
-import { canonicalPath, type SandboxExecutionPolicy, type SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import { Context, Service } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
+import type {} from '@forgeweaver/fw-agent'
+import { canonicalPath, type SandboxExecutionPolicy, type SandboxMode } from '@forgeweaver/fw-sandbox'
+import type { Session } from '@forgeweaver/fw-session'
+import type {} from '@forgeweaver/fw-system-prompt'
 import { effectiveSandboxMode } from './session-mode.ts'
 
 export { SANDBOX_MODES, effectiveSandboxMode, setSandboxMode } from './session-mode.ts'
@@ -51,7 +51,7 @@ function renderPolicyContext(policy: SandboxExecutionPolicy): string {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     sandboxPolicy: SandboxPolicyService
   }

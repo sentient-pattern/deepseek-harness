@@ -4,13 +4,13 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { stubSettingsScope, type StubSettingsScope } from '@deepseek-ai/dsh-client-test-runtime'
+import { stubSettingsScope, type StubSettingsScope } from '@forgeweaver/fw-client-test-runtime'
 import { CardForm, numberField, textField } from '../src/client/card-form.ts'
 import { AgentLoopCardController, type AgentLoopSettings } from '../src/client/agent-loop-card-controller.ts'
 import { BashCardController, type BashSettings } from '../src/client/bash-card-controller.ts'
 import {
   SettingsDescribeMirror, type SettingsMirrorSnapshot,
-} from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
+} from '@forgeweaver/fw-client-ui-settings/src/client/settings-mirror.ts'
 import { ConfigurablePluginsTabController } from '../src/client/tab-store.ts'
 import { WebSearchCardController, type WebSearchSettings } from '../src/client/web-search-card-controller.ts'
 
@@ -31,7 +31,7 @@ function acceptWrites<T>(host: StubSettingsScope<T>): void {
 function credentialsApi(configured: boolean) {
   const describe = vi.fn(() => Promise.resolve({
     rpcId: 'c-1' as never,
-    result: { ok: true as const, value: { credentials: { DEEPSEEK_API_KEY: { configured, writable: true } } } },
+    result: { ok: true as const, value: { credentials: { FORGEWEAVER_API_KEY: { configured, writable: true } } } },
   }))
   const set = vi.fn(() => Promise.resolve({ rpcId: 'c-2' as never, result: { ok: true as const, value: {} } }))
   return { api: { credentials: { describe, set } } as never, describe, set }
@@ -413,12 +413,12 @@ describe('WebSearchCardController', () => {
 
     credentials.describe.mockImplementation(() => Promise.resolve({
       rpcId: 'c-1' as never,
-      result: { ok: true as const, value: { credentials: { DEEPSEEK_API_KEY: { configured: true, writable: true } } } },
+      result: { ok: true as const, value: { credentials: { FORGEWEAVER_API_KEY: { configured: true, writable: true } } } },
     }))
     face.save()
     await vi.waitFor(() => { expect(credentials.set).toHaveBeenCalled() })
 
-    expect(credentials.set).toHaveBeenCalledWith({ ref: 'DEEPSEEK_API_KEY', value: 'ds-secret' })
+    expect(credentials.set).toHaveBeenCalledWith({ ref: 'FORGEWEAVER_API_KEY', value: 'ds-secret' })
     expect(host.set).not.toHaveBeenCalled()
     await vi.waitFor(() => {
       expect(face.hooks.webSearchCard.getSnapshot()).toMatchObject({ dirty: false, apiKeyConfigured: true })
@@ -455,9 +455,9 @@ describe('WebSearchCardController', () => {
     // A key written on another surface reaches this card only through this signal.
     credentials.describe.mockImplementation(() => Promise.resolve({
       rpcId: 'c-1' as never,
-      result: { ok: true as const, value: { credentials: { DEEPSEEK_API_KEY: { configured: true, writable: true } } } },
+      result: { ok: true as const, value: { credentials: { FORGEWEAVER_API_KEY: { configured: true, writable: true } } } },
     }))
-    controller.refreshCredential('DEEPSEEK_API_KEY')
+    controller.refreshCredential('FORGEWEAVER_API_KEY')
 
     await vi.waitFor(() => {
       expect(controller.inject().hooks.webSearchCard.getSnapshot().apiKeyConfigured).toBe(true)
@@ -581,7 +581,7 @@ describe('ConfigurablePluginsTabController', () => {
 
   it('never dispatches a card whose namespace this deployment does not serve', async () => {
     const settings = settingsApi(['bash'])
-    const controller = new ConfigurablePluginsTabController(settings.mirror, () => ledger('bash', 'web-search-deepseek'))
+    const controller = new ConfigurablePluginsTabController(settings.mirror, () => ledger('bash', 'web-search-forgeweaver'))
 
     await settings.mirror.ensure()
 

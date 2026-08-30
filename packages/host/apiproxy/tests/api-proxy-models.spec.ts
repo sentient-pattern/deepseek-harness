@@ -6,22 +6,22 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AttachmentStore from '@deepseek-ai/dsh-attachment'
-import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@forgeweaver/cordis'
+import AgentRegistry, { agentEvents } from '@forgeweaver/fw-agent'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AttachmentStore from '@forgeweaver/fw-attachment'
+import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@forgeweaver/fw-llm'
 import type {
   GenerateOptions, LlmCallConfig, LlmModelInfo, LlmModelReasoningInfo, LlmProviderInfo,
   LlmResolvedModelInfo, StreamChunk,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import type { RpcRequest } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { RpcId } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
+} from '@forgeweaver/fw-llm'
+import SessionStore from '@forgeweaver/fw-session'
+import type { SessionId } from '@forgeweaver/fw-session'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import UserQuestionService from '@forgeweaver/fw-user-questions'
+import type { RpcRequest } from '@forgeweaver/fw-host-apiproxy/api/rpc'
+import { RpcId } from '@forgeweaver/fw-host-apiproxy/api/rpc'
 import { createApiProxy } from '../src/api-proxy.ts'
 
 let nextRpc = 1
@@ -88,9 +88,9 @@ async function harness(logged?: {
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(UserQuestionService)
   await ctx.plugin(AgentRegistry)
-  ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('DeepSeek', [
-    { provider: 'deepseek-official', id: 'deepseek-chat', name: 'DeepSeek Chat' },
-    { provider: 'deepseek-official', id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', description: 'Reasoning model' },
+  ctx.llm.registerAdapter(['forgeweaver-official'], new CatalogAdapter('ForgeWeaver', [
+    { provider: 'forgeweaver-official', id: 'forgeweaver-chat', name: 'ForgeWeaver Chat' },
+    { provider: 'forgeweaver-official', id: 'forgeweaver-reasoner', name: 'ForgeWeaver Reasoner', description: 'Reasoning model' },
   ], REASONING))
   ctx.llm.registerAdapter(['broken'], new CatalogAdapter('Broken Provider', new Error('catalog offline')))
   ctx.llm.registerAdapter(['metadata-broken'], new CatalogAdapter('Metadata Broken', [
@@ -157,7 +157,7 @@ describe('Web session model selection', () => {
     const followup = vi.fn()
     Object.assign(agent, { followup })
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }),
       cwd: '/tmp',
     })
 
@@ -203,7 +203,7 @@ describe('Web session model selection', () => {
     const { ctx, agent, sessionId } = await harness()
     registerTextOnly(ctx)
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }),
       cwd: '/tmp',
     })
     const image = {
@@ -241,7 +241,7 @@ describe('Web session model selection', () => {
     const readImage = vi.fn(() => Promise.resolve({ ref, data: Uint8Array.of(1, 2) }))
     ctx.provide('attachments', { readImage } as never)
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }),
       cwd: '/tmp',
     })
     agent.session.append('agent/inbox/spliced', {
@@ -269,26 +269,26 @@ describe('Web session model selection', () => {
   })
   it('groups successful providers and leaves an unlisted current selection out of the catalog', async () => {
     const { ctx, sessionId } = await harness({
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: ReasoningEffortId('max'),
     })
-    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }), cwd: '/tmp' })
+    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }), cwd: '/tmp' })
 
     const catalog = expectValue(await api.sessions.models(request({ sessionId })))
     expect(catalog.current).toEqual({
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: 'max',
     })
     expect(catalog.groups).toEqual([{
-      id: 'deepseek-official',
-      name: 'DeepSeek',
+      id: 'forgeweaver-official',
+      name: 'ForgeWeaver',
       models: [
-        { id: 'deepseek-chat', name: 'DeepSeek Chat', reasoning: REASONING },
+        { id: 'forgeweaver-chat', name: 'ForgeWeaver Chat', reasoning: REASONING },
         {
-          id: 'deepseek-reasoner',
-          name: 'DeepSeek Reasoner',
+          id: 'forgeweaver-reasoner',
+          name: 'ForgeWeaver Reasoner',
           description: 'Reasoning model',
           reasoning: REASONING,
         },
@@ -308,43 +308,43 @@ describe('Web session model selection', () => {
 
   it('accepts an advisory-unlisted model, rejects an unavailable provider, and switches only after the next assembly', async () => {
     const { ctx, agent, sessionId } = await harness()
-    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }), cwd: '/tmp' })
+    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }), cwd: '/tmp' })
     const seed: LlmCallConfig = { provider: 'seed', model: 'seed', temperature: 0.2 }
     const signal = new AbortController().signal
 
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'deepseek-chat' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' })
     expect((await ctx.systemPrompt.assemble()).variables)
-      .toMatchObject({ provider: 'deepseek-official', model: 'deepseek-chat' })
+      .toMatchObject({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' })
 
     const selected = expectValue(await api.sessions.selectModel(request({
       sessionId,
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: 'max',
     })))
     expect(selected.selected).toEqual({
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: 'max',
     })
     await expect(agentEvents(ctx, agent).waterfall(
       'agent/request', { turn: 1, step: 0, signal }, () => Promise.resolve(seed),
-    )).resolves.toMatchObject({ provider: 'deepseek-official', model: 'deepseek-chat' })
+    )).resolves.toMatchObject({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' })
 
     expect((await ctx.systemPrompt.assemble()).variables)
-      .toMatchObject({ provider: 'deepseek-official', model: 'private-preview' })
+      .toMatchObject({ provider: 'forgeweaver-official', model: 'private-preview' })
     await expect(agentEvents(ctx, agent).waterfall(
       'agent/request', { turn: 1, step: 1, signal }, () => Promise.resolve(seed),
     )).resolves.toMatchObject({
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: 'max',
     })
 
     const unsupported = await api.sessions.selectModel(request({
       sessionId,
-      provider: 'deepseek-official',
+      provider: 'forgeweaver-official',
       model: 'private-preview',
       reasoningEffort: 'medium',
     }))
@@ -352,7 +352,7 @@ describe('Web session model selection', () => {
       ok: false,
       error: {
         code: 'model-unavailable',
-        message: 'provider "deepseek-official" model "private-preview" does not support reasoning effort "medium"',
+        message: 'provider "forgeweaver-official" model "private-preview" does not support reasoning effort "medium"',
       },
     })
 
@@ -370,37 +370,37 @@ describe('Web session model selection', () => {
       },
     })
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'private-preview', reasoningEffort: 'max' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'private-preview', reasoningEffort: 'max' })
     await ctx.fiber.dispose()
   })
 
   it('reads the Agent default live for a session whose log names no selection', async () => {
     const { ctx, sessionId } = await harness()
-    let stored = { provider: 'deepseek-official', model: 'deepseek-chat' }
+    let stored = { provider: 'forgeweaver-official', model: 'forgeweaver-chat' }
     const api = createApiProxy(ctx, {
       defaultModelSelection: () => stored,
       cwd: '/tmp',
     })
 
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'deepseek-chat' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' })
     // The default moving after the session exists still reaches it: New
     // Session reuses a blank session rather than minting another, so a seed
     // captured at creation would show the superseded model there.
-    stored = { provider: 'deepseek-official', model: 'deepseek-reasoner' }
+    stored = { provider: 'forgeweaver-official', model: 'forgeweaver-reasoner' }
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'deepseek-reasoner' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-reasoner' })
     expect(expectValue(await api.host.describe(request({}))))
-      .toMatchObject({ provider: 'deepseek-official', model: 'deepseek-reasoner' })
+      .toMatchObject({ provider: 'forgeweaver-official', model: 'forgeweaver-reasoner' })
     await ctx.fiber.dispose()
   })
 
   it('keeps a session on its logged selection when the Agent default differs', async () => {
     const { ctx, sessionId } = await harness({
-      provider: 'deepseek-official',
-      model: 'deepseek-chat',
+      provider: 'forgeweaver-official',
+      model: 'forgeweaver-chat',
     })
-    let stored = { provider: 'deepseek-official', model: 'deepseek-chat' }
+    let stored = { provider: 'forgeweaver-official', model: 'forgeweaver-chat' }
     const api = createApiProxy(ctx, {
       defaultModelSelection: () => stored,
       cwd: '/tmp',
@@ -408,7 +408,7 @@ describe('Web session model selection', () => {
 
     stored = { provider: 'duplicate', model: 'same' }
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'deepseek-chat' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' })
     await ctx.fiber.dispose()
   })
 
@@ -417,7 +417,7 @@ describe('Web session model selection', () => {
     const saved: unknown[] = []
     let reject = false
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'forgeweaver-official', model: 'forgeweaver-chat' }),
       saveDefaultModelSelection: (selection) => {
         saved.push(selection)
         return reject ? Promise.reject(new Error('read-only document')) : Promise.resolve()
@@ -426,10 +426,10 @@ describe('Web session model selection', () => {
     })
 
     expectValue(await api.sessions.selectModel(request({
-      sessionId, provider: 'deepseek-official', model: 'deepseek-reasoner', reasoningEffort: 'max',
+      sessionId, provider: 'forgeweaver-official', model: 'forgeweaver-reasoner', reasoningEffort: 'max',
     })))
     expect(saved).toEqual([
-      { provider: 'deepseek-official', model: 'deepseek-reasoner', reasoningEffort: 'max' },
+      { provider: 'forgeweaver-official', model: 'forgeweaver-reasoner', reasoningEffort: 'max' },
     ])
 
     // A refused selection never becomes anyone's default.
@@ -440,11 +440,11 @@ describe('Web session model selection', () => {
     // to this session, so the call still succeeds.
     reject = true
     const stillAccepted = expectValue(await api.sessions.selectModel(request({
-      sessionId, provider: 'deepseek-official', model: 'deepseek-chat',
+      sessionId, provider: 'forgeweaver-official', model: 'forgeweaver-chat',
     })))
-    expect(stillAccepted.selected).toEqual({ provider: 'deepseek-official', model: 'deepseek-chat', reasoningEffort: 'high' })
+    expect(stillAccepted.selected).toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-chat', reasoningEffort: 'high' })
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'deepseek-official', model: 'deepseek-chat', reasoningEffort: 'high' })
+      .toEqual({ provider: 'forgeweaver-official', model: 'forgeweaver-chat', reasoningEffort: 'high' })
     await ctx.fiber.dispose()
   })
 
@@ -469,7 +469,7 @@ describe('Web session model selection', () => {
     // An advisory-unlisted model on a live route is NOT this: the route
     // serves it, so the prompt goes through and nothing blocks.
     expectValue(await api.sessions.selectModel(request({
-      sessionId, provider: 'deepseek-official', model: 'unlisted-but-served',
+      sessionId, provider: 'forgeweaver-official', model: 'unlisted-but-served',
     })))
     const catalog = expectValue(await api.sessions.models(request({ sessionId })))
     expect(catalog.routable).toBe(true)

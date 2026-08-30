@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-web-fetch-http`.
- * @module @deepseek-ai/dsh-web-fetch-http/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-web-fetch-http`.
+ * @module @forgeweaver/fw-web-fetch-http/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-web-fetch-http'
+const PACKAGE_NAME = '@forgeweaver/fw-web-fetch-http'
 
 /** Cordis companion plugin name. */
 export const name = 'web-fetch-http-invariant'

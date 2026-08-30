@@ -1,7 +1,7 @@
-import { createUserMessage, type StreamChunk } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, type StreamChunk } from '@forgeweaver/fw-llm'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import { SessionId } from '@forgeweaver/fw-session'
 import {
   errorResponse,
   makeBridgeHarness,

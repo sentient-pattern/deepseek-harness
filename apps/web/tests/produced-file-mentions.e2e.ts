@@ -9,9 +9,9 @@
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { CallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-title'
+import { CallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@forgeweaver/fw-llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId } from '@forgeweaver/fw-session'
+import type {} from '@forgeweaver/fw-session-title'
 import {
   launchWebScaffold, seedSession, watchConsole, webSnapshotMode, type WebScaffold,
 } from './scaffold.ts'
@@ -59,7 +59,7 @@ function mentionFixture(): string {
         name: 'write',
         arguments: call.args,
       })),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
     }),
   }, { surfaceOp: 'append' })
   for (const call of calls) {
@@ -93,7 +93,7 @@ function mentionFixture(): string {
           DONE,
         ].join('\n'),
       }],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
     }),
   }, { surfaceOp: 'append' })
   session.append('step/end', { turn: 1, step: 2 })

@@ -6,16 +6,16 @@
  */
 
 import { expect } from 'vitest'
-import { FiberState, Inject, RegistryService, ValidationError } from '@deepseek-ai/cordis'
-import type { Context, Plugin } from '@deepseek-ai/cordis'
-import { AttachmentStore } from '@deepseek-ai/dsh-attachment'
+import { FiberState, Inject, RegistryService, ValidationError } from '@forgeweaver/cordis'
+import type { Context, Plugin } from '@forgeweaver/cordis'
+import { AttachmentStore } from '@forgeweaver/fw-attachment'
 import type {
   ImageAttachmentLimits,
   ImageAttachmentRef,
   SaveImageAttachment,
   StoredImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+} from '@forgeweaver/fw-attachment'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
 
 declare global {
   interface ImportMeta {

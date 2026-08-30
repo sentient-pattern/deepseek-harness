@@ -1,6 +1,6 @@
 /** Pure first-run readiness projection over the shared Models join. */
 import { describe, expect, it } from 'vitest'
-import type { CredentialView } from '@deepseek-ai/dsh-api-remotes/client'
+import type { CredentialView } from '@forgeweaver/fw-api-remotes/client'
 import type { ModelsSettingsState, ProviderRow } from '../src/client/store.ts'
 import { onboardingReadiness, providerUsable } from '../src/client/store.ts'
 
@@ -9,15 +9,15 @@ const missingCredential: CredentialView = { configured: false, writable: true }
 function row(overrides: Partial<ProviderRow> = {}): ProviderRow {
   return {
     entry: {
-      provider: 'deepseek-official',
-      displayName: 'DeepSeek',
-      settingsNs: 'llm-deepseek',
+      provider: 'forgeweaver-official',
+      displayName: 'ForgeWeaver',
+      settingsNs: 'llm-forgeweaver',
       settingsPath: [],
       active: true,
     },
     configured: true,
     removable: false,
-    apiKeyEnv: 'DEEPSEEK_API_KEY',
+    apiKeyEnv: 'FORGEWEAVER_API_KEY',
     credential: missingCredential,
     ...overrides,
   }

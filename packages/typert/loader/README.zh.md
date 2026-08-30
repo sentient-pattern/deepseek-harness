@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-typert-loader
+# @forgeweaver/fw-typert-loader
 
 [English](README.md) | 中文
 

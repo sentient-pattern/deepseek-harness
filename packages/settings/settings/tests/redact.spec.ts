@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
 import { redactSecrets, settingsNamespace } from '../src/index.ts'
 import { MemorySettings } from './memory.ts'
 

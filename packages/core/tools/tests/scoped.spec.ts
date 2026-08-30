@@ -1,15 +1,15 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Events } from '@deepseek-ai/cordis'
-import { bindScopeParent, createScope } from '@deepseek-ai/dsh-scope'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { PreToolDecision, ToolDefinition, ToolExecution, ToolExecutionInput, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import { Context } from '@forgeweaver/cordis'
+import type { Events } from '@forgeweaver/cordis'
+import { bindScopeParent, createScope } from '@forgeweaver/fw-scope'
+import type { Scope } from '@forgeweaver/fw-scope'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import ToolRuntime from '@forgeweaver/fw-tools'
+import type { PreToolDecision, ToolDefinition, ToolExecution, ToolExecutionInput, ToolExecutionToken } from '@forgeweaver/fw-tools'
+import type { Agent } from '@forgeweaver/fw-agent'
 
-import { CallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import { CallId } from '@forgeweaver/fw-llm'
+import type { SessionId } from '@forgeweaver/fw-session'
 
 const testToolSignal = new AbortController().signal
 

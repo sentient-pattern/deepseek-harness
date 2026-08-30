@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-session-persistence-sqlite
+# @forgeweaver/fw-session-persistence-sqlite
 
 English | [中文](README.zh.md)
 

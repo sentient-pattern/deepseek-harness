@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { IDisposable, IPty } from 'node-pty'
-import { LocalTerminalHandle } from '@deepseek-ai/dsh-subprocess-local/src/terminal.ts'
+import { LocalTerminalHandle } from '@forgeweaver/fw-subprocess-local/src/terminal.ts'
 import type {
   ProcessIdentity,
   ProcessInspector,
-} from '@deepseek-ai/dsh-subprocess-local/src/process-inspector.ts'
-import type { SubprocessTerminalSignal } from '@deepseek-ai/dsh-subprocess'
+} from '@forgeweaver/fw-subprocess-local/src/process-inspector.ts'
+import type { SubprocessTerminalSignal } from '@forgeweaver/fw-subprocess'
 
 class FakePty {
   pid = 123

@@ -1,4 +1,4 @@
-# `@deepseek-ai/dsh-file-reference-local`
+# `@forgeweaver/fw-file-reference-local`
 
 [English](README.md) | 中文
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import { SessionId } from '@forgeweaver/fw-session'
 import {
   settleRun,
   settleRunResult,

@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { carrierKeyOf, createScope } from '@deepseek-ai/dsh-scope'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import SessionStore, { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ApprovalService, { ApprovalOutcome, ApprovalRequest, effectiveApprovalPolicy, setApprovalPolicy } from '@deepseek-ai/dsh-user-approval'
+import { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import { CallId } from '@forgeweaver/fw-llm'
+import { carrierKeyOf, createScope } from '@forgeweaver/fw-scope'
+import type { Scope } from '@forgeweaver/fw-scope'
+import SessionStore, { Session, SessionId } from '@forgeweaver/fw-session'
+import type { SessionEvent } from '@forgeweaver/fw-session'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import ApprovalService, { ApprovalOutcome, ApprovalRequest, effectiveApprovalPolicy, setApprovalPolicy } from '@forgeweaver/fw-user-approval'
 
 /**
  * A minimal Agent stand-in — the service only reaches `agent.session.append`

@@ -1,11 +1,11 @@
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
+import { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import { mountAgentLoopTestDependencies } from '@forgeweaver/fw-agent-loop-testkit'
+import LocalFileSystem from '@forgeweaver/fw-fs-local'
+import * as FsPolicy from '@forgeweaver/fw-fs-observation-policy'
+import * as ToolFs from '@forgeweaver/fw-tool-fs'
+import * as LlmForgeWeaver from '@forgeweaver/fw-llm-forgeweaver'
 
 /**
  * Build the real fs-tool stack for with-key e2e tests. Agents have no session
@@ -16,7 +16,7 @@ export async function fsHarness(fsCwd: string, persona = ''): Promise<Context> {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx, { systemPrompt: { persona } })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek)
+  await ctx.plugin(LlmForgeWeaver)
   await ctx.plugin(LocalFileSystem, { cwd: fsCwd })
   await ctx.plugin(FsPolicy)
   await ctx.plugin(ToolFs)

@@ -8,14 +8,14 @@
  * (and the reverse), the one-shared-state contract of the dual entry.
  * Scope disposal drops the directory (HMR safety).
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it } from 'vitest'
-import { createScope } from '@deepseek-ai/dsh-client-runtime/client'
-import type { SessionId } from '@deepseek-ai/dsh-client-runtime/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ModelSelection } from '@deepseek-ai/dsh-api-remotes/client'
-import type { CommandContribution, SelectOption } from '@deepseek-ai/dsh-client-ui-commands/client'
+import { createScope } from '@forgeweaver/fw-client-runtime/client'
+import type { SessionId } from '@forgeweaver/fw-client-runtime/client'
+import { LocaleRuntime } from '@forgeweaver/fw-client-locale/client'
+import { TestRemote } from '@forgeweaver/fw-client-test-runtime'
+import type { ModelSelection } from '@forgeweaver/fw-api-remotes/client'
+import type { CommandContribution, SelectOption } from '@forgeweaver/fw-client-ui-commands/client'
 import type { ModelSelectInjected } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { zh } from '../src/client/locales.ts'
@@ -23,12 +23,12 @@ import { zh } from '../src/client/locales.ts'
 const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
-  id: 'deepseek-official',
-  name: 'DeepSeek',
+  id: 'forgeweaver-official',
+  name: 'ForgeWeaver',
   models: [
     {
-      id: 'deepseek-v4-flash',
-      name: 'DeepSeek-V4-Flash',
+      id: 'forgeweaver-v4-flash',
+      name: 'ForgeWeaver-V4-Flash',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -39,8 +39,8 @@ const GROUPS = [{
       },
     },
     {
-      id: 'deepseek-v4-pro',
-      name: 'DeepSeek-V4-Pro',
+      id: 'forgeweaver-v4-pro',
+      name: 'ForgeWeaver-V4-Pro',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -56,7 +56,7 @@ const GROUPS = [{
 /** Boot the plugin over fake faces + a stateful fake host (current moves on selectModel). */
 async function bench() {
   const ctx = new Context()
-  let current: ModelSelection = { provider: 'deepseek-official', model: 'deepseek-v4-flash' }
+  let current: ModelSelection = { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' }
   const calls = { models: 0, select: 0 }
   ctx.provide('connection', { api: { sessions: {
     models: () => {
@@ -155,8 +155,8 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.map((o: SelectOption) => o.label)).toEqual(['DeepSeek-V4-Flash', 'DeepSeek-V4-Pro'])
-    expect(options[0]).toMatchObject({ active: true, detail: 'DeepSeek' })
+    expect(options.map((o: SelectOption) => o.label)).toEqual(['ForgeWeaver-V4-Flash', 'ForgeWeaver-V4-Pro'])
+    expect(options[0]).toMatchObject({ active: true, detail: 'ForgeWeaver' })
     expect(options[1]?.active).toBeUndefined()
   })
 
@@ -166,23 +166,23 @@ describe('ui-model-selection dual entry', () => {
     const seatFace = b.seat().inject!(sid('s1'))
     // Switch through the SEAT entry.
     expect(await seatFace.select({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'forgeweaver-official',
+      model: 'forgeweaver-v4-pro',
       reasoningEffort: 'max',
     })).toBe(true)
     expect(b.hostCurrent()).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'forgeweaver-official',
+      model: 'forgeweaver-v4-pro',
       reasoningEffort: 'max',
     })
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'forgeweaver-official',
+      model: 'forgeweaver-v4-pro',
       reasoningEffort: 'max',
     })
     // The POPUP's next options pass reflects it without a seat-side reload.
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')).toMatchObject({ active: true })
+    expect(options.find((o: SelectOption) => o.label === 'ForgeWeaver-V4-Pro')).toMatchObject({ active: true })
   })
 
   it('a popup selection lands on the seat store — the reverse direction of the same state', async () => {
@@ -190,11 +190,11 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const seatFace = b.seat().inject!(sid('s1'))
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    const pro = options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')!
+    const pro = options.find((o: SelectOption) => o.label === 'ForgeWeaver-V4-Pro')!
     await b.contribution().ui.onSelect(pro, projection('s1'))
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'forgeweaver-official',
+      model: 'forgeweaver-v4-pro',
       reasoningEffort: 'high',
     })
   })
@@ -216,14 +216,14 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
-    await face.select({ provider: 'deepseek-official', model: 'deepseek-v4-pro' })
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    await face.select({ provider: 'forgeweaver-official', model: 'forgeweaver-v4-pro' })
+    b.setHostCurrent({ provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' })
 
     b.ctx.emit('connection/reset')
     expect(face.directory.getSnapshot()).toMatchObject({ current: null, status: 'loading' })
     await Promise.resolve()
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      current: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
       status: 'ready',
     })
   })
@@ -259,7 +259,7 @@ describe('ui-model-selection dual entry', () => {
 
     // Recovering clears it without a reload of the surface.
     b.setRoutable(true)
-    b.ctx.remote.$dispatch('settings/document-updated', ['llm-deepseek', 1])
+    b.ctx.remote.$dispatch('settings/document-updated', ['llm-forgeweaver', 1])
     await Promise.resolve()
     await Promise.resolve()
     expect(b.blockOf('s1')).toBeUndefined()
@@ -272,7 +272,7 @@ describe('ui-model-selection dual entry', () => {
     // A model the route serves but no longer advertises: the seat prompts for
     // a selection, the composer stays usable. Blocking here would break a
     // supported configuration (a narrowed `models` list over a live route).
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'unlisted' })
+    b.setHostCurrent({ provider: 'forgeweaver-official', model: 'unlisted' })
     face.load()
     await Promise.resolve()
     await Promise.resolve()
@@ -314,12 +314,12 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBe(false)
+    await expect(face.select({ provider: 'forgeweaver', model: 'forgeweaver-v4-pro' })).resolves.toBe(false)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'deepseek',
-      model: 'deepseek-v4-pro',
+      provider: 'forgeweaver',
+      model: 'forgeweaver-v4-pro',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')
     await Promise.resolve()

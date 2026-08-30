@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-storage-sqlite
+# @forgeweaver/fw-storage-sqlite
 
 [English](README.md) | 中文
 

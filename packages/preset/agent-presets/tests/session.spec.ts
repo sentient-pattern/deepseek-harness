@@ -8,8 +8,8 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import { SessionId } from '@forgeweaver/fw-session'
+import type { SessionEvent, SessionHeader } from '@forgeweaver/fw-session'
 import { resolveSessionPreset } from '../src/session.ts'
 
 /** A header carrying the creation-time preset, if any. */

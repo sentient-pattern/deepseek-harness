@@ -1,13 +1,13 @@
 /**
  * Human-facing `/goal` command over the persisted same-session goal domain.
- * @module @deepseek-ai/dsh-command-goal
+ * @module @forgeweaver/fw-command-goal
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
-import { GoalError } from '@deepseek-ai/dsh-goal'
-import type { GoalPhase, GoalRef, GoalView } from '@deepseek-ai/dsh-goal'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@forgeweaver/cordis'
+import type { CommandInvocation, CommandResult } from '@forgeweaver/fw-commands'
+import { GoalError } from '@forgeweaver/fw-goal'
+import type { GoalPhase, GoalRef, GoalView } from '@forgeweaver/fw-goal'
+import { createUserMessage } from '@forgeweaver/fw-llm'
 
 export const name = 'command-goal'
 export const inject = ['commands', 'goals']

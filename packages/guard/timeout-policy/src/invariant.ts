@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-tool-call-timeout-policy`.
- * @module @deepseek-ai/dsh-tool-call-timeout-policy/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-tool-call-timeout-policy`.
+ * @module @forgeweaver/fw-tool-call-timeout-policy/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-tool-call-timeout-policy'
+const PACKAGE_NAME = '@forgeweaver/fw-tool-call-timeout-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'timeout-policy-invariant'

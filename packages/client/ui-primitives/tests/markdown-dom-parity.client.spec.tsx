@@ -17,7 +17,7 @@
 //   diff -r <recorded fixtures> <this branch's fixtures>   # byte-identical
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { MarkdownText } from '@deepseek-ai/dsh-client-ui-primitives'
+import { MarkdownText } from '@forgeweaver/fw-client-ui-primitives'
 
 afterEach(cleanup)
 
@@ -180,7 +180,7 @@ const CORPUS: Record<string, string> = {
     '',
     '[relative dropped](/settings) and [js dropped](javascript:alert(1)) and [upper kept](HTTPS://example.com).',
     '',
-    '<https://deepseek.com> and bare autolink https://autolink.example.com literal.',
+    '<https://forgeweaver.com> and bare autolink https://autolink.example.com literal.',
     '',
     '[spaces encoded](https://example.com/a b)',
   ].join('\n'),

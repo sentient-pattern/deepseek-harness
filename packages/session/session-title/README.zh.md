@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-session-title
+# @forgeweaver/fw-session-title
 
 [English](README.md) | 中文
 

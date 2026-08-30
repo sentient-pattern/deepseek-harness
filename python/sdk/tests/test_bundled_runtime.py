@@ -10,9 +10,9 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, HarnessConfig
-from deepseek_harness.errors import TransportClosedError
-from deepseek_harness_runtime import resolve_bundled_launch_args
+from forgeweaver_harness import ForgeWeaverHarness, HarnessClient, HarnessConfig
+from forgeweaver_harness.errors import TransportClosedError
+from forgeweaver_harness_runtime import resolve_bundled_launch_args
 
 _MODES = ("exe", "node")
 _REPO_ROOT = Path(__file__).parents[3]
@@ -21,25 +21,25 @@ _MINIMAL_CONFIG = _REPO_ROOT / "examples" / "jsonrpc-agent" / "minimal.cordis.ym
 # The config must include the JSON-RPC serving plugin.
 _CORDIS_YML = """\
 - id: sdk-jsonrpc-server
-  name: '@deepseek-ai/dsh-sdk-jsonrpc-server'
+  name: '@forgeweaver/fw-sdk-jsonrpc-server'
 - id: agent-core
-  name: '@deepseek-ai/dsh-agent-spine-demo'
+  name: '@forgeweaver/fw-agent-spine-demo'
   config:
     workspaceContext: false
 - id: sessions
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@forgeweaver/fw-session-persistence-jsonl'
   config:
     root: './sessions'
 - id: session-checkpoints
-  name: '@deepseek-ai/dsh-session-checkpoint-policy'
+  name: '@forgeweaver/fw-session-checkpoint-policy'
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@forgeweaver/fw-subprocess-local'
 - id: bash
-  name: '@deepseek-ai/dsh-bash-local'
+  name: '@forgeweaver/fw-bash-local'
   config:
     cwd: '.'
 - id: todo
-  name: '@deepseek-ai/dsh-tool-todo'
+  name: '@forgeweaver/fw-tool-todo'
   config:
     allowParallelInProgress: true
 """
@@ -58,12 +58,12 @@ def _client(tmp_path: Path, launch_args: tuple[str, ...]) -> HarnessClient:
             launch_args_override=launch_args,
             cwd=str(tmp_path),
             env={
-                "DSH_CORDIS_CONFIG": "./cordis.yml",
-                "DSH_SESSION_ROOT": str(tmp_path / "sessions"),
-                "DSH_CWD": str(tmp_path),
+                "FW_CORDIS_CONFIG": "./cordis.yml",
+                "FW_SESSION_ROOT": str(tmp_path / "sessions"),
+                "FW_CWD": str(tmp_path),
                 # The lazily mounted adapter requires a key even without a model call.
-                "DEEPSEEK_API_KEY": "sk-dummy-for-boot",
-                "DEEPSEEK_BASE_URL": "http://127.0.0.1:9",
+                "FORGEWEAVER_API_KEY": "sk-dummy-for-boot",
+                "FORGEWEAVER_BASE_URL": "http://127.0.0.1:9",
             },
             request_timeout_seconds=120,
         )
@@ -76,25 +76,25 @@ def test_bundled_runtime_boots_a_cordis_config(tmp_path: Path, mode: str) -> Non
     (tmp_path / "cordis.yml").write_text(_CORDIS_YML)
 
     with _client(tmp_path, launch_args) as client:
-        init = client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+        init = client.initialize(provider="forgeweaver-official", cwd=str(tmp_path), model="forgeweaver-v4-pro")
 
     assert init.serverInfo is not None
-    assert init.serverInfo.name == "deepseek-harness-sdk-runtime"
+    assert init.serverInfo.name == "forgeweaver-harness-sdk-runtime"
 
 
 @pytest.mark.parametrize("mode", _MODES)
 def test_python_sdk_boots_minimal_jsonrpc_config(tmp_path: Path, mode: str) -> None:
     launch_args = _launch_args(mode)
     model = "minimal-environment-model"
-    harness = DeepSeekHarness(
+    harness = ForgeWeaverHarness(
         model=model,
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),
         cordis=str(_MINIMAL_CONFIG),
         env={
-            "DSH_MODEL": model,
-            "DSH_CONTEXT_WINDOW": "1000000",
-            "DSH_SYSTEM_PROMPT": "You are the Python SDK minimal boot test agent.",
+            "FW_MODEL": model,
+            "FW_CONTEXT_WINDOW": "1000000",
+            "FW_SYSTEM_PROMPT": "You are the Python SDK minimal boot test agent.",
         },
         api_key="sk-dummy-for-boot",
         base_url="http://127.0.0.1:9",
@@ -110,18 +110,18 @@ def test_python_sdk_boots_minimal_jsonrpc_config(tmp_path: Path, mode: str) -> N
 def test_bundled_runtime_surfaces_unbundled_plugin_failure(tmp_path: Path, mode: str) -> None:
     launch_args = _launch_args(mode)
     (tmp_path / "cordis.yml").write_text(
-        "- id: missing\n  name: '@deepseek-ai/dsh-does-not-exist'\n"
+        "- id: missing\n  name: '@forgeweaver/fw-does-not-exist'\n"
     )
 
     client = _client(tmp_path, launch_args)
     client.start()
     try:
         with pytest.raises((TransportClosedError, TimeoutError)) as excinfo:
-            client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+            client.initialize(provider="forgeweaver-official", cwd=str(tmp_path), model="forgeweaver-v4-pro")
     finally:
         client.close()
 
-    assert "@deepseek-ai/dsh-does-not-exist" in str(excinfo.value)
+    assert "@forgeweaver/fw-does-not-exist" in str(excinfo.value)
 
 
 @pytest.mark.parametrize("mode", _MODES)
@@ -130,14 +130,14 @@ def test_zero_config_run_injects_bundled_default_cordis_config(
     tmp_path: Path, mode: str, ambient_config: str | None, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     _launch_args(mode)  # skip early when this carrier is unavailable
-    monkeypatch.setenv("DSH_RUNTIME_MODE", mode)
+    monkeypatch.setenv("FW_RUNTIME_MODE", mode)
     if ambient_config is None:
-        monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+        monkeypatch.delenv("FW_CORDIS_CONFIG", raising=False)
     else:
-        monkeypatch.setenv("DSH_CORDIS_CONFIG", ambient_config)
+        monkeypatch.setenv("FW_CORDIS_CONFIG", ambient_config)
 
-    harness = DeepSeekHarness(
-        model="deepseek-v4-pro",
+    harness = ForgeWeaverHarness(
+        model="forgeweaver-v4-pro",
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),
         api_key="sk-dummy-for-boot",

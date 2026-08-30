@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-credentials-local`.
- * @module @deepseek-ai/dsh-credentials-local/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-credentials-local`.
+ * @module @forgeweaver/fw-credentials-local/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-credentials-local'
+const PACKAGE_NAME = '@forgeweaver/fw-credentials-local'
 
 /** Cordis companion plugin name. */
 export const name = 'credentials-local-invariant'
@@ -15,7 +15,7 @@ export const name = 'credentials-local-invariant'
 export const inject = ['invariants']
 
 /**
- * No runtime invariant: the Service Definition companion (`dsh-credentials/invariant`) owns the
+ * No runtime invariant: the Service Definition companion (`fw-credentials/invariant`) owns the
  * `credentials/reference-updated` lifecycle contract; this provider's file/environment layering is
  * asynchronous I/O pinned by its unit suite.
  */

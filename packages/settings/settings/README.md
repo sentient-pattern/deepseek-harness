@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-settings
+# @forgeweaver/fw-settings
 
 English | [中文](README.zh.md)
 

@@ -6,12 +6,12 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import { normalizeSessionSnapshot, type NormalizeContext } from '@deepseek-ai/dsh-acp-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@forgeweaver/cordis'
+import { normalizeSessionSnapshot, type NormalizeContext } from '@forgeweaver/fw-acp-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@forgeweaver/fw-loader-smoke'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@forgeweaver/fw-session'
+import JsonlSessionPersistence from '@forgeweaver/fw-session-persistence-jsonl'
 import { describe, expect, it } from 'vitest'
 
 const fixtureDir = fileURLToPath(new URL('./subagent-inheritance-snapshots/parent-override', import.meta.url))
@@ -23,7 +23,7 @@ const configPath = fileURLToPath(new URL('../subagent-inheritance.cordis.snapsho
 const binScript = fileURLToPath(new URL('./fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('subagent-inheritance-parent')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.FW_SNAPSHOT === 'refresh'
 const task = 'Delegate the write probe to a subagent.'
 
 /** Seed a completed parent turn with the only read-only fact in the app. */
@@ -57,7 +57,7 @@ describe('parent-only override inheritance snapshot', () => {
     let cwd = ''
     const result = await runLoaderSmoke({
       label: 'subagent inheritance headless stream-json snapshot',
-      tempDirPrefix: 'dsh-subagent-inherit-',
+      tempDirPrefix: 'fw-subagent-inherit-',
       binScript,
       libBinScript: binScript,
       configPath,
@@ -66,9 +66,9 @@ describe('parent-only override inheritance snapshot', () => {
       env: {
         // The primary fixture path must exist for llm-replay's config guard;
         // the override sidecar fully replaces the derived parent script.
-        DSH_SNAPSHOT_FILE: replayOverride,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
-        DSH_SNAPSHOT_CHILD_FILES: childReplay,
+        FW_SNAPSHOT_FILE: replayOverride,
+        FW_SNAPSHOT_OVERRIDE: replayOverride,
+        FW_SNAPSHOT_CHILD_FILES: childReplay,
       },
       prepare: async (runCwd) => {
         cwd = runCwd
@@ -105,7 +105,7 @@ describe('parent-only override inheritance snapshot', () => {
           }
           if (record.type !== 'user/message'
             || record.data?.source?.kind !== 'plugin'
-            || record.data.source.plugin !== '@deepseek-ai/dsh-system-prompt') return []
+            || record.data.source.plugin !== '@forgeweaver/fw-system-prompt') return []
           return record.data.content?.flatMap(block => block.type === 'text' && typeof block.text === 'string' ? [block.text] : []) ?? []
         })
         const policyContexts = [...runtimeContexts(parent), ...runtimeContexts(child)]

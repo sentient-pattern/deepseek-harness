@@ -1,10 +1,10 @@
-import { createUserMessage, createMessage } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, createMessage } from '@forgeweaver/fw-llm'
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionHeader, SessionId as SessionIdType } from '@deepseek-ai/dsh-session'
-import SessionPersistence from '@deepseek-ai/dsh-session-persistence'
-import { type SessionQueryErrorCode } from '@deepseek-ai/dsh-session-query'
+import { Context } from '@forgeweaver/cordis'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@forgeweaver/fw-session'
+import type { Session, SessionEvent, SessionHeader, SessionId as SessionIdType } from '@forgeweaver/fw-session'
+import SessionPersistence from '@forgeweaver/fw-session-persistence'
+import { type SessionQueryErrorCode } from '@forgeweaver/fw-session-query'
 import { TestSessionQueryEngine } from './test-service.ts'
 
 type MutableSessionHeader = { -readonly [K in keyof SessionHeader]: SessionHeader[K] }

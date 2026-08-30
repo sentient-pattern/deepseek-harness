@@ -1,0 +1,66 @@
+{
+  "name": "@forgeweaver/fw-llm-forgeweaver",
+  "description": "ForgeWeaver chat-completions adapter for the ForgeWeaver LLM seam",
+  "version": "0.1.1-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
+    "directory": "packages/llm/llm-forgeweaver"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@forgeweaver/fw-attachment": "workspace:^",
+    "@forgeweaver/fw-atomic-write": "workspace:^",
+    "@forgeweaver/fw-brand": "workspace:^",
+    "@forgeweaver/fw-credentials": "workspace:^",
+    "@forgeweaver/fw-launch-environment": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-home-paths": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^",
+    "@forgeweaver/fw-timeout": "workspace:^",
+    "@forgeweaver/fw-anonymous-user-id": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "eventsource-parser": "^3.1.0",
+    "@forgeweaver/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@forgeweaver/fw-attachment": "workspace:^",
+    "@forgeweaver/fw-atomic-write": "workspace:^",
+    "@forgeweaver/fw-brand": "workspace:^",
+    "@forgeweaver/fw-credentials": "workspace:^",
+    "@forgeweaver/fw-launch-environment": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-llm": "workspace:^",
+    "@forgeweaver/fw-home-paths": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^",
+    "@forgeweaver/fw-timeout": "workspace:^",
+    "@forgeweaver/fw-anonymous-user-id": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^"
+  }
+}

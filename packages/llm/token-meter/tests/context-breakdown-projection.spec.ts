@@ -2,15 +2,15 @@
 // plus the shared estimator's pricing branches.
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, ToolSchema } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import type { ContextBreakdownProjection } from '@deepseek-ai/dsh-token-meter/client'
-import { CompactionId } from '@deepseek-ai/dsh-compaction'
+import { Context } from '@forgeweaver/cordis'
+import { createMessage, createUserMessage } from '@forgeweaver/fw-llm'
+import type { ContentBlock, ToolSchema } from '@forgeweaver/fw-llm'
+import SessionStore from '@forgeweaver/fw-session'
+import type { Session, SessionEvent } from '@forgeweaver/fw-session'
+import SessionProjectionRegistry from '@forgeweaver/fw-session-projection'
+import TokenMeter from '@forgeweaver/fw-token-meter'
+import type { ContextBreakdownProjection } from '@forgeweaver/fw-token-meter/client'
+import { CompactionId } from '@forgeweaver/fw-compaction'
 import { contextBreakdownProjectionDefinition } from '../src/breakdown-projection.ts'
 import {
   estimateContent,

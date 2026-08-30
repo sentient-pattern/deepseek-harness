@@ -1,9 +1,9 @@
 /** Current-surface projection and byte-bounded rendering. */
 
-import { isCompactCheckpointSource } from '@deepseek-ai/dsh-compaction'
-import type { SessionSurfaceSnapshot } from '@deepseek-ai/dsh-session-query'
-import { assertNever } from '@deepseek-ai/dsh-llm'
-import { TextRetainer } from '@deepseek-ai/dsh-output-retention'
+import { isCompactCheckpointSource } from '@forgeweaver/fw-compaction'
+import type { SessionSurfaceSnapshot } from '@forgeweaver/fw-session-query'
+import { assertNever } from '@forgeweaver/fw-llm'
+import { TextRetainer } from '@forgeweaver/fw-output-retention'
 import { stringifyTagSafeJson } from './serialization.ts'
 import type { ReferencedConversationItem } from './types.ts'
 

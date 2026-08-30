@@ -1,12 +1,12 @@
 /**
  * Package-owned invariant companion for the adaptive directory-picker chooser.
- * @module @deepseek-ai/dsh-host-directory-picker-auto/invariant
+ * @module @forgeweaver/fw-host-directory-picker-auto/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-host-directory-picker-auto'
+const PACKAGE_NAME = '@forgeweaver/fw-host-directory-picker-auto'
 
 /** Cordis companion plugin name. */
 export const name = 'host-directory-picker-auto-invariant'

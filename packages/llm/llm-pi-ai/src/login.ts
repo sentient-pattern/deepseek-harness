@@ -4,14 +4,14 @@
  * vocabulary and pi-ai's `AuthInteraction`; nothing above it knows which
  * library ran the conversation.
  *
- * @module dsh-llm-pi-ai/login
+ * @module fw-llm-pi-ai/login
  */
 
 import { createModels } from '@earendil-works/pi-ai'
 import type { AuthEvent, AuthPrompt, AuthType, Provider } from '@earendil-works/pi-ai'
-import type { Context } from '@deepseek-ai/cordis'
-import type { AuthorizationMethod, AuthorizationPrompt, AuthorizationSession } from '@deepseek-ai/dsh-authorization'
-import { isCredentialKeySegment } from '@deepseek-ai/dsh-credentials'
+import type { Context } from '@forgeweaver/cordis'
+import type { AuthorizationMethod, AuthorizationPrompt, AuthorizationSession } from '@forgeweaver/fw-authorization'
+import { isCredentialKeySegment } from '@forgeweaver/fw-credentials'
 import { catalogProvider, catalogProviderIds } from './catalog.ts'
 import { recordKeyFor } from './auth.ts'
 import type { PiAiAuthInjection } from './adapter.ts'

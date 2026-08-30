@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-tool-ralph`.
- * @module @deepseek-ai/dsh-tool-ralph/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-tool-ralph`.
+ * @module @forgeweaver/fw-tool-ralph/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-tool-ralph'
+const PACKAGE_NAME = '@forgeweaver/fw-tool-ralph'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-ralph-invariant'

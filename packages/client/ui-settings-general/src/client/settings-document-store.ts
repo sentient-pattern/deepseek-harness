@@ -1,8 +1,8 @@
 /** State owner for the optional local settings-document action. */
 
-import type { IApiClient } from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-runtime/client'
-import type { SettingsDescribeFace } from '@deepseek-ai/dsh-client-ui-settings/client'
+import type { IApiClient } from '@forgeweaver/fw-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@forgeweaver/fw-client-runtime/client'
+import type { SettingsDescribeFace } from '@forgeweaver/fw-client-ui-settings/client'
 
 /** Browser state of the Host-owned settings document. */
 export interface SettingsDocumentState {

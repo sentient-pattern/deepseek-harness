@@ -1,18 +1,18 @@
 /**
  * `LocalSpillStore`: the host-filesystem implementation of the
- * `@deepseek-ai/dsh-spill` storage seam. Persists a tool's oversized text to a
+ * `@forgeweaver/fw-spill` storage seam. Persists a tool's oversized text to a
  * private, session-scoped file (see `./store.ts` for the traversal-safe naming
  * and exclusive owner-only write) and returns a path locator plus local
  * read/grep retrieval guidance.
  *
- * @module @deepseek-ai/dsh-spill-local
+ * @module @forgeweaver/fw-spill-local
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { resolve } from 'node:path'
-import z from '@deepseek-ai/schemastery'
-import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
+import z from '@forgeweaver/schemastery'
+import { SpillLocator, SpillStore } from '@forgeweaver/fw-spill'
+import type { SaveTextSpill, SpillRef } from '@forgeweaver/fw-spill'
 import { privateRoot, saveTextFile } from './store.ts'
 
 export { encodeSegment, privateRoot, saveTextFile, sessionDir } from './store.ts'

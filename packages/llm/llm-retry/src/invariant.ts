@@ -1,14 +1,14 @@
-/** Package-owned durable retry-event invariants. @module @deepseek-ai/dsh-llm-retry/invariant */
+/** Package-owned durable retry-event invariants. @module @forgeweaver/fw-llm-retry/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type { LlmFailure } from '@deepseek-ai/dsh-llm'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { Session, SessionEvent } from '@forgeweaver/fw-session'
+import type { LlmFailure } from '@forgeweaver/fw-llm'
+import { MAX_TIMER_DELAY_MS } from '@forgeweaver/fw-timeout'
+import type { InvariantFailure, InvariantInstaller } from '@forgeweaver/fw-invariants'
 import { providerForOpenStep } from './history.ts'
 import type {} from './index.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-llm-retry'
+const PACKAGE_NAME = '@forgeweaver/fw-llm-retry'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-retry-invariant'

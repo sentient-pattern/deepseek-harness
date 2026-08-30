@@ -13,12 +13,12 @@ import {
   tokenizeSessionFixtureCwd,
   type HarvestedLog,
   type NormalizeContext,
-} from '@deepseek-ai/dsh-acp-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
+} from '@forgeweaver/fw-acp-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@forgeweaver/fw-loader-smoke'
 import {
   decompressZstdFrame,
   scanZstdFrames,
-} from '@deepseek-ai/dsh-session-persistence-jsonl/src/zstd.ts'
+} from '@forgeweaver/fw-session-persistence-jsonl/src/zstd.ts'
 import { describe, expect, it } from 'vitest'
 
 const snapshotsDir = join(dirname(fileURLToPath(import.meta.url)), 'snapshots')
@@ -52,15 +52,15 @@ const teamConfigPath = fileURLToPath(new URL('../team.cordis.snapshot.yml', impo
 const startupFailureConfigPath = fileURLToPath(new URL('./fixtures/startup-activation-error/cordis.yml', import.meta.url))
 const startupFailureExpected = join(snapshotsDir, 'startup-activation-error', 'stderr.expected.txt')
 const binScript = fileURLToPath(new URL('./fixtures/headless-driver.ts', import.meta.url))
-const dshBinScript = fileURLToPath(new URL('../../../apps/cli/src/bin.ts', import.meta.url))
+const fwBinScript = fileURLToPath(new URL('../../../apps/cli/src/bin.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../tsconfig.json', import.meta.url))
 const reasoningConfigPath = fileURLToPath(new URL('./fixtures/cli.cordis.yml', import.meta.url))
-const deepseekDefaultsConfigPath = fileURLToPath(new URL('./fixtures/deepseek-defaults.cordis.yml', import.meta.url))
+const forgeweaverDefaultsConfigPath = fileURLToPath(new URL('./fixtures/forgeweaver-defaults.cordis.yml', import.meta.url))
 const headlessOverlayPath = fileURLToPath(new URL('./fixtures/headless-profile.cordis.yml', import.meta.url))
 const headlessSessionExpected = join(snapshotsDir, 'headless-profile', 'session.expected.jsonl')
 const headlessFailureExpected = join(snapshotsDir, 'headless-profile', 'stderr.expected.txt')
 const cliMockLlmPluginPath = fileURLToPath(new URL('./fixtures/cli-mock-llm.ts', import.meta.url))
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.FW_SNAPSHOT === 'refresh'
 
 interface JsonObject {
   [key: string]: unknown
@@ -93,14 +93,14 @@ function projectSessionFixture(rawLog: string): string {
   }).join('\n')
 }
 
-interface DeepSeekDefaultsServer {
+interface ForgeWeaverDefaultsServer {
   readonly url: string
   readonly requests: JsonObject[]
   close(): Promise<void>
 }
 
-/** Serve one deterministic DeepSeek-compatible response while retaining its request body. */
-async function deepseekDefaultsServer(): Promise<DeepSeekDefaultsServer> {
+/** Serve one deterministic ForgeWeaver-compatible response while retaining its request body. */
+async function forgeweaverDefaultsServer(): Promise<ForgeWeaverDefaultsServer> {
   const requests: JsonObject[] = []
   const server = createServer((request: IncomingMessage, response: ServerResponse) => {
     let body = ''
@@ -128,7 +128,7 @@ async function deepseekDefaultsServer(): Promise<DeepSeekDefaultsServer> {
   })
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
   const address = server.address()
-  if (address === null || typeof address === 'string') throw new Error('DeepSeek defaults snapshot server has no port')
+  if (address === null || typeof address === 'string') throw new Error('ForgeWeaver defaults snapshot server has no port')
   return {
     url: `http://127.0.0.1:${address.port}`,
     requests,
@@ -234,7 +234,7 @@ async function persistedLogs(cwd: string, root: string = join(cwd, '.sessions'))
 
 /** Install the keyless product-CLI adapter into the temporary headless profile. */
 async function prepareCliMockFixture(cwd: string): Promise<void> {
-  const fixtureDir = join(cwd, '.dsh', 'profiles', 'headless', 'snapshot-fixtures')
+  const fixtureDir = join(cwd, '.fw', 'profiles', 'headless', 'snapshot-fixtures')
   await mkdir(fixtureDir, { recursive: true })
   await Promise.all([
     copyFile(cliMockLlmPluginPath, join(fixtureDir, 'cli-mock-llm.ts')),
@@ -248,18 +248,18 @@ describe('headless stream-json snapshots', () => {
     const result = await runLoaderSmoke({
       label: 'product headless profile snapshot',
       tempDirPrefix: 'headless-snapshot-profile-',
-      binScript: dshBinScript,
+      binScript: fwBinScript,
       configPath: headlessOverlayPath,
       binArgs: ['--profile', 'headless', '--patch', headlessOverlayPath, task],
       tsconfigPath,
       env: {
-        DSH_PERMISSION_MODE: 'danger-full-access',
-        DSH_TELEMETRY_DISABLED: '1',
+        FW_PERMISSION_MODE: 'danger-full-access',
+        FW_TELEMETRY_DISABLED: '1',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: prepareCliMockFixture,
       inspect: async (cwd) => {
-        const logs = await persistedLogs(cwd, join(cwd, '.dsh', 'sessions'))
+        const logs = await persistedLogs(cwd, join(cwd, '.fw', 'sessions'))
         expect(logs).toHaveLength(1)
         const actual = logs[0]
         if (actual === undefined) throw new Error('the headless profile did not persist its session')
@@ -280,14 +280,14 @@ describe('headless stream-json snapshots', () => {
     const result = await runLoaderSmoke({
       label: 'product headless profile model failure snapshot',
       tempDirPrefix: 'headless-snapshot-profile-failure-',
-      binScript: dshBinScript,
+      binScript: fwBinScript,
       configPath: headlessOverlayPath,
       binArgs: ['--profile', 'headless', '--patch', headlessOverlayPath, 'Trigger the keyless model failure.'],
       tsconfigPath,
       expectedExitCode: 1,
       env: {
-        DSH_CLI_MOCK_FAILURE: '1',
-        DSH_TELEMETRY_DISABLED: '1',
+        FW_CLI_MOCK_FAILURE: '1',
+        FW_TELEMETRY_DISABLED: '1',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: prepareCliMockFixture,
@@ -325,7 +325,7 @@ describe('headless stream-json snapshots', () => {
       binArgs: [retryConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
+        FW_SNAPSHOT: 'replay',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -336,7 +336,7 @@ describe('headless stream-json snapshots', () => {
         const retries = records.filter(record => record.type === 'llm/retry')
         expect(retries).toHaveLength(1)
         expect(retries[0]?.data).toMatchObject({
-          provider: 'deepseek-official',
+          provider: 'forgeweaver-official',
           mode: 'normal',
           policyKey: '["normal",1,["RATE_LIMIT"],1,1,0]',
           retry: 1,
@@ -366,8 +366,8 @@ describe('headless stream-json snapshots', () => {
       binArgs: [compactionConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: compactionSessionFixture,
+        FW_SNAPSHOT: 'replay',
+        FW_SNAPSHOT_FILE: compactionSessionFixture,
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -435,9 +435,9 @@ describe('headless stream-json snapshots', () => {
       binArgs: [credentialsConfigPath, 'say pong'],
       tsconfigPath,
       env: {
-        // First-run posture: no key in the environment, none under ./.dsh.
-        DEEPSEEK_API_KEY: '',
-        DEEPSEEK_BASE_URL: '',
+        // First-run posture: no key in the environment, none under ./.fw.
+        FORGEWEAVER_API_KEY: '',
+        FORGEWEAVER_BASE_URL: '',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -455,9 +455,9 @@ describe('headless stream-json snapshots', () => {
     // environment, and stops there: configuration carries the reference, so
     // there is no literal-key escape hatch left to offer.
     expect(normalized).toContain(
-      'store DEEPSEEK_API_KEY through the credentials service (the web Models page writes it),',
+      'store FORGEWEAVER_API_KEY through the credentials service (the web Models page writes it),',
     )
-    expect(normalized).toContain('or export DEEPSEEK_API_KEY in the launching environment')
+    expect(normalized).toContain('or export FORGEWEAVER_API_KEY in the launching environment')
     expect(normalized).not.toContain('as a last resort')
   }, LOADER_SMOKE_TEST_TIMEOUT_MS)
 
@@ -476,8 +476,8 @@ describe('headless stream-json snapshots', () => {
         // A key that exists but no HTTP header can carry — the paste the
         // credential guard exists for: without it, `fetch` refuses to build
         // the header and the turn ends on a retried ByteString TypeError.
-        DEEPSEEK_API_KEY: 'sk-\u{1F600}pasted-from-a-chat-window',
-        DEEPSEEK_BASE_URL: '',
+        FORGEWEAVER_API_KEY: 'sk-\u{1F600}pasted-from-a-chat-window',
+        FORGEWEAVER_BASE_URL: '',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -490,7 +490,7 @@ describe('headless stream-json snapshots', () => {
     // The durable failure names the reference to correct and the writer that
     // usually owns it, and stays true in a composition that mounts no Models
     // page at all.
-    expect(normalized).toContain('the API key resolved from DEEPSEEK_API_KEY contains characters')
+    expect(normalized).toContain('the API key resolved from FORGEWEAVER_API_KEY contains characters')
     expect(normalized).toContain('the web Models page writes it')
     // Neither the key nor its transport-level symptom (the ByteString error)
     // may reach the user: the code point of one character is still the key.
@@ -539,25 +539,25 @@ describe('headless stream-json snapshots', () => {
     `)
   }, LOADER_SMOKE_TEST_TIMEOUT_MS)
 
-  it('keeps provider comments alive and sends DeepSeek defaults through the one-shot app', async () => {
-    const server = await deepseekDefaultsServer()
+  it('keeps provider comments alive and sends ForgeWeaver defaults through the one-shot app', async () => {
+    const server = await forgeweaverDefaultsServer()
     try {
       const result = await runLoaderSmoke({
-        label: 'DeepSeek adapter defaults headless stream-json snapshot',
-        tempDirPrefix: 'headless-snapshot-deepseek-defaults-',
+        label: 'ForgeWeaver adapter defaults headless stream-json snapshot',
+        tempDirPrefix: 'headless-snapshot-forgeweaver-defaults-',
         binScript,
         libBinScript: binScript,
-        configPath: deepseekDefaultsConfigPath,
+        configPath: forgeweaverDefaultsConfigPath,
         binArgs: [
-          deepseekDefaultsConfigPath,
+          forgeweaverDefaultsConfigPath,
           'return the deterministic response',
         ],
         tsconfigPath,
         env: {
           // Configuration carries only the reference; the key rides the
           // launching environment, which is the whole credential plane here.
-          DEEPSEEK_API_KEY: 'snapshot-key',
-          DSH_SNAPSHOT_BASE_URL: server.url,
+          FORGEWEAVER_API_KEY: 'snapshot-key',
+          FW_SNAPSHOT_BASE_URL: server.url,
           NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
         },
       })
@@ -578,8 +578,8 @@ describe('headless stream-json snapshots', () => {
       expect(header?.config).toMatchInlineSnapshot(`
         {
           "maxTokens": 256000,
-          "model": "deepseek-v4-flash",
-          "provider": "deepseek-official",
+          "model": "forgeweaver-v4-flash",
+          "provider": "forgeweaver-official",
           "reasoningEffort": "low",
         }
       `)
@@ -610,9 +610,9 @@ describe('headless stream-json snapshots', () => {
       binArgs: [advancedConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: advancedSessionFixture,
-        DSH_SNAPSHOT_CHILD_FILES: [
+        FW_SNAPSHOT: 'replay',
+        FW_SNAPSHOT_FILE: advancedSessionFixture,
+        FW_SNAPSHOT_CHILD_FILES: [
           join(advancedScenarioDir, 'session.1.jsonl'),
           join(advancedScenarioDir, 'session.2.jsonl'),
         ].join(delimiter),
@@ -684,7 +684,7 @@ describe('headless stream-json snapshots', () => {
       tsconfigPath,
       processTimeoutMs: 60_000,
       env: {
-        DSH_SNAPSHOT: 'team',
+        FW_SNAPSHOT: 'team',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       inspect: async (cwd) => {
@@ -761,9 +761,9 @@ describe('headless stream-json snapshots', () => {
       binArgs: [goalConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: join(goalScenarioDir, 'session.jsonl'),
-        DSH_SNAPSHOT_OVERRIDE: join(goalScenarioDir, 'replay.override.json'),
+        FW_SNAPSHOT: 'replay',
+        FW_SNAPSHOT_FILE: join(goalScenarioDir, 'session.jsonl'),
+        FW_SNAPSHOT_OVERRIDE: join(goalScenarioDir, 'replay.override.json'),
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -818,10 +818,10 @@ describe('headless stream-json snapshots', () => {
       binArgs: [ralphConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: join(ralphScenarioDir, 'session.jsonl'),
-        DSH_SNAPSHOT_OVERRIDE: join(ralphScenarioDir, 'replay.override.json'),
-        DSH_SNAPSHOT_CHILD_FILES: [
+        FW_SNAPSHOT: 'replay',
+        FW_SNAPSHOT_FILE: join(ralphScenarioDir, 'session.jsonl'),
+        FW_SNAPSHOT_OVERRIDE: join(ralphScenarioDir, 'replay.override.json'),
+        FW_SNAPSHOT_CHILD_FILES: [
           join(ralphScenarioDir, 'session.1.jsonl'),
           join(ralphScenarioDir, 'session.2.jsonl'),
         ].join(delimiter),
@@ -902,9 +902,9 @@ describe('headless stream-json snapshots', () => {
       env: {
         // The override fully supplies the parent script; the child fixture
         // remains separate so replay binds it to the fresh child Session.
-        DSH_SNAPSHOT_FILE: parentReplay,
-        DSH_SNAPSHOT_OVERRIDE: parentOverride,
-        DSH_SNAPSHOT_CHILD_FILES: childReplay,
+        FW_SNAPSHOT_FILE: parentReplay,
+        FW_SNAPSHOT_OVERRIDE: parentOverride,
+        FW_SNAPSHOT_CHILD_FILES: childReplay,
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },
@@ -971,8 +971,8 @@ describe('headless stream-json snapshots', () => {
       binArgs: [ptyConfigPath, prompt],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: ptySessionFixture,
+        FW_SNAPSHOT: 'replay',
+        FW_SNAPSHOT_FILE: ptySessionFixture,
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: (cwd) => { runCwd = cwd },

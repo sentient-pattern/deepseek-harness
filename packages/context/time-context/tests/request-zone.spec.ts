@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { UserMessage } from '@deepseek-ai/dsh-llm'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import type { UserMessage } from '@forgeweaver/fw-llm'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,

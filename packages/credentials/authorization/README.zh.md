@@ -1,4 +1,4 @@
-# dsh-authorization
+# fw-authorization
 
 [English](README.md) | 中文
 
@@ -13,9 +13,9 @@
 ## 接口
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import { AuthorizationDeclinedError, type AuthorizationSession } from '@deepseek-ai/dsh-authorization'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
+import type { Context } from '@forgeweaver/cordis'
+import { AuthorizationDeclinedError, type AuthorizationSession } from '@forgeweaver/fw-authorization'
+import { credentialKey } from '@forgeweaver/fw-credentials'
 
 declare const ctx: Context
 declare const exchange: (signal: AbortSignal) => Promise<void>

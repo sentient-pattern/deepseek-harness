@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
 import { chmod, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
 import { FileSettingsProvider } from '../src/index.ts'
 
 // chokidar is the nondeterministic OS boundary: faking it lets these tests
@@ -51,7 +51,7 @@ afterEach(async () => {
 })
 
 async function tempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-settings-watch-'))
+  const dir = await mkdtemp(join(tmpdir(), 'fw-settings-watch-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   return dir
 }

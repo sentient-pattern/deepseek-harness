@@ -1,17 +1,17 @@
 /** Models section registration: slot declaration injection, the locale-following label thunk, and HMR recovery. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-runtime/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { apply, inject, refreshIfLoaded } from '@deepseek-ai/dsh-client-ui-settings-models/client'
+import { resolveSlotLabel } from '@forgeweaver/fw-client-ui-slots'
+import { SlotRegistry } from '@forgeweaver/fw-client-runtime/client'
+import { LocaleRuntime } from '@forgeweaver/fw-client-locale/client'
+import { TestRemote } from '@forgeweaver/fw-client-test-runtime'
+import { apply as settingsApply, inject as settingsInject } from '@forgeweaver/fw-client-ui-settings/client'
+import { apply, inject, refreshIfLoaded } from '@forgeweaver/fw-client-ui-settings-models/client'
 import {
   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE, WELCOME_NOTICE_VERSION,
 } from '../src/onboarding-copy.ts'
 import { ModelsSection } from '../src/client/ModelsSection.tsx'
-import { DeepSeekOnboardingDialog } from '../src/client/DeepSeekOnboardingDialog.tsx'
+import { ForgeWeaverOnboardingDialog } from '../src/client/ForgeWeaverOnboardingDialog.tsx'
 import { WelcomeNotice } from '../src/client/WelcomeNotice.tsx'
 
 // These specs assert the shipped Chinese copy. The lane has no jsdom `window`,
@@ -77,11 +77,11 @@ describe('ui-settings-models apply', () => {
       component: WelcomeNotice,
       options: { id: 'welcome-notice', order: -100 },
     })
-    const deepSeek = onboarding.find(entry => entry.options.id === 'deepseek-official')!
-    expect(deepSeek.component).toBe(DeepSeekOnboardingDialog)
-    expect(deepSeek.options).toMatchObject({ id: 'deepseek-official', order: 0 })
+    const deepSeek = onboarding.find(entry => entry.options.id === 'forgeweaver-official')!
+    expect(deepSeek.component).toBe(ForgeWeaverOnboardingDialog)
+    expect(deepSeek.options).toMatchObject({ id: 'forgeweaver-official', order: 0 })
     const deepSeekInjected = (
-      deepSeek.inject as unknown as () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+      deepSeek.inject as unknown as () => import('../src/client/ForgeWeaverOnboardingDialog.tsx').ForgeWeaverOnboardingInjected
     )()
     expect(deepSeekInjected.hooks.models).toBe(injected.controller.store)
     expect(deepSeekInjected.api).toBeDefined()
@@ -203,14 +203,14 @@ describe('pushed invalidations', () => {
     declare(b.slots)
     await b.ctx.plugin({ inject: [...inject], apply }).await()
     const entry = b.slots.entries('settings.onboarding')
-      .find(candidate => candidate.options.id === 'deepseek-official')!
+      .find(candidate => candidate.options.id === 'forgeweaver-official')!
     const injected = (
       entry.inject as unknown as
-      () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+      () => import('../src/client/ForgeWeaverOnboardingDialog.tsx').ForgeWeaverOnboardingInjected
     )()
     injected.controller.store.update((state) => { state.status = 'ready' })
     const load = vi.spyOn(injected.controller, 'load').mockResolvedValue()
-    b.ctx.remote.$dispatch('credentials/reference-updated', ['DEEPSEEK_API_KEY'])
+    b.ctx.remote.$dispatch('credentials/reference-updated', ['FORGEWEAVER_API_KEY'])
     expect(load).toHaveBeenCalledTimes(1)
   })
 

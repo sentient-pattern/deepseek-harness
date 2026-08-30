@@ -2,13 +2,13 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { createUserMessage, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import FileSettingsProvider from '@deepseek-ai/dsh-settings-file'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import { PiAiAdapter } from '@deepseek-ai/dsh-llm-pi-ai'
+import { Context } from '@forgeweaver/cordis'
+import LlmRuntime, { createUserMessage, ReasoningEffortId } from '@forgeweaver/fw-llm'
+import type { StreamChunk } from '@forgeweaver/fw-llm'
+import FileSettingsProvider from '@forgeweaver/fw-settings-file'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
+import * as LlmPiAi from '@forgeweaver/fw-llm-pi-ai'
+import { PiAiAdapter } from '@forgeweaver/fw-llm-pi-ai'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { createModels, getSupportedThinkingLevels } from '@earendil-works/pi-ai'
 import type { Api, Model, OpenAICompletionsCompat, Provider } from '@earendil-works/pi-ai'
@@ -35,9 +35,9 @@ afterEach(async () => {
   await Promise.all(homes.splice(0).map(dir => rm(dir, { recursive: true, force: true })))
 })
 
-/** A throwaway $DSH_HOME with an empty settings document. */
+/** A throwaway $FW_HOME with an empty settings document. */
 async function home(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-pi-catalog-'))
+  const dir = await mkdtemp(join(tmpdir(), 'fw-pi-catalog-'))
   homes.push(dir)
   await writeFile(join(dir, 'settings.yaml'), '')
   return dir
@@ -699,7 +699,7 @@ describe('modelOverrides', () => {
       deepseek: {
         modelOverrides: {
           [target.id]: {
-            name: 'DeepSeek (proxied)',
+            name: 'ForgeWeaver (proxied)',
             maxTokens: 4096,
             reasoningEfforts: { off: null, high: 'high' },
           },
@@ -713,7 +713,7 @@ describe('modelOverrides', () => {
     // The whole catalog still serves — that is the difference from `models`,
     // which replaces it.
     expect(models).toHaveLength(catalogSize)
-    expect(reshaped.name).toBe('DeepSeek (proxied)')
+    expect(reshaped.name).toBe('ForgeWeaver (proxied)')
     expect(getSupportedThinkingLevels(reshaped)).toEqual(['off', 'high'])
     // An override's cap is explicit configuration, so it becomes the request
     // default exactly as a models entry's would.
@@ -1119,9 +1119,9 @@ describe('configurable-provider directory', () => {
   it('keeps the previous directory when a route collides with another adapter family', async () => {
     const dir = await home()
     const ctx = await bootWithSettings(dir, {})
-    // Another adapter family owns this route id, exactly as llm-deepseek does.
+    // Another adapter family owns this route id, exactly as llm-forgeweaver does.
     ctx.llm.registerConfigurableProviders([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'deepseek-official', displayName: 'ForgeWeaver', settingsNs: 'llm-forgeweaver', settingsPath: [] },
     ])
     const before = ctx.llm.listConfigurableProviders().length
     expect(before).toBeGreaterThan(30)
@@ -1140,7 +1140,7 @@ describe('configurable-provider directory', () => {
     // page needs is still declared.
     expect(ctx.llm.listConfigurableProviders()).toHaveLength(before)
     expect(ctx.llm.listConfigurableProviders().find(entry => entry.provider === 'deepseek-official')?.settingsNs)
-      .toBe('llm-deepseek')
+      .toBe('llm-forgeweaver')
   })
 
   it('replaces its entries atomically as declared routes come and go', async () => {

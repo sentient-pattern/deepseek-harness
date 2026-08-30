@@ -1,12 +1,12 @@
 // A temp-file write failure cannot be timed from outside. The `fs/promises` API
 // injects it once so the test can prove that the writer lock still releases.
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@forgeweaver/cordis'
+import z from '@forgeweaver/schemastery'
 import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
 import { FileSettingsProvider } from '../src/index.ts'
 
 const state = vi.hoisted(() => ({
@@ -54,7 +54,7 @@ afterEach(async () => {
 })
 
 async function tempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-settings-lockrace-'))
+  const dir = await mkdtemp(join(tmpdir(), 'fw-settings-lockrace-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   return dir
 }

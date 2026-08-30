@@ -1,22 +1,22 @@
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { createUserMessage } from '@forgeweaver/fw-llm'
 import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
-import * as WorkspaceContext from '@deepseek-ai/dsh-agent-instructions'
+import { Context } from '@forgeweaver/cordis'
+import LlmRuntime from '@forgeweaver/fw-llm'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import ToolRuntime from '@forgeweaver/fw-tools'
+import AgentRegistry from '@forgeweaver/fw-agent'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import * as LlmForgeWeaver from '@forgeweaver/fw-llm-forgeweaver'
+import * as WorkspaceContext from '@forgeweaver/fw-agent-instructions'
 import { candidateScopeKey } from '../src/render.ts'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import LocalFileSystem from '@forgeweaver/fw-fs-local'
+import * as ToolFs from '@forgeweaver/fw-tool-fs'
+import type { SessionEvent } from '@forgeweaver/fw-session'
 
 const PROBE = 'banana-271828'
 const NESTED_PROBE = 'papaya-314159'
@@ -33,7 +33,7 @@ afterEach(async () => {
 })
 
 async function harness(): Promise<{ ctx: Context; agent: Agent }> {
-  workdir = await mkdtemp(join(tmpdir(), 'dsh-workspace-context-e2e-'))
+  workdir = await mkdtemp(join(tmpdir(), 'fw-workspace-context-e2e-'))
   await mkdir(join(workdir, '.git'), { recursive: true })
   await writeFile(join(workdir, 'AGENTS.md'), `If the user asks for the workspace context handshake, reply with exactly this string and nothing else: ${PROBE}.\n`)
   ctx = new Context()
@@ -46,11 +46,11 @@ async function harness(): Promise<{ ctx: Context; agent: Agent }> {
   await ctx.plugin(ToolFs)
   await ctx.plugin(WorkspaceContext, { maxBytes: 65536 })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
+  await ctx.plugin(LlmForgeWeaver, { models: [{ id: 'forgeweaver-v4-flash' }] })
   const handle = await ctx.agents.create({
     sessionId: SessionId('workspace-context-e2e-session'),
     meta: { cwd: workdir },
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
   })
   return { ctx, agent: handle.agent }
 }
@@ -75,7 +75,7 @@ function finalText(events: SessionEvent[]): string {
     .join('')
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('workspace context e2e: real model sees AGENTS.md baseline', () => {
+describe.skipIf(!process.env.FORGEWEAVER_API_KEY)('workspace context e2e: real model sees AGENTS.md baseline', () => {
   it('obeys a probe instruction loaded from the workspace', async () => {
     const live = await harness()
 

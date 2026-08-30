@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-client-hmr
+# @forgeweaver/fw-client-hmr
 
 [English](README.md) | 中文
 

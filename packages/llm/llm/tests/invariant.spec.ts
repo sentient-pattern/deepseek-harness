@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { CallId, LlmAdapter } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import * as LlmInvariant from '@deepseek-ai/dsh-llm/invariant'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@forgeweaver/cordis'
+import LlmRuntime, { CallId, LlmAdapter } from '@forgeweaver/fw-llm'
+import type { GenerateOptions, StreamChunk } from '@forgeweaver/fw-llm'
+import * as LlmInvariant from '@forgeweaver/fw-llm/invariant'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

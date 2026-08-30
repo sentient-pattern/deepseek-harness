@@ -3,15 +3,15 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
-import { remoteMethods } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@forgeweaver/cordis'
+import Include from '@forgeweaver/cordis-plugin-include'
+import Loader from '@forgeweaver/cordis-plugin-loader'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
+import JsonlSessionPersistence from '@forgeweaver/fw-session-persistence-jsonl'
+import Storage from '@forgeweaver/fw-storage'
+import * as StorageDomain from '@forgeweaver/fw-storage-domain'
+import * as StorageJson from '@forgeweaver/fw-storage-json'
+import { remoteMethods } from '@forgeweaver/fw-typert-protocol'
 import MessageFeedbackService from '../src/index.ts'
 import { appendMessageFixture } from './helpers.ts'
 
@@ -30,12 +30,12 @@ async function loadComposition(configPath: string): Promise<Context> {
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@deepseek-ai/dsh-session', SessionStore],
-    ['@deepseek-ai/dsh-session-persistence-jsonl', JsonlSessionPersistence],
-    ['@deepseek-ai/dsh-storage', Storage],
-    ['@deepseek-ai/dsh-storage-json', StorageJson],
-    ['@deepseek-ai/dsh-storage-domain', StorageDomain],
-    ['@deepseek-ai/dsh-message-feedback', MessageFeedbackService],
+    ['@forgeweaver/fw-session', SessionStore],
+    ['@forgeweaver/fw-session-persistence-jsonl', JsonlSessionPersistence],
+    ['@forgeweaver/fw-storage', Storage],
+    ['@forgeweaver/fw-storage-json', StorageJson],
+    ['@forgeweaver/fw-storage-domain', StorageDomain],
+    ['@forgeweaver/fw-message-feedback', MessageFeedbackService],
   ])
   ctx.loader.internal = {
     version: 'v2',
@@ -58,23 +58,23 @@ async function loadComposition(configPath: string): Promise<Context> {
 
 describe('message feedback through a real Loader composition', () => {
   it('persists a checkpointed target and its sidecar across a cold restart', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-message-feedback-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'fw-message-feedback-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-session'",
-      "- name: '@deepseek-ai/dsh-session-persistence-jsonl'",
+      "- name: '@forgeweaver/fw-session'",
+      "- name: '@forgeweaver/fw-session-persistence-jsonl'",
       '  config:',
       `    root: ${JSON.stringify(join(root, 'sessions'))}`,
       '    compression: none',
       '    writeBatchMaxDelayMs: 1',
-      "- name: '@deepseek-ai/dsh-storage'",
-      "- name: '@deepseek-ai/dsh-storage-json'",
+      "- name: '@forgeweaver/fw-storage'",
+      "- name: '@forgeweaver/fw-storage-json'",
       '  config:',
       `    root: ${JSON.stringify(join(root, 'storage'))}`,
-      "- name: '@deepseek-ai/dsh-storage-domain'",
+      "- name: '@forgeweaver/fw-storage-domain'",
       '  config:',
       '    backend: json',
-      "- name: '@deepseek-ai/dsh-message-feedback'",
+      "- name: '@forgeweaver/fw-message-feedback'",
       '  config:',
       '    maxNoteBytes: 32',
       '',

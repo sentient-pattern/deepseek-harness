@@ -1,17 +1,17 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import LlmRuntime, { createUserMessage, CallId, isAgentLoopRequest, LlmAdapter  } from '@deepseek-ai/dsh-llm'
-import type { FinishReason, GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import { SessionTitleProviderId } from '@deepseek-ai/dsh-session-title'
-import type { SessionTitleProviderRequest } from '@deepseek-ai/dsh-session-title'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import LlmRuntime, { createUserMessage, CallId, isAgentLoopRequest, LlmAdapter  } from '@forgeweaver/fw-llm'
+import type { FinishReason, GenerateOptions, StreamChunk } from '@forgeweaver/fw-llm'
+import SessionStore, { SessionId } from '@forgeweaver/fw-session'
+import { SessionTitleProviderId } from '@forgeweaver/fw-session-title'
+import type { SessionTitleProviderRequest } from '@forgeweaver/fw-session-title'
+import { MAX_TIMER_DELAY_MS } from '@forgeweaver/fw-timeout'
 import {
   generateSessionTitleWithLlm,
   resolveSessionTitleLlmConfig,
   SESSION_TITLE_TIMEOUT_CODE,
-} from '@deepseek-ai/dsh-session-title-llm'
-import type { SessionTitleLlmConfig } from '@deepseek-ai/dsh-session-title-llm'
+} from '@forgeweaver/fw-session-title-llm'
+import type { SessionTitleLlmConfig } from '@forgeweaver/fw-session-title-llm'
 
 class RecordingAdapter extends LlmAdapter {
   readonly requests: GenerateOptions[] = []

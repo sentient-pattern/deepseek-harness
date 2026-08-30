@@ -7,19 +7,19 @@
  */
 
 import { describe, expect, it, beforeEach, afterEach } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, normalize } from 'node:path'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SaveTextSpill } from '@deepseek-ai/dsh-spill'
-import LocalSpillStore, { encodeSegment, privateRoot, saveTextFile, sessionDir } from '@deepseek-ai/dsh-spill-local'
+import { CallId } from '@forgeweaver/fw-llm'
+import { SessionId } from '@forgeweaver/fw-session'
+import type { SaveTextSpill } from '@forgeweaver/fw-spill'
+import LocalSpillStore, { encodeSegment, privateRoot, saveTextFile, sessionDir } from '@forgeweaver/fw-spill-local'
 
 let root: string
 
 beforeEach(() => {
-  root = mkdtempSync(join(tmpdir(), 'dsh-spill-test-'))
+  root = mkdtempSync(join(tmpdir(), 'fw-spill-test-'))
 })
 afterEach(() => {
   rmSync(root, { recursive: true, force: true })

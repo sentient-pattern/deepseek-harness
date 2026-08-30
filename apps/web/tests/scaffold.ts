@@ -1,24 +1,24 @@
 // Shared scaffold for the keyless browser e2e lane (Agent Note:
 // .agents/notes/implemented/testing/2026-07-24-web-gui-browser-e2e-lane.md).
-// Boots the REAL web composition — the dsh-base and dsh-web-app bundle
+// Boots the REAL web composition — the fw-base and fw-web-app bundle
 // patches over the empty profile root through the vendored Loader (the same
 // layer stack the profile boot composes), patched the
 // snapshot way — so a real chromium exercises the real HTTP uplink/WebSocket
-// downlink, api-gateway, agent loop, tools, and persistence. Modes ride $DSH_SNAPSHOT:
-// replay (default, keyless: normally disables the llm-deepseek row and
-// inserts dsh-llm-replay in providers mode), record (real adapter + key,
+// downlink, api-gateway, agent loop, tools, and persistence. Modes ride $FW_SNAPSHOT:
+// replay (default, keyless: normally disables the llm-forgeweaver row and
+// inserts fw-llm-replay in providers mode), record (real adapter + key,
 // harvests fixtures from live session memory), refresh (keyless replay that
 // rewrites goldens). A first-run option keeps the real adapter mounted while
 // masking its credential, without making a model call.
 //
-// Composition divergences from `dsh web`, all deliberate, all via include
+// Composition divergences from `fw web`, all deliberate, all via include
 // patches after the shipped bundle layers, over the SAME tree (never a
 // second yml): temp persistenceRoot; host-level skill roots confined to the
 // temp workspace while project skill discovery remains real; agent-instructions
 // disabled (recorded fixtures must not embed this repo's AGENTS.md);
 // session-title-llm disabled (its fire-and-forget title call would race the
 // loop for the session's replay cursor); webserver pinned to port 0 with the
-// built dist; ordinary keyless modes disable llm-deepseek and fill the open
+// built dist; ordinary keyless modes disable llm-forgeweaver and fill the open
 // llm seam post-boot with installLlmReplay on the settled root ctx
 // (the plugin-row path discards the ReplayHandle; the direct install keeps
 // assertConsumed for the teardown fixture-consumption check).
@@ -29,29 +29,29 @@ import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { Page } from 'playwright'
 import { expect } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include, { type PatchOptions } from '@deepseek-ai/cordis-plugin-include'
-import Group from '@deepseek-ai/cordis-plugin-group'
+import { Context } from '@forgeweaver/cordis'
+import Loader from '@forgeweaver/cordis-plugin-loader'
+import Include, { type PatchOptions } from '@forgeweaver/cordis-plugin-include'
+import Group from '@forgeweaver/cordis-plugin-group'
 import {
   scrubRequestHeaders,
   scrubSessionSnapshot,
   stabilizeFixtureMessageIds,
-} from '@deepseek-ai/dsh-acp-snapshot'
+} from '@forgeweaver/fw-acp-snapshot'
 import {
   assertEntriesLoaded,
   composeEntries,
   healProfilesModuleFallback,
   loadOverlayPatches,
-} from '@deepseek-ai/dsh-app-boot'
-import { dshHomePath } from '@deepseek-ai/dsh-home-paths'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
-import { LlmAdapter } from '@deepseek-ai/dsh-llm'
+} from '@forgeweaver/fw-app-boot'
+import { fwHomePath } from '@forgeweaver/fw-home-paths'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
+import { LlmAdapter } from '@forgeweaver/fw-llm'
 import type {
   LlmModelInfo, LlmProviderInfo, LlmResolvedModelInfo, RetryPolicyConfig, StreamChunk,
-} from '@deepseek-ai/dsh-llm'
-import type { ReplayHandle } from '@deepseek-ai/dsh-llm-replay'
-import { installLlmReplay, parseSessionLog } from '@deepseek-ai/dsh-llm-replay'
+} from '@forgeweaver/fw-llm'
+import type { ReplayHandle } from '@forgeweaver/fw-llm-replay'
+import { installLlmReplay, parseSessionLog } from '@forgeweaver/fw-llm-replay'
 import SessionStore, {
   packChunkRuns,
   SESSION_FORMAT_VERSION,
@@ -59,12 +59,12 @@ import SessionStore, {
   type Session,
   type SessionEvent,
   type SessionHeader,
-} from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+} from '@forgeweaver/fw-session'
+import JsonlSessionPersistence from '@forgeweaver/fw-session-persistence-jsonl'
 // Empty type imports carry the webServer/agents/sessionPersistence Context merges.
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import type {} from '@deepseek-ai/dsh-agent'
-import { provideCmdline } from '@deepseek-ai/dsh-cmdline'
+import type {} from '@forgeweaver/fw-host-webserver'
+import type {} from '@forgeweaver/fw-agent'
+import { provideCmdline } from '@forgeweaver/fw-cmdline'
 import { REPO_ROOT, requireDist } from './support.ts'
 
 // Host-side web e2e cannot import a browser package: doing so would pull that
@@ -74,19 +74,19 @@ import { REPO_ROOT, requireDist } from './support.ts'
 // import {
 //   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE,
 //   WELCOME_NOTICE_VERSION, WELCOME_NOTICE_COPY,
-// } from '@deepseek-ai/dsh-client-ui-settings-models'
+// } from '@forgeweaver/fw-client-ui-settings-models'
 export const WELCOME_NOTICE_SETTINGS_NAMESPACE = 'ui-onboarding'
 export const WELCOME_NOTICE_ACK_FIELD = 'welcomeNoticeVersion'
 export const WELCOME_NOTICE_VERSION = '2026-08-13.1'
 export const WELCOME_NOTICE_COPY = {
   zh: {
     title: '内测声明',
-    body: 'DeepSeek Harness 目前的 0.1 版本仍处在面向 Harness 开发者进行测试的阶段，还有许多地方需要持续改进和打磨，希望听取广大开发者的反馈建议。预计 DeepSeek Harness 的核心插件以及基础 API 都会在接下来的一段时间内快速迭代、持续演化。\n\n我们期待与全球开发者一起，在开源、开放、可复用、可组合的基础设施之上，共同探索智能上限。欢迎全球 Harness 开发者加入 DSH 插件生态。',
+    body: 'ForgeWeaver 目前的 0.1 版本仍处在面向 Harness 开发者进行测试的阶段，还有许多地方需要持续改进和打磨，希望听取广大开发者的反馈建议。预计 ForgeWeaver 的核心插件以及基础 API 都会在接下来的一段时间内快速迭代、持续演化。\n\n我们期待与全球开发者一起，在开源、开放、可复用、可组合的基础设施之上，共同探索智能上限。欢迎全球 Harness 开发者加入 DSH 插件生态。',
     continueLabel: '继续',
   },
 } as const
 
-/** Snapshot mode for the lane, from $DSH_SNAPSHOT (same vocabulary as the other snapshot suites). */
+/** Snapshot mode for the lane, from $FW_SNAPSHOT (same vocabulary as the other snapshot suites). */
 export type WebSnapshotMode = 'replay' | 'record' | 'refresh'
 
 /**
@@ -94,13 +94,13 @@ export type WebSnapshotMode = 'replay' | 'record' | 'refresh'
  * @returns the active mode; unset/empty selects replay.
  */
 export function webSnapshotMode(): WebSnapshotMode {
-  const value = process.env.DSH_SNAPSHOT
+  const value = process.env.FW_SNAPSHOT
   if (value === undefined || value === '' || value === 'replay') return 'replay'
   if (value === 'record' || value === 'refresh') return value
-  throw new Error(`DSH_SNAPSHOT must be replay, record, or refresh; got ${JSON.stringify(value)}`)
+  throw new Error(`FW_SNAPSHOT must be replay, record, or refresh; got ${JSON.stringify(value)}`)
 }
 
-/** The shipped composition under test: the dsh-base and dsh-web-app bundle patches over the empty profile root. */
+/** The shipped composition under test: the fw-base and fw-web-app bundle patches over the empty profile root. */
 const BASE_PATCH_PATH = join(REPO_ROOT, 'packages/bundle/base/cordis.patch.yml')
 const WEB_PATCH_PATH = join(REPO_ROOT, 'packages/bundle/web-app/cordis.patch.yml')
 /** The installation anchor whose dependency surface the profile module fallback mirrors. */
@@ -109,14 +109,14 @@ const INSTALL_ANCHOR = join(REPO_ROOT, 'apps/cli/package.json')
 const SHIPPED_PRESET_DIR = join(REPO_ROOT, 'apps/cli/config/agent-presets')
 
 // Replay publishes the provider catalog the gateway routes to (providers
-// mode, never catch-all: with llm-deepseek disabled no adapter exists, so a
+// mode, never catch-all: with llm-forgeweaver disabled no adapter exists, so a
 // catch-all would leave resolveModelInfo unroutable and compaction-basic's
 // post-step pressure check would warn every step). The published
 // contextWindow keeps that pressure path provably inert for small fixtures.
 const REPLAY_PROVIDERS = [{
-  id: 'deepseek-official',
-  name: 'DeepSeek',
-  models: [{ id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', contextWindow: 128_000 }],
+  id: 'forgeweaver-official',
+  name: 'ForgeWeaver',
+  models: [{ id: 'forgeweaver-v4-flash', name: 'ForgeWeaver-V4-Flash', contextWindow: 128_000 }],
 }]
 
 /**
@@ -179,7 +179,7 @@ export interface WebScaffold {
   workspaceCwd: string
   /** Temp persistence root (seeded sessions land here through the real API). */
   persistenceRoot: string
-  /** Isolated harness home the settings/credentials rows write ($DSH_HOME double). */
+  /** Isolated harness home the settings/credentials rows write ($FW_HOME double). */
   harnessHome: string
   /** Await a settled turn end: in-process turn/end, then the agent's idle flip (which follows the persistence flush). */
   whenTurnSettled(timeoutMs?: number): Promise<SessionId>
@@ -200,10 +200,10 @@ export interface LaunchOptions {
    */
   extraOverlayPath?: string
   /**
-   * Replay fixture (session.jsonl) served by the inserted dsh-llm-replay row
+   * Replay fixture (session.jsonl) served by the inserted fw-llm-replay row
    * in replay/refresh modes; ignored in record mode (the real adapter
    * answers). Omit for scenarios issuing no model calls — a stray stream then
-   * fails loud with NO_ADAPTER (llm-deepseek is disabled and no replay row
+   * fails loud with NO_ADAPTER (llm-forgeweaver is disabled and no replay row
    * mounts). With {@link replayProvidersOnly}, the fixture must record no
    * model calls (its header alone mounts the catalog).
    */
@@ -253,15 +253,15 @@ export interface LaunchOptions {
    */
   cordisTools?: boolean
   /**
-   * Keep the shipped DeepSeek adapter mounted while masking the process
-   * environment's DEEPSEEK_API_KEY for this scaffold lifetime. This is the
+   * Keep the shipped ForgeWeaver adapter mounted while masking the process
+   * environment's FORGEWEAVER_API_KEY for this scaffold lifetime. This is the
    * keyless first-run configuration lane; the default disables the adapter.
    */
   deepSeekMissingCredential?: boolean
   /** Leave the current welcome notice pending; ordinary scenarios pre-acknowledge it before browser boot. */
   welcomeNoticePending?: boolean
   /**
-   * Patch the shipped DeepSeek search row to a deterministic endpoint and
+   * Patch the shipped ForgeWeaver search row to a deterministic endpoint and
    * credential reference. Browser search scenarios keep the real provider and
    * credentials seam while avoiding external search traffic and ambient keys.
    */
@@ -323,44 +323,44 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
   if (mode === 'record') {
     // Both owning vitest configs (web unconditionally, snapshot in record
     // mode) load the repo-root .env before this file runs.
-    if (process.env.DEEPSEEK_API_KEY === undefined || process.env.DEEPSEEK_API_KEY.length === 0) {
-      throw new Error('web e2e record mode needs DEEPSEEK_API_KEY (env or repo-root .env)')
+    if (process.env.FORGEWEAVER_API_KEY === undefined || process.env.FORGEWEAVER_API_KEY.length === 0) {
+      throw new Error('web e2e record mode needs FORGEWEAVER_API_KEY (env or repo-root .env)')
     }
   }
   if (mode === 'record' && options.deepSeekMissingCredential === true) {
     throw new Error('deepSeekMissingCredential is a keyless replay/refresh option')
   }
-  const maskDeepSeekCredential = mode !== 'record' && options.deepSeekMissingCredential === true
-  const originalDeepSeekCredential = process.env.DEEPSEEK_API_KEY
+  const maskForgeWeaverCredential = mode !== 'record' && options.deepSeekMissingCredential === true
+  const originalForgeWeaverCredential = process.env.FORGEWEAVER_API_KEY
   let credentialEnvironmentRestored = false
   const restoreCredentialEnvironment = (): void => {
-    if (credentialEnvironmentRestored || !maskDeepSeekCredential) return
+    if (credentialEnvironmentRestored || !maskForgeWeaverCredential) return
     credentialEnvironmentRestored = true
-    if (originalDeepSeekCredential === undefined) {
-      Reflect.deleteProperty(process.env, 'DEEPSEEK_API_KEY')
+    if (originalForgeWeaverCredential === undefined) {
+      Reflect.deleteProperty(process.env, 'FORGEWEAVER_API_KEY')
     } else {
-      process.env.DEEPSEEK_API_KEY = originalDeepSeekCredential
+      process.env.FORGEWEAVER_API_KEY = originalForgeWeaverCredential
     }
   }
-  const workspaceCwd = await realpath(await mkdtemp(join(tmpdir(), 'dsh-web-e2e-ws-')))
-  // Isolated harness home: the settings/credentials rows resolve $DSH_HOME
+  const workspaceCwd = await realpath(await mkdtemp(join(tmpdir(), 'fw-web-e2e-ws-')))
+  // Isolated harness home: the settings/credentials rows resolve $FW_HOME
   // paths at load, and an in-process boot must NEVER touch the developer's
-  // real ~/.dsh document or credential file.
-  const harnessHome = options.harnessHome ?? join(workspaceCwd, '.dsh-home')
+  // real ~/.fw document or credential file.
+  const harnessHome = options.harnessHome ?? join(workspaceCwd, '.fw-home')
   // Skill discovery is model-visible input, and its roots now resolve inside a
   // PRESET — a subtree this lane's include patches cannot reach, because the
   // roster mounts it directly per session rather than as a row of the booted
   // tree. The row's documented fallback is the environment, so pin that: the
   // whole scaffold lifetime, not just the boot, since presets mount when a
-  // session is created. Without this a developer's real ~/.dsh/skills silently
-  // enters replay requests and goldens while CI sees none. `DSH_HOME` follows
+  // session is created. Without this a developer's real ~/.fw/skills silently
+  // enters replay requests and goldens while CI sees none. `FW_HOME` follows
   // the resolved harness home so a scaffold sharing another's home — the
   // cross-port persistence scenario — pins the same roots the settings and
   // credentials rows were configured with.
   const skillRootEnvironment = {
-    DSH_HOME: harnessHome,
-    DSH_AGENTS_HOME: join(workspaceCwd, '.agents-home'),
-    DSH_BUNDLED_SKILL_DIR: join(workspaceCwd, '.bundled-skills'),
+    FW_HOME: harnessHome,
+    FW_AGENTS_HOME: join(workspaceCwd, '.agents-home'),
+    FW_BUNDLED_SKILL_DIR: join(workspaceCwd, '.bundled-skills'),
   }
   const originalSkillRootEnvironment = Object.fromEntries(
     Object.keys(skillRootEnvironment).map(key => [key, process.env[key]]),
@@ -377,7 +377,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
   Object.assign(process.env, skillRootEnvironment)
   let persistenceRoot: string
   try {
-    persistenceRoot = await mkdtemp(join(tmpdir(), 'dsh-web-e2e-sessions-'))
+    persistenceRoot = await mkdtemp(join(tmpdir(), 'fw-web-e2e-sessions-'))
   } catch (error) {
     const failures: unknown[] = [error]
     await rm(workspaceCwd, { recursive: true, force: true }).catch((cleanupError: unknown) => failures.push(cleanupError))
@@ -385,10 +385,10 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     if (failures.length > 1) throw new AggregateError(failures, 'web scaffold temp-root setup failed')
     throw error
   }
-  if (maskDeepSeekCredential) Reflect.deleteProperty(process.env, 'DEEPSEEK_API_KEY')
+  if (maskForgeWeaverCredential) Reflect.deleteProperty(process.env, 'FORGEWEAVER_API_KEY')
 
   // The include patch set — the same layer stack the profile boot composes
-  // (bundle patches in dsh.profile.bundles order), applied over the SAME empty root (a
+  // (bundle patches in fw.profile.bundles order), applied over the SAME empty root (a
   // patch id that stops matching a row fails the boot sweep loudly instead of
   // drifting).
   const basePatches = loadOverlayPatches('web e2e scaffold', BASE_PATCH_PATH)
@@ -411,7 +411,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // chooses it. This lane boots the shipped tree WITHOUT AppCLIEntry, so it
     // has to supply the same fact or the roster resolves nothing and every
     // session composes an agent with no tools, no persona, and no token meter.
-    // Only the shipped root: a developer's own `~/.dsh/.agent-presets` must not be
+    // Only the shipped root: a developer's own `~/.fw/.agent-presets` must not be
     // able to change a golden.
     {
       id: 'agent-presets',
@@ -427,18 +427,18 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // the seeded-session scenarios navigate by content search, and these e2e
     // runs are the assembled coverage for the opt-in search path.
     { id: 'session-query-sqlite', config: { path: ':memory:', openAt: 'first-search' } },
-    // storage-json's yml root is anchored to the real $DSH_HOME; pin the row
+    // storage-json's yml root is anchored to the real $FW_HOME; pin the row
     // to an absolute temp root (removed with the workspace at close) so tests
     // never write the user's harness home.
-    { id: 'storage-json', config: { root: join(workspaceCwd, '.dsh-storages') } },
+    { id: 'storage-json', config: { root: join(workspaceCwd, '.fw-storages') } },
     // Skill discovery is model-visible input. Pin every host-level root inside
-    // the owned temp world so ~/.dsh, ~/.agents, and a bundled-root env setting
+    // the owned temp world so ~/.fw, ~/.agents, and a bundled-root env setting
     // cannot change replay requests or conversation goldens. Project roots stay
     // enabled against the same empty temp workspace, preserving the real seam.
     {
       id: 'skill-filesystem',
       config: {
-        dshHome: join(workspaceCwd, '.dsh-home'),
+        fwHome: join(workspaceCwd, '.fw-home'),
         agentsHome: join(workspaceCwd, '.agents-home'),
         bundledSkillDir: join(workspaceCwd, '.bundled-skills'),
         watch: false,
@@ -450,7 +450,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     { id: 'agent-instructions', disabled: true },
     { id: 'session-title-llm', disabled: true },
     // Fixture sessions must never leave the process: the shipped row defaults
-    // to the production OTLP endpoint (or whatever DSH_TELEMETRY_OTLP_URL
+    // to the production OTLP endpoint (or whatever FW_TELEMETRY_OTLP_URL
     // names in the ambient environment). A scenario that pins a real backend
     // disclosure passes a local dead endpoint instead of disabling the row.
     options.telemetryUrl === undefined
@@ -468,7 +468,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
       config: { host: '127.0.0.1', port: 0 },
     },
     // The bundle's web-runtime row resolves the same built dist under test
-    // (apps/web IS @deepseek-ai/dsh-web-frontend); native browser opening and the
+    // (apps/web IS @forgeweaver/fw-web-frontend); native browser opening and the
     // URL line are disabled because this scaffold owns its Playwright browser.
     // Preserve the composed surface-context choice because a patch replaces
     // the row's complete config.
@@ -476,8 +476,8 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     ...options.remoteAuthority === undefined
       ? []
       : [{ id: 'connection', config: { trustedHosts: [options.remoteAuthority] } }],
-    { id: 'settings', config: { dshHome: harnessHome } },
-    { id: 'credentials', config: { dshHome: harnessHome } },
+    { id: 'settings', config: { fwHome: harnessHome } },
+    { id: 'credentials', config: { fwHome: harnessHome } },
     // The shipped directory-picker row is the -auto chooser, which resolves
     // the interaction from the RUNNING host (display, SSH launch, bind). The
     // lane's goldens are interaction-specific (workspace-management drives
@@ -486,8 +486,8 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // disable+insert pair.
     { id: 'directory-picker', disabled: true },
     { insert: [
-      { id: 'directory-picker-browse', name: '@deepseek-ai/dsh-host-directory-picker-browse' },
-      { id: 'ui-directory-picker-browse', name: '@deepseek-ai/dsh-client-ui-directory-picker-browse' },
+      { id: 'directory-picker-browse', name: '@forgeweaver/fw-host-directory-picker-browse' },
+      { id: 'ui-directory-picker-browse', name: '@forgeweaver/fw-client-ui-directory-picker-browse' },
     ] },
     ...options.agentPresets === undefined
       ? []
@@ -499,13 +499,13 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // scenario adds only the model-facing tools that exercise those services.
     ...options.cordisTools === true
       ? [{ insert: [
-        { id: 'tool-cordis', name: '@deepseek-ai/dsh-tool-cordis' },
+        { id: 'tool-cordis', name: '@forgeweaver/fw-tool-cordis' },
       ] }]
       : [],
     ...options.deepSeekSearch === undefined
       ? []
       : [{
-        id: 'web-search-deepseek',
+        id: 'web-search-forgeweaver',
         config: {
           apiKeyEnv: options.deepSeekSearch.apiKeyEnv,
           baseURL: options.deepSeekSearch.baseURL,
@@ -513,7 +513,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
       }],
     ...mode === 'record' || options.deepSeekMissingCredential === true
       ? []
-      : [{ id: 'llm-deepseek', disabled: true }],
+      : [{ id: 'llm-forgeweaver', disabled: true }],
   ]
 
   // Sessions inherit the gateway's process.cwd() default; run the boot from
@@ -534,7 +534,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     await writeFile(rootConfig, '[]\n')
     ctx.baseUrl = pathToFileURL(profileDir).href + '/'
     // This direct Loader harness supplies the same root-path capability as app-boot.
-    ctx.provide('dshHomePath', dshHomePath)
+    ctx.provide('fwHomePath', fwHomePath)
     // A host with no command line still provides one: the web bundle's startup
     // row releases the rows waiting on it, and with no arguments each starts on
     // the values this scaffold composed above. An exit request can only come
@@ -550,7 +550,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // `cordis:group` beside it, exactly as `boot()` registers it: a group row is
     // how a preset gives one `isolate` realm to a provider and its consumers,
     // and a preset resolving package names from its own directory cannot reach
-    // `@deepseek-ai/cordis-plugin-group` by name.
+    // `@forgeweaver/cordis-plugin-group` by name.
     ctx.loader.builtins.group = Group
     await ctx.loader.create({
       name: 'cordis:include',
@@ -570,7 +570,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     port = boundPort
 
     // Fill the open llm seam on the settled root ctx. Ordinary keyless modes
-    // disable llm-deepseek; the first-run lane keeps it mounted but has no
+    // disable llm-forgeweaver; the first-run lane keeps it mounted but has no
     // replay fixture and never streams. The direct install, unlike the plugin
     // row, returns the ReplayHandle for the teardown consumption check.
     if (options.replayProvidersOnly) {
@@ -960,7 +960,7 @@ export async function compareOrRefreshGolden(goldenPath: string, actual: string,
     return
   }
   if (!existsSync(goldenPath)) {
-    throw new Error(`missing golden ${goldenPath} — run DSH_SNAPSHOT=refresh pnpm run test:web to generate it`)
+    throw new Error(`missing golden ${goldenPath} — run FW_SNAPSHOT=refresh pnpm run test:web to generate it`)
   }
   expect(payload).toBe(await readFile(goldenPath, 'utf8'))
 }

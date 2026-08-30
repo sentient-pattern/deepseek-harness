@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import * as SidebarInvariant from '@deepseek-ai/dsh-client-ui-sidebar/invariant'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@forgeweaver/cordis'
+import * as SidebarInvariant from '@forgeweaver/fw-client-ui-sidebar/invariant'
+import InvariantRegistry from '@forgeweaver/fw-invariants'
 
 describe('invariant companion', () => {
   it('registers under the package name with an empty installer', async () => {
@@ -11,7 +11,7 @@ describe('invariant companion', () => {
   })
 
   it('node-half apply is a no-op host placeholder', async () => {
-    const { apply } = await import('@deepseek-ai/dsh-client-ui-sidebar')
+    const { apply } = await import('@forgeweaver/fw-client-ui-sidebar')
     apply()
     expect(true).toBe(true) // reaching here without throw is the contract
   })

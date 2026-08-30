@@ -8,9 +8,9 @@ import { join } from 'node:path'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { ReplayEntry, ReplayOverrideDoc } from '@deepseek-ai/dsh-llm-replay'
-import { SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
+import type { StreamChunk } from '@forgeweaver/fw-llm'
+import type { ReplayEntry, ReplayOverrideDoc } from '@forgeweaver/fw-llm-replay'
+import { SessionId, type SessionEvent } from '@forgeweaver/fw-session'
 import { createChatScrollFixture } from './chat-scroll-fixture.ts'
 import {
   launchWebScaffold,
@@ -141,7 +141,7 @@ describe('web e2e: long Chat interaction contract', () => {
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    replayDir = await mkdtemp(join(tmpdir(), 'dsh-chat-interaction-replay-'))
+    replayDir = await mkdtemp(join(tmpdir(), 'fw-chat-interaction-replay-'))
     const replayOverride = join(replayDir, 'replay.override.json')
     const replay: ReplayOverrideDoc = [replayEntry(continuationChunks())]
     await writeFile(replayOverride, JSON.stringify(replay))

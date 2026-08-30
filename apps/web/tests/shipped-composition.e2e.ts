@@ -7,18 +7,18 @@ import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { afterEach, expect, it } from 'vitest'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { canonicalPath, writableRoots } from '@deepseek-ai/dsh-sandbox'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import { CallId } from '@forgeweaver/fw-llm'
+import { canonicalPath, writableRoots } from '@forgeweaver/fw-sandbox'
+import { SessionId } from '@forgeweaver/fw-session'
+import { settingsNamespace } from '@forgeweaver/fw-settings'
 // Empty type imports carry the tools/sandboxPolicy/approval Context merges.
-import type {} from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import type {} from '@deepseek-ai/dsh-commands'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type {} from '@forgeweaver/fw-tools'
+import type {} from '@forgeweaver/fw-sandbox-policy'
+import type {} from '@forgeweaver/fw-user-approval'
+import type {} from '@forgeweaver/fw-permission-presets'
+import type {} from '@forgeweaver/fw-agent-presets'
+import type {} from '@forgeweaver/fw-commands'
+import type {} from '@forgeweaver/fw-system-prompt'
 import { launchWebScaffold, type WebScaffold } from './scaffold.ts'
 
 const FILE_REFERENCE_PROMPT = fileURLToPath(new URL(
@@ -60,7 +60,7 @@ const EXPECTED_TOOLS = [
 ]
 
 /**
- * `glob` and `grep` come from `dsh-tool-fs-search`, which spawns the PACKAGED
+ * `glob` and `grep` come from `fw-tool-fs-search`, which spawns the PACKAGED
  * ripgrep binary (`@vscode/ripgrep`) through the subprocess seam, so the pair
  * is always present on every host — asserted as fixed members, not a host
  * dependency.
@@ -77,7 +77,7 @@ afterEach(async () => {
 it('assembles the shipped Web catalog, file-reference guidance, retry policy, and confined access default', async () => {
   scaffold = await launchWebScaffold({ deepSeekMissingCredential: true })
   const ctx = scaffold.ctx
-  expect(ctx.llm.providerRetryPolicy('deepseek-official')).toMatchInlineSnapshot(`
+  expect(ctx.llm.providerRetryPolicy('forgeweaver-official')).toMatchInlineSnapshot(`
     {
       "initialDelayMs": 500,
       "jitterRatio": 0.1,
@@ -93,10 +93,10 @@ it('assembles the shipped Web catalog, file-reference guidance, retry policy, an
       ],
     }
   `)
-  await ctx.settings.update(settingsNamespace('llm-deepseek'), {
+  await ctx.settings.update(settingsNamespace('llm-forgeweaver'), {
     retryPolicy: { mode: 'always', maxRetries: 5 },
   })
-  expect(ctx.llm.providerRetryPolicy('deepseek-official')).toMatchInlineSnapshot(`
+  expect(ctx.llm.providerRetryPolicy('forgeweaver-official')).toMatchInlineSnapshot(`
     {
       "initialDelayMs": 500,
       "jitterRatio": 0.1,
@@ -171,7 +171,7 @@ it('assembles the shipped Web catalog, file-reference guidance, retry policy, an
   const commandHandle = await scaffold.ctx.agents.create({
     sessionId: SessionId('shipped-command-catalog'),
     meta: { cwd: scaffold.workspaceCwd },
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'forgeweaver-official', model: 'forgeweaver-v4-flash' },
   })
   try {
     expect(scaffold.ctx.commands.list(commandHandle.agent)).toContainEqual({

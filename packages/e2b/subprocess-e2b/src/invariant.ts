@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-subprocess-e2b`.
- * @module @deepseek-ai/dsh-subprocess-e2b/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-subprocess-e2b`.
+ * @module @forgeweaver/fw-subprocess-e2b/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-subprocess-e2b'
+const PACKAGE_NAME = '@forgeweaver/fw-subprocess-e2b'
 
 /** Cordis companion plugin name. */
 export const name = 'subprocess-e2b-invariant'

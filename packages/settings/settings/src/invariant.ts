@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-settings`.
- * @module @deepseek-ai/dsh-settings/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-settings`.
+ * @module @forgeweaver/fw-settings/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantFailure, InvariantInstaller } from '@forgeweaver/fw-invariants'
 import { deepEqualJson } from './index.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-settings'
+const PACKAGE_NAME = '@forgeweaver/fw-settings'
 
 /** Cordis companion plugin name. */
 export const name = 'settings-invariant'

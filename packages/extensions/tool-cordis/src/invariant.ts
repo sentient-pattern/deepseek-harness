@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-tool-cordis`.
- * @module @deepseek-ai/dsh-tool-cordis/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-tool-cordis`.
+ * @module @forgeweaver/fw-tool-cordis/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-tool-cordis'
+const PACKAGE_NAME = '@forgeweaver/fw-tool-cordis'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-cordis-invariant'

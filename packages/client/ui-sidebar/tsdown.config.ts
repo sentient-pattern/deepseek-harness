@@ -1,3 +1,3 @@
 import { clientBundle } from '../tsdown.client.ts'
 
-export default clientBundle('@deepseek-ai/dsh-client-ui-sidebar', ['lib/types/index.js', 'lib/types/invariant.js'])
+export default clientBundle('@forgeweaver/fw-client-ui-sidebar', ['lib/types/index.js', 'lib/types/invariant.js'])

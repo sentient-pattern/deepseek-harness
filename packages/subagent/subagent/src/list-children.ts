@@ -13,14 +13,14 @@
  * error. The module owns no catalog state and does not consult Activation,
  * Agent-registry, continuation-manager, or provider state.
  *
- * @module @deepseek-ai/dsh-subagent
+ * @module @forgeweaver/fw-subagent
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionProjectionRegistry } from '@deepseek-ai/dsh-session-projection'
-import type { SessionProjectionCache } from '@deepseek-ai/dsh-session-projection-cache'
+import type { Context } from '@forgeweaver/cordis'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@forgeweaver/fw-session'
+import type { SessionPersistence } from '@forgeweaver/fw-session-persistence'
+import type { SessionProjectionRegistry } from '@forgeweaver/fw-session-projection'
+import type { SessionProjectionCache } from '@forgeweaver/fw-session-projection-cache'
 import { SubagentError } from './error.ts'
 import type { SubagentIdentityProjection } from './projection-types.ts'
 
@@ -191,7 +191,7 @@ async function prepareListing(
   // deployment configuration error, never an empty success.
   if (projections === undefined) {
     throw new SubagentError(
-      'listing subagents requires the sessionProjections registry (load @deepseek-ai/dsh-session-projection)',
+      'listing subagents requires the sessionProjections registry (load @forgeweaver/fw-session-projection)',
       'SUBAGENT_CONTROL_PROJECTIONS_UNAVAILABLE',
     )
   }
@@ -201,7 +201,7 @@ async function prepareListing(
   const sessions = ctx.get('sessions')
   if (sessions === undefined) {
     throw new SubagentError(
-      'listing subagents requires the session store (load @deepseek-ai/dsh-session)',
+      'listing subagents requires the session store (load @forgeweaver/fw-session)',
       'SUBAGENT_CONTROL_SESSION_STORE_UNAVAILABLE',
     )
   }

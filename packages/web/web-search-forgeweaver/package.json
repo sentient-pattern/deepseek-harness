@@ -1,0 +1,58 @@
+{
+  "name": "@forgeweaver/fw-web-search-forgeweaver",
+  "description": "ForgeWeaver-backed search provider (native web_search via the Anthropic-compatible API) for the ForgeWeaver web capability seam (ctx.web)",
+  "version": "0.1.1-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sentient-pattern/deepseek-harness.git",
+    "directory": "packages/web/web-search-forgeweaver"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-credentials": "workspace:^",
+    "@forgeweaver/fw-launch-environment": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-web": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^"
+  },
+  "dependencies": {
+    "@forgeweaver/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@forgeweaver/fw-agent": "workspace:^",
+    "@forgeweaver/fw-credentials": "workspace:^",
+    "@forgeweaver/fw-credentials-local": "workspace:^",
+    "@forgeweaver/fw-launch-environment": "workspace:^",
+    "@forgeweaver/fw-invariants": "workspace:^",
+    "@forgeweaver/fw-session": "workspace:^",
+    "@forgeweaver/fw-web": "workspace:^",
+    "@forgeweaver/cordis": "workspace:^",
+    "@forgeweaver/fw-settings": "workspace:^"
+  }
+}

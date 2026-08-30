@@ -1,17 +1,17 @@
 /**
  * Plugin-owned human-command registry shared by interactive UI adapters.
- * @module @deepseek-ai/dsh-commands
+ * @module @forgeweaver/fw-commands
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { AttachmentError, admitEncodedImages } from '@deepseek-ai/dsh-attachment'
-import type { EncodedImageAttachment } from '@deepseek-ai/dsh-attachment/types'
-import type { ImageBlock } from '@deepseek-ai/dsh-llm'
-import { NamedEntries, ScopedLayers } from '@deepseek-ai/dsh-scope'
-import type { ScopeKey, ScopeLayer } from '@deepseek-ai/dsh-scope'
-import type { Session, SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import { AttachmentError, admitEncodedImages } from '@forgeweaver/fw-attachment'
+import type { EncodedImageAttachment } from '@forgeweaver/fw-attachment/types'
+import type { ImageBlock } from '@forgeweaver/fw-llm'
+import { NamedEntries, ScopedLayers } from '@forgeweaver/fw-scope'
+import type { ScopeKey, ScopeLayer } from '@forgeweaver/fw-scope'
+import type { Session, SessionEvent, SessionEventMap } from '@forgeweaver/fw-session'
+import { TypertRemoteService, Remote } from '@forgeweaver/fw-typert-protocol'
 import { CommandId } from './brand.ts'
 import type {
   CommandDescriptor,
@@ -101,7 +101,7 @@ class CommandLayer implements ScopeLayer {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@forgeweaver/cordis' {
   interface Context {
     commands: CommandRuntime
   }

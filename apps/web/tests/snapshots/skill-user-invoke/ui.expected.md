@@ -12,10 +12,10 @@
 - text: /user-invoke-demo and confirm the fixture wiring {{clock}}
 - button "Copy":
   - img
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @forgeweaver/fw-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
+  - text: Context injection @forgeweaver/fw-system-prompt
 - button "Context injection user-invoke-demo":
   - img
   - img
@@ -34,8 +34,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current ForgeWeaver-V4-Flash":
+  - text: ForgeWeaver-V4-Flash
   - img
 - button "0% of context used"
 - button "Send message" [disabled]

@@ -1,15 +1,15 @@
 /**
  * Durable projection state for dynamic runtime context.
- * @module @deepseek-ai/dsh-agent-loop/runtime-context
+ * @module @forgeweaver/fw-agent-loop/runtime-context
  */
 
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextSnapshotSection } from '@deepseek-ai/dsh-llm'
-import type { Session, UserMessage } from '@deepseek-ai/dsh-session'
-import { isReplacementSurfaceEvent } from '@deepseek-ai/dsh-session'
-import type { Context } from '@deepseek-ai/cordis'
+import { createUserMessage } from '@forgeweaver/fw-llm'
+import type { ContextSnapshotSection } from '@forgeweaver/fw-llm'
+import type { Session, UserMessage } from '@forgeweaver/fw-session'
+import { isReplacementSurfaceEvent } from '@forgeweaver/fw-session'
+import type { Context } from '@forgeweaver/cordis'
 
-const SOURCE = '@deepseek-ai/dsh-system-prompt'
+const SOURCE = '@forgeweaver/fw-system-prompt'
 const CLEARED = 'Current runtime context: none. Earlier runtime-context snapshots no longer apply.'
 
 function isOwned(message: UserMessage): boolean {

@@ -1,11 +1,11 @@
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@forgeweaver/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition, TurnErrorNode,
-} from '@deepseek-ai/dsh-client-runtime/client'
-import { displayFailureMessage } from '@deepseek-ai/dsh-client-runtime/client'
+} from '@forgeweaver/fw-client-runtime/client'
+import { displayFailureMessage } from '@forgeweaver/fw-client-runtime/client'
 import { chatNode } from './common.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+declare module '@forgeweaver/fw-client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Terminal turn failure recorded on the turn's end reason. */
     'turn-error': TurnErrorNode

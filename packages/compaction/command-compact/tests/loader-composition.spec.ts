@@ -3,11 +3,11 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
+import { Context } from '@forgeweaver/cordis'
+import Loader from '@forgeweaver/cordis-plugin-loader'
+import Include from '@forgeweaver/cordis-plugin-include'
+import type { Agent } from '@forgeweaver/fw-agent'
+import CommandRuntime from '@forgeweaver/fw-commands'
 import {
   CompactionId,
   CompactionEngine,
@@ -15,9 +15,9 @@ import {
   type CompactionResult,
   type CompactionTrigger,
   type ManualCompactAgentContext,
-} from '@deepseek-ai/dsh-compaction'
-import * as commandCompact from '@deepseek-ai/dsh-command-compact'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
+} from '@forgeweaver/fw-compaction'
+import * as commandCompact from '@forgeweaver/fw-command-compact'
+import { Session, SessionId } from '@forgeweaver/fw-session'
 
 const COMPACTION_ID = CompactionId('loader-command-compact-test')
 
@@ -81,12 +81,12 @@ afterEach(async () => {
 
 describe('command-compact real Loader composition', () => {
   it('discovers and executes /compact through the assembled command plane', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-command-compact-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'fw-command-compact-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-commands'",
+      "- name: '@forgeweaver/fw-commands'",
       "- name: '@test/compact-backend'",
-      "- name: '@deepseek-ai/dsh-command-compact'",
+      "- name: '@forgeweaver/fw-command-compact'",
       '',
     ].join('\n'))
 
@@ -95,9 +95,9 @@ describe('command-compact real Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-commands', CommandRuntime],
+      ['@forgeweaver/fw-commands', CommandRuntime],
       ['@test/compact-backend', LoaderCompactionEngine],
-      ['@deepseek-ai/dsh-command-compact', commandCompact],
+      ['@forgeweaver/fw-command-compact', commandCompact],
     ])
     context.loader.internal = {
       version: 'v2',

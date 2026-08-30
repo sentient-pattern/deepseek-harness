@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-skill-filesystem`.
- * @module @deepseek-ai/dsh-skill-filesystem/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-skill-filesystem`.
+ * @module @forgeweaver/fw-skill-filesystem/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-skill-filesystem'
+const PACKAGE_NAME = '@forgeweaver/fw-skill-filesystem'
 
 /** Cordis companion plugin name. */
 export const name = 'skill-filesystem-invariant'

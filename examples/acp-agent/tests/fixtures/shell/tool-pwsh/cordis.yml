@@ -1,27 +1,27 @@
 # Minimal tool-pwsh composition: real app boot path, real pwsh executor, real
 # foreground + background tool calls; driven by the package's loader.spec.ts.
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@forgeweaver/fw-system-prompt'
 
 - id: tools
-  name: '@deepseek-ai/dsh-tools'
+  name: '@forgeweaver/fw-tools'
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@forgeweaver/fw-subprocess-local'
 
 - id: bash
-  name: '@deepseek-ai/dsh-pwsh-local'
+  name: '@forgeweaver/fw-pwsh-local'
   config:
     graceMs: 200
 
 - id: shell-env
-  name: '@deepseek-ai/dsh-shell-env'
+  name: '@forgeweaver/fw-shell-env'
 
 - id: tasks
-  name: '@deepseek-ai/dsh-jobs-local'
+  name: '@forgeweaver/fw-jobs-local'
 
 - id: tool-jobs
-  name: '@deepseek-ai/dsh-tool-jobs'
+  name: '@forgeweaver/fw-tool-jobs'
 
 - id: tool-pwsh
-  name: '@deepseek-ai/dsh-tool-pwsh'
+  name: '@forgeweaver/fw-tool-pwsh'

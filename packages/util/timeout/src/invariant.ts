@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-timeout`.
- * @module @deepseek-ai/dsh-timeout/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-timeout`.
+ * @module @forgeweaver/fw-timeout/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-timeout'
+const PACKAGE_NAME = '@forgeweaver/fw-timeout'
 
 /** Cordis companion plugin name. */
 export const name = 'timeout-invariant'

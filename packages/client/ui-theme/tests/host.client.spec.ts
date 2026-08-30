@@ -1,10 +1,10 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@forgeweaver/cordis'
 import { describe, expect, it } from 'vitest'
-import type { IndexInjection } from '@deepseek-ai/dsh-host-webserver'
-import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@deepseek-ai/dsh-settings'
+import type { IndexInjection } from '@forgeweaver/fw-host-webserver'
+import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@forgeweaver/fw-settings'
 import {
   DEFAULT_PREFERENCE, THEME_SETTINGS_NAMESPACE, apply,
-} from '@deepseek-ai/dsh-client-ui-theme'
+} from '@forgeweaver/fw-client-ui-theme'
 
 class MemorySettings extends SettingsProvider {
   readonly writable = true

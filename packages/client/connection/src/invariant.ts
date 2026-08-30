@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-client-connection`.
- * @module @deepseek-ai/dsh-client-connection/invariant
+ * Package-owned invariant companion for `@forgeweaver/fw-client-connection`.
+ * @module @forgeweaver/fw-client-connection/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@forgeweaver/cordis'
+import type { InvariantInstaller } from '@forgeweaver/fw-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-client-connection'
+const PACKAGE_NAME = '@forgeweaver/fw-client-connection'
 
 /** Cordis companion plugin name. */
 export const name = 'client-connection-invariant'

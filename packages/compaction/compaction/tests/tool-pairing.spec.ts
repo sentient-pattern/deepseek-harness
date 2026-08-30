@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@deepseek-ai/dsh-llm'
-import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@deepseek-ai/dsh-compaction'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@forgeweaver/fw-llm'
+import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@forgeweaver/fw-compaction'
+import { Session, SessionId } from '@forgeweaver/fw-session'
+import type { SessionEvent } from '@forgeweaver/fw-session'
 
 const SURFACE = { surfaceOp: 'append' as const }
 

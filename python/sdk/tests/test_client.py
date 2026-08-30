@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, HarnessConfig, Notification, SdkProtocolError
+from forgeweaver_harness import ForgeWeaverHarness, HarnessClient, HarnessConfig, Notification, SdkProtocolError
 
 
 def test_high_level_sdk_runs_turn_and_collects_final_response(tmp_path: Path) -> None:
@@ -24,11 +24,11 @@ import sys
 
 env_dump = os.environ["ENV_DUMP"]
 json.dump({
-    "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
-    "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
-    "DSH_CWD": os.environ.get("DSH_CWD"),
-    "DSH_SESSION_ROOT": os.environ.get("DSH_SESSION_ROOT"),
-    "DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG"),
+    "FORGEWEAVER_API_KEY": os.environ.get("FORGEWEAVER_API_KEY"),
+    "FORGEWEAVER_BASE_URL": os.environ.get("FORGEWEAVER_BASE_URL"),
+    "FW_CWD": os.environ.get("FW_CWD"),
+    "FW_SESSION_ROOT": os.environ.get("FW_SESSION_ROOT"),
+    "FW_CORDIS_CONFIG": os.environ.get("FW_CORDIS_CONFIG"),
 }, open(env_dump, "w"))
 
 for line in sys.stdin:
@@ -91,8 +91,8 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
-        model="deepseek-v4-flash",
+    with ForgeWeaverHarness(
+        model="forgeweaver-v4-flash",
         max_tokens=4096,
         cwd=str(tmp_path),
         cordis=str(tmp_path / "cordis.yml"),
@@ -101,8 +101,8 @@ for line in sys.stdin:
         env={
             "ENV_DUMP": str(env_dump),
             "INIT_DUMP": str(init_dump),
-            "DEEPSEEK_API_KEY": "env-key",
-            "DEEPSEEK_BASE_URL": "http://127.0.0.1:4321",
+            "FORGEWEAVER_API_KEY": "env-key",
+            "FORGEWEAVER_BASE_URL": "http://127.0.0.1:4321",
         },
     ) as harness:
         result = harness.run("say hello", session_id="main")
@@ -111,15 +111,15 @@ for line in sys.stdin:
     assert result.finish_reason == "max-tokens"
     assert result.events[-1]["type"] == "turn/end"
     dumped_env = json.loads(env_dump.read_text())
-    assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
-    assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
-    assert dumped_env["DSH_CWD"] == str(tmp_path)
-    assert dumped_env["DSH_SESSION_ROOT"] == str(tmp_path / "sessions")
-    assert dumped_env["DSH_CORDIS_CONFIG"] == str(tmp_path / "cordis.yml")
+    assert dumped_env["FORGEWEAVER_API_KEY"] == "env-key"
+    assert dumped_env["FORGEWEAVER_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["FW_CWD"] == str(tmp_path)
+    assert dumped_env["FW_SESSION_ROOT"] == str(tmp_path / "sessions")
+    assert dumped_env["FW_CORDIS_CONFIG"] == str(tmp_path / "cordis.yml")
     assert json.loads(init_dump.read_text()) == {
         "cwd": str(tmp_path),
-        "provider": "deepseek-official",
-        "model": "deepseek-v4-flash",
+        "provider": "forgeweaver-official",
+        "model": "forgeweaver-v4-flash",
         "maxTokens": 4096,
     }
 
@@ -149,7 +149,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         launch_args_override=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -187,7 +187,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         launch_args_override=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -212,7 +212,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        json.dump({"process": os.getcwd(), "environment": os.environ.get("DSH_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
+        json.dump({"process": os.getcwd(), "environment": os.environ.get("FW_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-runtime"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
@@ -221,7 +221,7 @@ for line in sys.stdin:
     )
     monkeypatch.chdir(tmp_path)
 
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         cwd=".",
         runtime_cwd=".",
         launch_args_override=(sys.executable, str(script)),
@@ -262,7 +262,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         launch_args_override=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -311,7 +311,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         launch_args_override=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -366,7 +366,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with ForgeWeaverHarness(
         launch_args_override=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -401,7 +401,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(launch_args_override=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with ForgeWeaverHarness(launch_args_override=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         result = harness.run("one turn", session_id="main")
         assert harness.client._notifications.qsize() == 0
 
@@ -441,7 +441,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(launch_args_override=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with ForgeWeaverHarness(launch_args_override=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         first = harness.run("first turn", session_id="main")
         second = harness.run("second turn", session_id="main")
 
@@ -461,7 +461,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif method == "session/prompt":
         params = msg.get("params") or {}
         print(json.dumps({"jsonrpc": "2.0", "method": "llm/request", "params": {"requestId": "req-1", "sessionId": params["sessionId"], "model": "dsagent", "messages": []}}), flush=True)
@@ -475,8 +475,8 @@ for line in sys.stdin:
     with HarnessClient(
         HarnessConfig(launch_args_override=(sys.executable, str(script)))
     ) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        init = client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
+        assert init.serverInfo.name == "fake-fw"
 
         client.session_prompt("main", [{"type": "text", "text": "fix it"}])
         notification = client.next_notification()
@@ -598,7 +598,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif method in {"emit-first", "emit-second"}:
         print(json.dumps({"jsonrpc": "2.0", "method": "tick", "params": {"source": method}}), flush=True)
     elif method == "session/prompt":
@@ -613,7 +613,7 @@ for line in sys.stdin:
         raise RuntimeError("bad notification filter")
 
     with HarnessClient(HarnessConfig(launch_args_override=(sys.executable, str(script)))) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
         with (
             client.subscribe_notifications(broken_filter) as broken,
             client.subscribe_notifications(lambda notification: notification.method == "tick") as healthy,
@@ -640,7 +640,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif method == "session/prompt":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"accepted": False}}), flush=True)
     elif method == "shutdown":
@@ -650,7 +650,7 @@ for line in sys.stdin:
     )
 
     with HarnessClient(HarnessConfig(launch_args_override=(sys.executable, str(script)))) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
         with pytest.raises(ValueError):
             client.session_prompt("main", [{"type": "text", "text": "fix it"}])
 
@@ -666,7 +666,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
         print(json.dumps({"jsonrpc": "2.0", "id": "bridge-req-1", "method": "llm.request", "params": {"requestId": "req-1", "sessionId": "main", "model": "dsagent", "messages": []}}), flush=True)
     elif "id" in msg and "method" not in msg:
         print(json.dumps({"jsonrpc": "2.0", "method": "response/seen", "params": {"result": msg.get("result")}}), flush=True)
@@ -679,7 +679,7 @@ for line in sys.stdin:
     with HarnessClient(
         HarnessConfig(launch_args_override=(sys.executable, str(script)))
     ) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
 
         request = client.next_request()
         assert request.id == "bridge-req-1"
@@ -703,7 +703,7 @@ print("node warning: experimental loader", flush=True)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -713,8 +713,8 @@ for line in sys.stdin:
     with HarnessClient(
         HarnessConfig(launch_args_override=(sys.executable, str(script)))
     ) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        init = client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
+        assert init.serverInfo.name == "fake-fw"
 
 
 def test_client_request_times_out_when_bridge_does_not_respond(tmp_path: Path) -> None:
@@ -737,7 +737,7 @@ time.sleep(60)
     ) as client:
         start = time.monotonic()
         try:
-            client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+            client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
         except TimeoutError as exc:
             assert time.monotonic() - start < 2
             assert "bridge is still starting" in str(exc)
@@ -759,7 +759,7 @@ signal.signal(signal.SIGTERM, signal.SIG_IGN)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         time.sleep(60)
 """.strip()
@@ -774,7 +774,7 @@ for line in sys.stdin:
     client.start()
     proc = client._proc
     assert proc is not None
-    client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+    client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
     start = time.monotonic()
     client.close()
     assert time.monotonic() - start < 2
@@ -805,22 +805,22 @@ for line in sys.stdin:
     assert proc is not None
 
     with pytest.raises(Exception, match="bad initialize"):
-        client.initialize(provider="deepseek-official", cwd=".", model="dsagent")
+        client.initialize(provider="forgeweaver-official", cwd=".", model="dsagent")
 
     assert proc.wait(timeout=1) is not None
     assert client._proc is None
 
 
 def test_public_signatures_omit_unsupported_wire_parameters() -> None:
-    from deepseek_harness import DeepSeekHarnessConfig, Session
+    from forgeweaver_harness import ForgeWeaverHarnessConfig, Session
 
     assert "session_root" not in inspect.signature(HarnessClient.initialize).parameters
     assert "system_prompt" not in inspect.signature(HarnessClient.initialize).parameters
     assert "profile" not in inspect.signature(HarnessClient.session_prompt).parameters
-    assert "profile" not in inspect.signature(DeepSeekHarness.run).parameters
+    assert "profile" not in inspect.signature(ForgeWeaverHarness.run).parameters
     assert "profile" not in inspect.signature(Session.run).parameters
-    assert "system_prompt" not in DeepSeekHarnessConfig.__dataclass_fields__
-    assert "max_tokens" in DeepSeekHarnessConfig.__dataclass_fields__
+    assert "system_prompt" not in ForgeWeaverHarnessConfig.__dataclass_fields__
+    assert "max_tokens" in ForgeWeaverHarnessConfig.__dataclass_fields__
     assert "max_tokens" in inspect.signature(HarnessClient.initialize).parameters
     assert "client_name" not in HarnessConfig.__dataclass_fields__
     assert "client_version" not in HarnessConfig.__dataclass_fields__
@@ -838,7 +838,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -847,7 +847,7 @@ for line in sys.stdin:
 
     client = HarnessClient(HarnessConfig(launch_args_override=(sys.executable, str(script))))
     client.start()
-    client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+    client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
     client.close()
     client.close()
 
@@ -870,7 +870,7 @@ sys.exit(42)
         )
     ) as client:
         with pytest.raises(Exception, match="fatal bridge exploded"):
-            client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+            client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
 
 
 def test_client_serializes_concurrent_writes(tmp_path: Path) -> None:
@@ -888,7 +888,7 @@ with open(os.environ["SEEN"], "w") as seen:
         seen.flush()
         msg = json.loads(line)
         if "id" in msg and msg.get("method") == "initialize":
-            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-fw"}}}), flush=True)
         elif "id" in msg and msg.get("method") == "shutdown":
             print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
             break
@@ -901,7 +901,7 @@ with open(os.environ["SEEN"], "w") as seen:
             env={"SEEN": str(output)},
         )
     ) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="forgeweaver-official", cwd="/workspace", model="dsagent")
         threads = [
             threading.Thread(target=client.notify, args=(f"notice-{index}", {"index": index}))
             for index in range(50)
@@ -922,14 +922,14 @@ def _install_fake_bundled_runtime(
 
     Returns the fake bundled default config path.
     """
-    runtime = tmp_path / "dsh-jsonrpc-agent"
+    runtime = tmp_path / "fw-jsonrpc-agent"
     runtime.write_text(
         """#!/usr/bin/env python3
 import json
 import os
 import sys
 
-json.dump({"DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG")}, open(os.environ["ENV_DUMP"], "w"))
+json.dump({"FW_CORDIS_CONFIG": os.environ.get("FW_CORDIS_CONFIG")}, open(os.environ["ENV_DUMP"], "w"))
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
@@ -942,7 +942,7 @@ for line in sys.stdin:
     runtime.chmod(0o755)
 
     default_config = tmp_path / "default-cordis.yml"
-    module_dir = tmp_path / "deepseek_harness_runtime"
+    module_dir = tmp_path / "forgeweaver_harness_runtime"
     module_dir.mkdir()
     (module_dir / "__init__.py").write_text(
         f"""
@@ -956,7 +956,7 @@ def bundled_default_config_path():
     )
 
     monkeypatch.syspath_prepend(str(tmp_path))
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "forgeweaver_harness_runtime", raising=False)
     return default_config
 
 
@@ -967,15 +967,15 @@ def test_client_default_launch_uses_bundled_runtime_and_injects_default_config(
     env_dump = tmp_path / "env.json"
     default_config = _install_fake_bundled_runtime(tmp_path, monkeypatch)
     if ambient_config is None:
-        monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+        monkeypatch.delenv("FW_CORDIS_CONFIG", raising=False)
     else:
-        monkeypatch.setenv("DSH_CORDIS_CONFIG", ambient_config)
+        monkeypatch.setenv("FW_CORDIS_CONFIG", ambient_config)
 
     with HarnessClient(HarnessConfig(env={"ENV_DUMP": str(env_dump)})) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
+        init = client.initialize(provider="forgeweaver-official", cwd="/workspace", model="forgeweaver-v4-pro")
 
     assert init.serverInfo.name == "bundled-runtime"
-    assert json.loads(env_dump.read_text())["DSH_CORDIS_CONFIG"] == str(default_config)
+    assert json.loads(env_dump.read_text())["FW_CORDIS_CONFIG"] == str(default_config)
 
 
 def test_client_respects_explicit_config_over_bundled_default(
@@ -983,19 +983,19 @@ def test_client_respects_explicit_config_over_bundled_default(
 ) -> None:
     env_dump = tmp_path / "env.json"
     _install_fake_bundled_runtime(tmp_path, monkeypatch)
-    monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+    monkeypatch.delenv("FW_CORDIS_CONFIG", raising=False)
 
     with HarnessClient(
-        HarnessConfig(env={"ENV_DUMP": str(env_dump), "DSH_CORDIS_CONFIG": "./explicit.yml"})
+        HarnessConfig(env={"ENV_DUMP": str(env_dump), "FW_CORDIS_CONFIG": "./explicit.yml"})
     ) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
+        client.initialize(provider="forgeweaver-official", cwd="/workspace", model="forgeweaver-v4-pro")
 
-    assert json.loads(env_dump.read_text())["DSH_CORDIS_CONFIG"] == "./explicit.yml"
+    assert json.loads(env_dump.read_text())["FW_CORDIS_CONFIG"] == "./explicit.yml"
 
 
 def test_client_reports_missing_bundled_runtime_dependency(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "forgeweaver_harness_runtime", raising=False)
     monkeypatch.setattr(sys, "path", [])
 
-    with pytest.raises(FileNotFoundError, match="Install deepseek-harness-runtime-bin"):
+    with pytest.raises(FileNotFoundError, match="Install forgeweaver-harness-runtime-bin"):
         HarnessClient().start()

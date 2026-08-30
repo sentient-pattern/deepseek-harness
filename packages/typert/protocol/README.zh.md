@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-typert-protocol
+# @forgeweaver/fw-typert-protocol
 
 [English](README.md) | 中文
 

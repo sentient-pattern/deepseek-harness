@@ -11,23 +11,23 @@ afterEach(() => {
 
 describe('DocumentTitle', () => {
   it('projects a durable title and restores the product title', () => {
-    vi.stubEnv('DSH_CLIENT_TITLE', 'DeepSeek Harness')
+    vi.stubEnv('FW_CLIENT_TITLE', 'ForgeWeaver')
     document.title = 'stale title'
     const mounted = render(<DocumentTitle />)
-    expect(document.title).toBe('DeepSeek Harness')
+    expect(document.title).toBe('ForgeWeaver')
     mounted.rerender(<DocumentTitle title="First title" />)
-    expect(document.title).toBe('First title — DeepSeek Harness')
+    expect(document.title).toBe('First title — ForgeWeaver')
     mounted.rerender(<DocumentTitle title="Revised title" />)
-    expect(document.title).toBe('Revised title — DeepSeek Harness')
+    expect(document.title).toBe('Revised title — ForgeWeaver')
     mounted.rerender(<DocumentTitle />)
-    expect(document.title).toBe('DeepSeek Harness')
+    expect(document.title).toBe('ForgeWeaver')
     mounted.unmount()
-    expect(document.title).toBe('DeepSeek Harness')
+    expect(document.title).toBe('ForgeWeaver')
   })
 
   it('uses the generic title when the build provides no title', () => {
-    vi.stubEnv('DSH_CLIENT_TITLE', '')
-    delete process.env.DSH_CLIENT_TITLE
+    vi.stubEnv('FW_CLIENT_TITLE', '')
+    delete process.env.FW_CLIENT_TITLE
     const mounted = render(<DocumentTitle title="First title" />)
     expect(document.title).toBe('First title — DSH Local Build')
     mounted.unmount()

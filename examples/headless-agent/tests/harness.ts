@@ -1,24 +1,24 @@
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import ToolResultPruner from '@deepseek-ai/dsh-compaction-tool-result-pruner'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import * as SessionCheckpointPolicy from '@deepseek-ai/dsh-session-checkpoint-policy'
-import { BasicCompactionEngine } from '@deepseek-ai/dsh-compaction-basic'
-import type { BasicCompactionConfig } from '@deepseek-ai/dsh-compaction-basic'
+import { Context } from '@forgeweaver/cordis'
+import type { SessionEvent } from '@forgeweaver/fw-session'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import { mountAgentLoopTestDependencies } from '@forgeweaver/fw-agent-loop-testkit'
+import { LocalBashExecutor } from '@forgeweaver/fw-bash-local'
+import * as BashEnvPlugin from '@forgeweaver/fw-shell-env'
+import LocalSubprocessRuntime from '@forgeweaver/fw-subprocess-local'
+import * as ToolBash from '@forgeweaver/fw-tool-bash'
+import * as ToolTodo from '@forgeweaver/fw-tool-todo'
+import * as LlmForgeWeaver from '@forgeweaver/fw-llm-forgeweaver'
+import TokenMeter from '@forgeweaver/fw-token-meter'
+import ToolResultPruner from '@forgeweaver/fw-compaction-tool-result-pruner'
+import JsonlSessionPersistence from '@forgeweaver/fw-session-persistence-jsonl'
+import * as SessionCheckpointPolicy from '@forgeweaver/fw-session-checkpoint-policy'
+import { BasicCompactionEngine } from '@forgeweaver/fw-compaction-basic'
+import type { BasicCompactionConfig } from '@forgeweaver/fw-compaction-basic'
 
 /**
  * Shared harness for the headless-agent e2e suites: the full plugin stack
- * with the real DeepSeek adapter and the real bash + todo_write tools. Lives
+ * with the real ForgeWeaver adapter and the real bash + todo_write tools. Lives
  * outside the *.e2e.ts pattern so importing it never re-registers another
  * file's tests.
  */
@@ -49,7 +49,7 @@ export interface CodingHarnessOptions {
    * compaction plugin (the default suites run without it).
    */
   compact?: BasicCompactionConfig
-  /** Test-only context capacity advertised for `deepseek-v4-flash`. */
+  /** Test-only context capacity advertised for `forgeweaver-v4-flash`. */
   modelContextWindow?: number
 }
 
@@ -59,8 +59,8 @@ export async function codingHarness(workdir: string, options: CodingHarnessOptio
     systemPrompt: { persona: options.persona ?? '' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek, options.modelContextWindow === undefined ? {} : {
-    models: [{ id: 'deepseek-v4-flash', contextWindow: options.modelContextWindow }],
+  await ctx.plugin(LlmForgeWeaver, options.modelContextWindow === undefined ? {} : {
+    models: [{ id: 'forgeweaver-v4-flash', contextWindow: options.modelContextWindow }],
   })
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)

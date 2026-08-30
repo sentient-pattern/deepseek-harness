@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage, CallId  } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import { STRUCTURED_OUTPUT_TOOL } from '@deepseek-ai/dsh-subagent-in-process-driver'
-import * as spawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import WorkerThreadWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
+import { Context } from '@forgeweaver/cordis'
+import type { Agent } from '@forgeweaver/fw-agent'
+import AgentLoop from '@forgeweaver/fw-agent-loop'
+import { mountAgentLoopTestDependencies } from '@forgeweaver/fw-agent-loop-testkit'
+import { createUserMessage, CallId  } from '@forgeweaver/fw-llm'
+import { SessionId } from '@forgeweaver/fw-session'
+import SubagentRuntime from '@forgeweaver/fw-subagent'
+import { STRUCTURED_OUTPUT_TOOL } from '@forgeweaver/fw-subagent-in-process-driver'
+import * as spawn from '@forgeweaver/fw-subagent-spawn-in-process'
+import WorkerThreadWorkflowEngine from '@forgeweaver/fw-workflow-worker-thread'
 import { MockAdapter, maxTokensResponse, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as toolRalph from '../src/index.ts'
 
@@ -34,7 +34,7 @@ async function mountRalph(script: MockScript, config: toolRalph.Config) {
   return { ctx, adapter, parentHandle, parent: parentHandle.agent }
 }
 
-describe('dsh-tool-ralph over the real spawn and worker-thread stack', () => {
+describe('fw-tool-ralph over the real spawn and worker-thread stack', () => {
   it('uses distinct empty-seed children, shared cwd, and only the prior bounded handoff', async () => {
     const firstReport = {
       status: 'continue',

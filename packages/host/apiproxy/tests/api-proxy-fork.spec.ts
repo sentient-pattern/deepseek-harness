@@ -1,19 +1,19 @@
 /** Session-fork boundaries, lineage, and inherited model routing. */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import type { Workspace } from '@deepseek-ai/dsh-workspace'
-import type { RpcRequest } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { RpcId } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@deepseek-ai/dsh-host-apiproxy'
+import { Context } from '@forgeweaver/cordis'
+import AgentRegistry, { agentEvents } from '@forgeweaver/fw-agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@forgeweaver/fw-agent'
+import { createUserMessage, ReasoningEffortId } from '@forgeweaver/fw-llm'
+import type { LlmCallConfig } from '@forgeweaver/fw-llm'
+import SessionStore from '@forgeweaver/fw-session'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@forgeweaver/fw-session'
+import SystemPrompt from '@forgeweaver/fw-system-prompt'
+import UserQuestionService from '@forgeweaver/fw-user-questions'
+import type { Workspace } from '@forgeweaver/fw-workspace'
+import type { RpcRequest } from '@forgeweaver/fw-host-apiproxy/api/rpc'
+import { RpcId } from '@forgeweaver/fw-host-apiproxy/api/rpc'
+import { createApiProxy } from '@forgeweaver/fw-host-apiproxy'
 
 const sid = (id: string): SessionId => id as SessionId
 

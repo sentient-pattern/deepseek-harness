@@ -1,7 +1,7 @@
 /**
  * Default Agent driver over queued turns and step-boundary input. Every request
  * is derived from the session log.
- * @module dsh-agent-loop/agent
+ * @module fw-agent-loop/agent
  */
 
 import type {
@@ -14,9 +14,9 @@ import type {
   InboxTarget,
   PreStepDecision,
   RequestErrorAction,
-} from '@deepseek-ai/dsh-agent'
-import { Inbox, agentEvents, assembleContextFor } from '@deepseek-ai/dsh-agent'
-import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@deepseek-ai/dsh-llm'
+} from '@forgeweaver/fw-agent'
+import { Inbox, agentEvents, assembleContextFor } from '@forgeweaver/fw-agent'
+import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@forgeweaver/fw-llm'
 import {
   BlockAssembler,
   LlmError,
@@ -24,14 +24,14 @@ import {
   deepFreeze,
   errorChain,
   markAgentLoopRequest,
-} from '@deepseek-ai/dsh-llm'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@deepseek-ai/dsh-session'
-import { canonicalHeader, headerEquals } from '@deepseek-ai/dsh-session'
-import { joinContextSections, renderContextSections, renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import type { PromptAssembly } from '@deepseek-ai/dsh-system-prompt'
-import type { Context } from '@deepseek-ai/cordis'
+} from '@forgeweaver/fw-llm'
+import type { Scope } from '@forgeweaver/fw-scope'
+import { createScope } from '@forgeweaver/fw-scope'
+import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@forgeweaver/fw-session'
+import { canonicalHeader, headerEquals } from '@forgeweaver/fw-session'
+import { joinContextSections, renderContextSections, renderPrompt } from '@forgeweaver/fw-system-prompt'
+import type { PromptAssembly } from '@forgeweaver/fw-system-prompt'
+import type { Context } from '@forgeweaver/cordis'
 import { RuntimeContextProjection } from './runtime-context.ts'
 import { executeToolCalls } from './tool-calls.ts'
 
